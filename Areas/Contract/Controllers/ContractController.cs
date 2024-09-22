@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace App.Areas.DashBoard
+namespace App.Areas.Contract
 {
-    [Area("DashBoard")]
-    public class DashBoard : Controller
+    [Area("Contract")]
+    public class ContractController : Controller
     {
-        [Route("/")]
+        [Route("/contract")]
         public IActionResult Index()
         {
             return View();

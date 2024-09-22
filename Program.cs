@@ -1,6 +1,8 @@
 using App.ExtendMethods;
+using App.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace Accommodation_Room_Project_Offìcal
+namespace App
 {
 	public class Program
 	{
@@ -11,10 +13,17 @@ namespace Accommodation_Room_Project_Offìcal
 			// Add services to the container.
 			builder.Services.AddControllersWithViews();
 
-			var app = builder.Build();
+            // Configure to connect database
+            builder.Services.AddDbContext<AppDbContext>(options =>
+            {
 
-			// Configure the HTTP request pipeline.
-			if (!app.Environment.IsDevelopment())
+                string connectionString = builder.Configuration.GetConnectionString("AppMvcConnectionString");
+                options.UseSqlServer(connectionString);
+            });
+
+            var app = builder.Build();
+            // Configure the HTTP request pipeline.
+            if (!app.Environment.IsDevelopment())
 			{
 				app.UseExceptionHandler("/Home/Error");
 				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.

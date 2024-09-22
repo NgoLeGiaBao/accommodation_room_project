@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace App.Areas.RoomInformation
+namespace App.Areas.Room
 {
-    [Area("RoomInformation")]
-    public class RoomInformation : Controller
+    [Area("Room")]
+    public class RoomController : Controller
     {
         [Route("/room-information")]
         public IActionResult Index()
