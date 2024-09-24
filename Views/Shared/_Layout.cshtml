@@ -6,19 +6,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Quixlab - Bootstrap Admin Dashboard Template by Themefisher.com</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon_2.png">
-    <!-- Pignose Calender -->
+@*     <!-- Pignose Calender -->
     <link href="./plugins/pg-calendar/css/pignose.calendar.min.css" rel="stylesheet">
     <!-- Chartist -->
     <link rel="stylesheet" href="./plugins/chartist/css/chartist.min.css">
-    <link rel="stylesheet" href="./plugins/chartist-plugin-tooltips/css/chartist-plugin-tooltip.css">
-    <!-- Custom Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="./plugins/chartist-plugin-tooltips/css/chartist-plugin-tooltip.css"> *@
+    
+    <!-- Datatable -->
+@*     <link href="./plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet"> *@
+
+    @RenderSection("AdditionalLinkCSS", required: false)
 
     
-
+    <!-- Custom Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
 </head>
 
 <body>
@@ -70,10 +74,12 @@
                 <div class="header-left">
                     <div class="input-group icons">
                         <div class="input-group-prepend">
-                            <span class="input-group-text bg-transparent border-0 pr-2 pr-sm-3" id="basic-addon1"><i class="mdi mdi-magnify"></i></span>
+                            <span class="input-group-text bg-transparent border-0 pr-2 pr-sm-3" id="basic-addon1"><i
+                                    class="mdi mdi-magnify"></i></span>
                         </div>
-                        <input type="search" class="form-control" placeholder="Search Dashboard" aria-label="Search Dashboard">
-                        <div class="drop-down   d-md-none">
+                        <input type="search" class="form-control" placeholder="Search Dashboard"
+                            aria-label="Search Dashboard">
+                        <div class="drop-down d-md-none">
                             <form action="#">
                                 <input type="text" class="form-control" placeholder="Search">
                             </form>
@@ -96,17 +102,20 @@
                                     <ul>
                                         <li class="notification-unread">
                                             <a href="javascript:void()">
-                                                <img class="float-left mr-3 avatar-img" src="images/avatar/1.jpg" alt="">
+                                                <img class="float-left mr-3 avatar-img" src="images/avatar/1.jpg"
+                                                    alt="">
                                                 <div class="notification-content">
                                                     <div class="notification-heading">Saiful Islam</div>
                                                     <div class="notification-timestamp">08 Hours ago</div>
-                                                    <div class="notification-text">Hi Teddy, Just wanted to let you ...</div>
+                                                    <div class="notification-text">Hi Teddy, Just wanted to let you ...
+                                                    </div>
                                                 </div>
                                             </a>
                                         </li>
                                         <li class="notification-unread">
                                             <a href="javascript:void()">
-                                                <img class="float-left mr-3 avatar-img" src="images/avatar/2.jpg" alt="">
+                                                <img class="float-left mr-3 avatar-img" src="images/avatar/2.jpg"
+                                                    alt="">
                                                 <div class="notification-content">
                                                     <div class="notification-heading">Adam Smith</div>
                                                     <div class="notification-timestamp">08 Hours ago</div>
@@ -116,17 +125,20 @@
                                         </li>
                                         <li>
                                             <a href="javascript:void()">
-                                                <img class="float-left mr-3 avatar-img" src="images/avatar/3.jpg" alt="">
+                                                <img class="float-left mr-3 avatar-img" src="images/avatar/3.jpg"
+                                                    alt="">
                                                 <div class="notification-content">
                                                     <div class="notification-heading">Barak Obama</div>
                                                     <div class="notification-timestamp">08 Hours ago</div>
-                                                    <div class="notification-text">Hi Teddy, Just wanted to let you ...</div>
+                                                    <div class="notification-text">Hi Teddy, Just wanted to let you ...
+                                                    </div>
                                                 </div>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="javascript:void()">
-                                                <img class="float-left mr-3 avatar-img" src="images/avatar/4.jpg" alt="">
+                                                <img class="float-left mr-3 avatar-img" src="images/avatar/4.jpg"
+                                                    alt="">
                                                 <div class="notification-content">
                                                     <div class="notification-heading">Hilari Clinton</div>
                                                     <div class="notification-timestamp">08 Hours ago</div>
@@ -153,7 +165,8 @@
                                     <ul>
                                         <li>
                                             <a href="javascript:void()">
-                                                <span class="mr-3 avatar-icon bg-success-lighten-2"><i class="icon-present"></i></span>
+                                                <span class="mr-3 avatar-icon bg-success-lighten-2"><i
+                                                        class="icon-present"></i></span>
                                                 <div class="notification-content">
                                                     <h6 class="notification-heading">Events near you</h6>
                                                     <span class="notification-text">Within next 5 days</span>
@@ -162,7 +175,8 @@
                                         </li>
                                         <li>
                                             <a href="javascript:void()">
-                                                <span class="mr-3 avatar-icon bg-danger-lighten-2"><i class="icon-present"></i></span>
+                                                <span class="mr-3 avatar-icon bg-danger-lighten-2"><i
+                                                        class="icon-present"></i></span>
                                                 <div class="notification-content">
                                                     <h6 class="notification-heading">Event Started</h6>
                                                     <span class="notification-text">One hour ago</span>
@@ -171,7 +185,8 @@
                                         </li>
                                         <li>
                                             <a href="javascript:void()">
-                                                <span class="mr-3 avatar-icon bg-success-lighten-2"><i class="icon-present"></i></span>
+                                                <span class="mr-3 avatar-icon bg-success-lighten-2"><i
+                                                        class="icon-present"></i></span>
                                                 <div class="notification-content">
                                                     <h6 class="notification-heading">Event Ended Successfully</h6>
                                                     <span class="notification-text">One hour ago</span>
@@ -180,7 +195,8 @@
                                         </li>
                                         <li>
                                             <a href="javascript:void()">
-                                                <span class="mr-3 avatar-icon bg-danger-lighten-2"><i class="icon-present"></i></span>
+                                                <span class="mr-3 avatar-icon bg-danger-lighten-2"><i
+                                                        class="icon-present"></i></span>
                                                 <div class="notification-content">
                                                     <h6 class="notification-heading">Events to Join</h6>
                                                     <span class="notification-text">After two days</span>
@@ -194,7 +210,7 @@
                         </li>
                         <li class="icons dropdown d-none d-md-flex">
                             <a href="javascript:void(0)" class="log-user" data-toggle="dropdown">
-                                <span>English</span>  <i class="fa fa-angle-down f-s-14" aria-hidden="true"></i>
+                                <span>English</span> <i class="fa fa-angle-down f-s-14" aria-hidden="true"></i>
                             </a>
                             <div class="drop-down dropdown-language animated fadeIn  dropdown-menu">
                                 <div class="dropdown-content-body">
@@ -214,17 +230,23 @@
                                 <div class="dropdown-content-body">
                                     <ul>
                                         <li>
-                                            <a href="app-profile.html"><i class="icon-user"></i> <span>Profile</span></a>
+                                            <a href="app-profile.html"><i class="icon-user"></i>
+                                                <span>Profile</span></a>
                                         </li>
                                         <li>
-                                            <a href="email-inbox.html"><i class="icon-envelope-open"></i> <span>Inbox</span> <div class="badge gradient-3 badge-pill badge-primary">3</div></a>
+                                            <a href="email-inbox.html"><i class="icon-envelope-open"></i>
+                                                <span>Inbox</span>
+                                                <div class="badge gradient-3 badge-pill badge-primary">3</div>
+                                            </a>
                                         </li>
 
                                         <hr class="my-2">
                                         <li>
-                                            <a href="page-lock.html"><i class="icon-lock"></i> <span>Lock Screen</span></a>
+                                            <a href="page-lock.html"><i class="icon-lock"></i> <span>Lock
+                                                    Screen</span></a>
                                         </li>
-                                        <li><a href="page-login.html"><i class="icon-key"></i> <span>Logout</span></a></li>
+                                        <li><a href="page-login.html"><i class="icon-key"></i> <span>Logout</span></a>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -248,8 +270,12 @@
                             <i class="icon-speedometer menu-icon"></i><span class="nav-text">Dashboard</span>
                         </a>
                         <ul aria-expanded="false">
-                            <li><a href="./index.html">Home 1</a></li>
-                            <li><a asp-area="Room" asp-action="Index" asp-controller="Room">Home 2</a></li>
+                            <li>
+                                <a asp-area="DashBoard" asp-action="Index" asp-controller="DashBoard">
+                                    Home 1
+                                </a>
+                            </li>
+                            @* <li><a asp-area="Room" asp-action="Index" asp-controller="Room">Home 2</a></li> *@
                         </ul>
                     </li>
 
@@ -265,7 +291,8 @@
                     </li>
                     <li>
                         <a asp-area="Contract" asp-action="Index" asp-controller="Contract">
-                            <i class="fa fa-file menu-icon white-icon" aria-hidden="true"></i><span class="nav-text">Contract</span>
+                            <i class="fa fa-file menu-icon white-icon" aria-hidden="true"></i><span
+                                class="nav-text">Contract</span>
                         </a>
                     </li>
                     <li>
@@ -284,7 +311,7 @@
                         </a>
                     </li>
                 </ul>
-            
+
             </div>
         </div>
         <!--**********************************
@@ -294,9 +321,7 @@
             Content body start
         ***********************************-->
         <div class="content-body">
-
             @RenderBody()
-
         </div>
         <!--**********************************
             Content body end
@@ -306,7 +331,8 @@
         ***********************************-->
         <div class="footer">
             <div class="copyright">
-                <p>Copyright &copy; Designed & Developed by <a href="https://themeforest.net/user/quixlab">Bao Ngo Le Gia</a> 2024</p>
+                <p>Copyright &copy; Designed & Developed by <a href="https://themeforest.net/user/quixlab">Bao Ngo Le
+                        Gia</a> 2024</p>
             </div>
         </div>
         <!--**********************************
@@ -325,7 +351,7 @@
     <script src="js/gleek.js"></script>
     <script src="js/styleSwitcher.js"></script>
 
-    <!-- Chartjs -->
+@*     <!-- Chartjs -->
     <script src="./plugins/chart.js/Chart.bundle.min.js"></script>
     <!-- Circle progress -->
     <script src="./plugins/circle-progress/circle-progress.min.js"></script>
@@ -342,7 +368,13 @@
     <!-- ChartistJS -->
     <script src="./plugins/chartist/js/chartist.min.js"></script>
     <script src="./plugins/chartist-plugin-tooltips/js/chartist-plugin-tooltip.min.js"></script>
-    <script src="./js/dashboard/dashboard-1.js"></script>
+    <script src="./js/dashboard/dashboard-1.js"></script> *@
+
+    <!-- Data Table -->
+    @RenderSection("AdditionalLinkJavascript", required: false)
+@*     <script src="./plugins/tables/js/jquery.dataTables.min.js"></script>
+    <script src="./plugins/tables/js/datatable/dataTables.bootstrap4.min.js"></script>
+    <script src="./plugins/tables/js/datatable-init/datatable-basic.min.js"></script> *@
 
 
     <script>

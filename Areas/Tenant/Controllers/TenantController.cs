@@ -10,5 +10,25 @@ namespace App.Areas.Tenant
         {
             return View();
         }
+        
+        [Route("/tenant-edit/{id?}")]
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            return Content(id.ToString());
+        }
+
+        [Route("/tenant-delete/{id?}")]
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            return Content(id.ToString());
+        }
+
+        [Route("/tenant-create")]
+        public IActionResult Create()
+        {
+            return View();
+        }
     }
 }
