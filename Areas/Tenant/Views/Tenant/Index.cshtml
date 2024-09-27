@@ -12,9 +12,9 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <a asp-area="Room" asp-controller="Room" asp-action="Create" class="btn mb-1 btn-primary" role="button">
+                    <a asp-controller="Tenant" asp-action="CreateTenant" class="btn mb-1 btn-primary" role="button">
                         <i class="fas fa-plus"></i>
-                        Add new room
+                        Add new tenant
                     </a>
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered zero-configuration">
@@ -39,10 +39,12 @@
                                     <td>$320,800</td>
                                     <td>
                                         <span>
-                                            <a asp-area="Room" asp-controller="Room" asp-action="Edit" asp-route-id="1" data-toggle="tooltip" data-placement="top" title="Edit">
+                                            <a asp-controller="Tenant" asp-action="EditTenant" asp-route-id="1"
+                                                data-toggle="tooltip" data-placement="top" title="Edit">
                                                 <i class="fa fa-pencil color-muted m-r-5"></i>
                                             </a>
-                                            @* <a asp-area="Room" asp-controller="Room" asp-action="Delete" asp-route-id="1" data-toggle="tooltip" data-placement="top" title="Close">
+                                            @* <a asp-area="Room" asp-controller="Room" asp-action="Delete"
+                                            asp-route-id="1" data-toggle="tooltip" data-placement="top" title="Close">
                                             <i class="fa fa-close color-danger"></i>
                                             </a> *@
                                             <!-- Link trigger modal -->
@@ -60,7 +62,10 @@
                                     <td>2011/07/25</td>
                                     <td>$170,750</td>
                                     <td>
-                                        <span><a href="#" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted m-r-5"></i> </a><a href="#" data-toggle="tooltip" data-placement="top" title="Close"><i class="fa fa-close color-danger"></i></a></span>
+                                        <span><a href="#" data-toggle="tooltip" data-placement="top" title="Edit"><i
+                                                    class="fa fa-pencil color-muted m-r-5"></i> </a><a href="#"
+                                                data-toggle="tooltip" data-placement="top" title="Close"><i
+                                                    class="fa fa-close color-danger"></i></a></span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -71,7 +76,10 @@
                                     <td>2009/01/12</td>
                                     <td>$86,000</td>
                                     <td>
-                                        <span><a href="#" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted m-r-5"></i> </a><a href="#" data-toggle="tooltip" data-placement="top" title="Close"><i class="fa fa-close color-danger"></i></a></span>
+                                        <span><a href="#" data-toggle="tooltip" data-placement="top" title="Edit"><i
+                                                    class="fa fa-pencil color-muted m-r-5"></i> </a><a href="#"
+                                                data-toggle="tooltip" data-placement="top" title="Close"><i
+                                                    class="fa fa-close color-danger"></i></a></span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -82,7 +90,10 @@
                                     <td>2012/03/29</td>
                                     <td>$433,060</td>
                                     <td>
-                                        <span><a href="#" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted m-r-5"></i> </a><a href="#" data-toggle="tooltip" data-placement="top" title="Close"><i class="fa fa-close color-danger"></i></a></span>
+                                        <span><a href="#" data-toggle="tooltip" data-placement="top" title="Edit"><i
+                                                    class="fa fa-pencil color-muted m-r-5"></i> </a><a href="#"
+                                                data-toggle="tooltip" data-placement="top" title="Close"><i
+                                                    class="fa fa-close color-danger"></i></a></span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -93,7 +104,10 @@
                                     <td>2008/11/28</td>
                                     <td>$162,700</td>
                                     <td>
-                                        <span><a href="#" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted m-r-5"></i> </a><a href="#" data-toggle="tooltip" data-placement="top" title="Close"><i class="fa fa-close color-danger"></i></a></span>
+                                        <span><a href="#" data-toggle="tooltip" data-placement="top" title="Edit"><i
+                                                    class="fa fa-pencil color-muted m-r-5"></i> </a><a href="#"
+                                                data-toggle="tooltip" data-placement="top" title="Close"><i
+                                                    class="fa fa-close color-danger"></i></a></span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -104,7 +118,10 @@
                                     <td>2012/12/02</td>
                                     <td>$372,000</td>
                                     <td>
-                                        <span><a href="#" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted m-r-5"></i> </a><a href="#" data-toggle="tooltip" data-placement="top" title="Close"><i class="fa fa-close color-danger"></i></a></span>
+                                        <span><a href="#" data-toggle="tooltip" data-placement="top" title="Edit"><i
+                                                    class="fa fa-pencil color-muted m-r-5"></i> </a><a href="#"
+                                                data-toggle="tooltip" data-placement="top" title="Close"><i
+                                                    class="fa fa-close color-danger"></i></a></span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -115,7 +132,10 @@
                                     <td>2012/08/06</td>
                                     <td>$137,500</td>
                                     <td>
-                                        <span><a href="#" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted m-r-5"></i> </a><a href="#" data-toggle="tooltip" data-placement="top" title="Close"><i class="fa fa-close color-danger"></i></a></span>
+                                        <span><a href="#" data-toggle="tooltip" data-placement="top" title="Edit"><i
+                                                    class="fa fa-pencil color-muted m-r-5"></i> </a><a href="#"
+                                                data-toggle="tooltip" data-placement="top" title="Close"><i
+                                                    class="fa fa-close color-danger"></i></a></span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -126,7 +146,10 @@
                                     <td>2010/10/14</td>
                                     <td>$327,900</td>
                                     <td>
-                                        <span><a href="#" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted m-r-5"></i> </a><a href="#" data-toggle="tooltip" data-placement="top" title="Close"><i class="fa fa-close color-danger"></i></a></span>
+                                        <span><a href="#" data-toggle="tooltip" data-placement="top" title="Edit"><i
+                                                    class="fa fa-pencil color-muted m-r-5"></i> </a><a href="#"
+                                                data-toggle="tooltip" data-placement="top" title="Close"><i
+                                                    class="fa fa-close color-danger"></i></a></span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -137,7 +160,10 @@
                                     <td>2009/09/15</td>
                                     <td>$205,500</td>
                                     <td>
-                                        <span><a href="#" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted m-r-5"></i> </a><a href="#" data-toggle="tooltip" data-placement="top" title="Close"><i class="fa fa-close color-danger"></i></a></span>
+                                        <span><a href="#" data-toggle="tooltip" data-placement="top" title="Edit"><i
+                                                    class="fa fa-pencil color-muted m-r-5"></i> </a><a href="#"
+                                                data-toggle="tooltip" data-placement="top" title="Close"><i
+                                                    class="fa fa-close color-danger"></i></a></span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -148,7 +174,10 @@
                                     <td>2008/12/13</td>
                                     <td>$103,600</td>
                                     <td>
-                                        <span><a href="#" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted m-r-5"></i> </a><a href="#" data-toggle="tooltip" data-placement="top" title="Close"><i class="fa fa-close color-danger"></i></a></span>
+                                        <span><a href="#" data-toggle="tooltip" data-placement="top" title="Edit"><i
+                                                    class="fa fa-pencil color-muted m-r-5"></i> </a><a href="#"
+                                                data-toggle="tooltip" data-placement="top" title="Close"><i
+                                                    class="fa fa-close color-danger"></i></a></span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -159,7 +188,10 @@
                                     <td>2008/12/19</td>
                                     <td>$90,560</td>
                                     <td>
-                                        <span><a href="#" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted m-r-5"></i> </a><a href="#" data-toggle="tooltip" data-placement="top" title="Close"><i class="fa fa-close color-danger"></i></a></span>
+                                        <span><a href="#" data-toggle="tooltip" data-placement="top" title="Edit"><i
+                                                    class="fa fa-pencil color-muted m-r-5"></i> </a><a href="#"
+                                                data-toggle="tooltip" data-placement="top" title="Close"><i
+                                                    class="fa fa-close color-danger"></i></a></span>
                                     </td>
                                 </tr>
                             </tbody>

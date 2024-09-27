@@ -1,7 +1,9 @@
-using App.ExtendMethods;
+﻿using App.ExtendMethods;
 using App.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
+
 
 namespace App
 {
@@ -21,6 +23,9 @@ namespace App
 				options.UseSqlServer(connectionString);
 			});
 
+			builder.Services.AddSingleton<IFileProvider>(
+				new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
+
 			// Register Identity without UI
 			builder.Services.AddIdentity<AppUser, IdentityRole>()
 						.AddEntityFrameworkStores<AppDbContext>()
@@ -34,6 +39,7 @@ namespace App
 				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 				app.UseHsts();
 			}
+
 			app.AddStatusCode();
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
@@ -44,7 +50,8 @@ namespace App
 
 			app.MapControllerRoute(
 				name: "default",
-				pattern: "{Area= DashBoard }/{controller=DashBoard}/{action=Index}");
+				pattern: "{area=Dashboard}/{controller=Dashboard}/{action=Index}/{id?}"
+			);
 
 			app.Run();
 		}

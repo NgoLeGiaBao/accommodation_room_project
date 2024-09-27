@@ -5,18 +5,26 @@ namespace App.Areas.Room
     [Area("Room")]
     public class RoomController : Controller
     {
-        [Route("/room-information")]
+        [Route("/information-room")]
         public IActionResult Index()
         {
             return View();
         }
 
-        [Route("/room-edit/{id?}")]
+        [Route("/edit-room/{id?}")]
         [HttpGet]
-        public IActionResult Edit(int id)
+        public IActionResult EditRoom(int id)
         {
-            return Content(id.ToString());
+            return View();
         }
+
+        [Route("/edit-home/{id?}")]
+        [HttpGet]
+        public IActionResult EditHome(int id)
+        {
+            return View();
+        }
+
 
         [Route("/room-delete/{id?}")]
         [HttpGet]
@@ -25,8 +33,20 @@ namespace App.Areas.Room
             return Content(id.ToString());
         }
 
-        [Route("/room-create")]
-        public IActionResult Create ()
+        [Route("/create-home")]
+        public IActionResult CreateHome()
+        {
+            return View();
+        }
+
+        [Route("/create-room")]
+        public IActionResult CreateRoom()
+        {
+            return View();
+        }
+
+        [Route("/view-room")]
+        public IActionResult ViewRoom()
         {
             return View();
         }

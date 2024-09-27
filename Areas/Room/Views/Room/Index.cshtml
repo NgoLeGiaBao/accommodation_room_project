@@ -11,6 +11,7 @@
                                     aria-label="Chọn trạng thái phòng">
                                     <option value="all">Room status</option>
                                     <option value="available">Available </option>
+                                    <option value="abouttoexpire">About to expire</option>
                                     <option value="rented">Rented</option>
                                 </select>
                                 <!-- Room Number Field -->
@@ -23,17 +24,16 @@
                                 </a>
                             </div>
                             <div class="action-buttons mb-2">
-                                <a href="#" class="btn btn-primary me-2">
+                                <a asp-controller="Room" asp-action="CreateHome" class="btn btn-primary me-2">
                                     <i class="fas fa-plus"></i>
                                     Add home
                                 </a>
-                                <a href="#" class="btn btn-info me-2">
-                                    <i class="fas fa-edit"></i>
-                                    Enter room from excel
-                                </a>
+                                @* <a href="#" class="btn btn-info me-2">
+                                <i class="fas fa-edit"></i>
+                                Enter room from excel
+                                </a> *@
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -63,18 +63,18 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
                             <div class="status-info mb-2">
-                                <span>Available 4</span> | <span>Rented 7</span>
+                                <span>Available 4</span> | <span>About to expire 2</span> | <span>Rented 7</span>
                             </div>
                             <div class="action-buttons mb-2">
-                                <a href="#" class="btn btn-primary me-2 ">
+                                <a asp-controller="Room" asp-action="CreateRoom" class="btn btn-primary me-2 ">
                                     <i class="fas fa-plus"></i> Add room
                                 </a>
-                                <a href="#" class="btn btn-info me-2 ">
+                                <a asp-controller="Room" asp-action="EditHome" class="btn btn-info me-2 ">
                                     <i class="fas fa-edit"></i> Update home
                                 </a>
-                                <a href="#" class="btn btn-danger ">
-                                    <i class="fas fa-trash"></i> Delete home
-                                </a>
+                                @* <a href="#" class="btn btn-danger ">
+                                <i class="fas fa-trash"></i> Delete home
+                                </a> *@
                             </div>
                         </div>
                         <hr />
@@ -83,84 +83,21 @@
                             <div class="col-lg-3 col-md-6 mb-4">
                                 <div class="card text-center">
                                     <div class="card-body">
-                                        <h5 class="card-title">Special title treatment</h5>
-                                        <p class="card-text">With supporting text below as a natural lead-in to
-                                            additional content.</p>
-                                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                                        <h5 class="card-title">P-001</h5>
+                                        <p class="card-text ">
+                                            Room Price: 4000
+                                            </br>
+                                            Room Status: <span class="badge badge-primary px-2">Sale</span>
+                                        </p>
+                                        <div class="d-flex justify-content-center">
+                                            <a asp-controller="Room" asp-action="EditRoom"
+                                                class="btn btn-primary ">Edit</a>
+                                            <a asp-controller="Room" asp-action="ViewRoom"
+                                                class="btn btn-secondary margin-room-update">View</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-md-6 mb-4">
-                                <div class="card text-center">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Special title treatment</h5>
-                                        <p class="card-text">With supporting text below as a natural lead-in to
-                                            additional content.</p>
-                                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-6 mb-4">
-                                <div class="card text-center">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Special title treatment</h5>
-                                        <p class="card-text">With supporting text below as a natural lead-in to
-                                            additional content.</p>
-                                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-6 mb-4">
-                                <div class="card text-center">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Special title treatment</h5>
-                                        <p class="card-text">With supporting text below as a natural lead-in to
-                                            additional content.</p>
-                                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-6 mb-4">
-                                <div class="card text-center">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Special title treatment</h5>
-                                        <p class="card-text">With supporting text below as a natural lead-in to
-                                            additional content.</p>
-                                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-6 mb-4">
-                                <div class="card text-center">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Special title treatment</h5>
-                                        <p class="card-text">With supporting text below as a natural lead-in to
-                                            additional content.</p>
-                                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-6 mb-4">
-                                <div class="card text-center">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Special title treatment</h5>
-                                        <p class="card-text">With supporting text below as a natural lead-in to
-                                            additional content.</p>
-                                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-6 mb-4">
-                                <div class="card text-center">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Special title treatment</h5>
-                                        <p class="card-text">With supporting text below as a natural lead-in to
-                                            additional content.</p>
-                                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Repeat similar blocks for other columns -->
                         </div>
                         <partial name="_Paging"></partial>
                     </div>
@@ -178,19 +115,6 @@
 
 @* Link Javascript*@
 @section AdditionalLinkJavascript {
-    <script>
-        // Select all the nav links
-        const navLinks = document.querySelectorAll('.nav-link');
-        navLinks.forEach(link => {
-            link.addEventListener('click', function (event) {
-                // Remove 'active' class from all links
-                navLinks.forEach(link => link.classList.remove('active'));
-                // Add 'active' class to the clicked link
-                this.classList.add('active');
-            });
-        });
-    </script>
-
+    <script src="~/js/room/room.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-
 }

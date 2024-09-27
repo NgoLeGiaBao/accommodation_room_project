@@ -1,0 +1,112 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <!-- Centered card title -->
+                    <h2 class="card-title text-center">Edit Rental Property</h2>
+                    <div class="basic-form">
+                        <form action="/submitNewHome" method="POST">
+                            <!-- Property Name -->
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Property Name</label>
+                                    <input type="text" class="form-control" name="homeName"
+                                        placeholder="Enter property name" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Owner Name</label>
+                                    <input type="text" class="form-control" name="ownerName"
+                                        placeholder="Enter owner's name" required>
+                                </div>
+                            </div>
+
+                            <!-- Address -->
+                            <div class="form-group">
+                                <label>Address</label>
+                                <input type="text" class="form-control" name="address" placeholder="Enter address"
+                                    required>
+                            </div>
+
+                            <div class="form-row">
+                                <!-- Number of Rooms -->
+                                <div class="form-group col-md-6">
+                                    <label>Number of Rooms</label>
+                                    <input type="number" class="form-control" name="roomCount"
+                                        placeholder="Enter number of rooms" required>
+                                </div>
+
+                                <!-- Owner's Phone Number -->
+                                <div class="form-group col-md-6">
+                                    <label>Owner's Phone Number</label>
+                                    <input type="tel" class="form-control" name="ownerPhone"
+                                        placeholder="Enter phone number" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <!-- Total Area -->
+                                <div class="form-group col-md-6">
+                                    <label>Total Area (m²)</label>
+                                    <input type="number" class="form-control" name="totalArea"
+                                        placeholder="Enter total area" required>
+                                </div>
+
+                                <!-- Property Type -->
+                                <div class="form-group col-md-6">
+                                    <label>Property Type</label>
+                                    <select class="form-control" name="type" required>
+                                        <option selected="selected">Choose type...</option>
+                                        <option value="Low-cost">Low-cost</option>
+                                        <option value="High-end">High-end</option>
+                                        <option value="Student rooms">Student rooms</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Facilities -->
+                            <div class="form-group">
+                                <label>Facilities</label>
+                                <textarea class="form-control" name="facilities" rows="3"
+                                    placeholder="Wi-Fi, parking, air-conditioning, security cameras, ..."
+                                    required></textarea>
+                            </div>
+                            <div class="form-row">
+                                <!-- Electricity Price -->
+                                <div class="form-group col-md-6">
+                                    <label>Electricity Price (VND/kWh)</label>
+                                    <input type="number" class="form-control" name="electricPrice"
+                                        placeholder="Enter electricity price" required>
+                                </div>
+
+                                <!-- Water Price -->
+                                <div class="form-group col-md-6">
+                                    <label>Water Price (VND/m³)</label>
+                                    <input type="number" class="form-control" name="waterPrice"
+                                        placeholder="Enter water price" required>
+                                </div>
+                            </div>
+
+                            <!-- Start Date -->
+                            <div class="form-group">
+                                <label>Start Date</label>
+                                <input type="date" class="form-control" name="startDate" required>
+                            </div>
+
+                            <!-- Property Image -->
+                            <div class="form-group">
+                                <label>Property Image</label>
+                                <input type="file" class="form-control-file" name="homeImage">
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-dark btn-lg px-5">Edit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

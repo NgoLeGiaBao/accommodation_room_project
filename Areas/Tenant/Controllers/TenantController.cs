@@ -5,19 +5,19 @@ namespace App.Areas.Tenant
     [Area("Tenant")]
     public class TenantController : Controller
     {
-        [Route("/tenant-information")]
+        [Route("tenant-information")]
         public IActionResult Index()
         {
             return View();
         }
-        
-        [Route("/tenant-edit/{id?}")]
-        [HttpGet]
-        public IActionResult Edit(int id)
-        {
-            return Content(id.ToString());
-        }
 
+        [Route("edit-tenant/{id:int?}")]
+        [HttpGet]
+        public IActionResult EditTenant(int? id)
+        {
+            // Kiểm tra id nếu cần
+            return View();
+        }
         [Route("/tenant-delete/{id?}")]
         [HttpGet]
         public IActionResult Delete(int id)
@@ -25,8 +25,8 @@ namespace App.Areas.Tenant
             return Content(id.ToString());
         }
 
-        [Route("/tenant-create")]
-        public IActionResult Create()
+        [Route("/create-tenant")]
+        public IActionResult CreateTenant()
         {
             return View();
         }

@@ -1,0 +1,60 @@
+﻿<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <!-- Centered card title -->
+                    <h4 class="card-title text-center">Edit Room</h4>
+                    <div class="basic-form">
+                        <form action="/submitNewRoom" method="POST">
+                            <div class="form-row">
+                                <!-- Diện Tích -->
+                                <div class="form-group col-md-6">
+                                    <label>Diện Tích (m²)</label>
+                                    <input type="number" class="form-control" name="area" placeholder="Nhập diện tích"
+                                        required>
+                                </div>
+
+                                <!-- Số Phòng -->
+                                <div class="form-group col-md-6">
+                                    <label>Số Phòng</label>
+                                    <input type="number" class="form-control" name="roomCount"
+                                        placeholder="Nhập số phòng" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <!-- Số Lượng Người Ở Tối Đa -->
+                                <div class="form-group col-md-6">
+                                    <label>Số Lượng Người Ở Tối Đa</label>
+                                    <input type="number" class="form-control" name="maxOccupants"
+                                        placeholder="Nhập số lượng người tối đa" required>
+                                </div>
+
+                                <!-- Giá Thuê -->
+                                <div class="form-group col-md-6">
+                                    <label>Giá Thuê (VND/tháng)</label>
+                                    <input type="number" class="form-control" name="rentalPrice"
+                                        placeholder="Nhập giá thuê" required>
+                                </div>
+                            </div>
+
+                            <!-- Tiện Nghi -->
+                            <div class="form-group">
+                                <label>Tiện Nghi</label>
+                                <textarea class="form-control" name="facilities" rows="3"
+                                    placeholder="Nhập tiện nghi..." required></textarea>
+                            </div>
+
+                            <!-- Nút Gửi -->
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-dark btn-lg px-5">Edit Room</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
