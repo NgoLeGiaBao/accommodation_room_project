@@ -22,10 +22,10 @@
                                <meta charset='utf-8'>
                                <meta http-equiv='X-UA-Compatible' content='IE=edge'>
                                <meta name='viewport' content='width=device-width,initial-scale=1'>
-                               <title>Quixlab - Bootstrap Admin Dashboard Template by Themefisher.com</title>
+                               <title>Error</title>
                                <!-- Favicon icon -->
-                               <link rel='icon' type='image/png' sizes='16x16' href='images/favicon.png'>
-                               <link href='css/style.css' rel='stylesheet'>
+                               <link rel='icon' type='image/png' sizes='16x16' href='../images/favicon.png'>
+                               <link href='../css/style.css' rel='stylesheet'>
                            </head>
                            
                            <body class='h-100'>
@@ -74,11 +74,11 @@
                                    </div>
                                </div>
                                <!-- Scripts -->
-                               <script src='plugins/common/common.min.js'></script>
-                               <script src='js/custom.min.js'></script>
-                               <script src='js/settings.js'></script>
-                               <script src='js/gleek.js'></script>
-                               <script src='js/styleSwitcher.js'></script>
+                               <script src='../plugins/common/common.min.js'></script>
+                               <script src='../js/custom.min.js'></script>
+                               <script src='../js/settings.js'></script>
+                               <script src='../js/gleek.js'></script>
+                               <script src='../js/styleSwitcher.js'></script>
                            </body>
                            </html>";
 

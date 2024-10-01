@@ -28,6 +28,7 @@ namespace App.Models
             modelBuilder.Entity<AppUser>()
                 .HasIndex(u => u.IdentityCard)
                 .IsUnique();
+
         }
 
         public DbSet<Menu> menu { set; get; }
