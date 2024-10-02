@@ -20,6 +20,7 @@ namespace App
 			builder.Services.AddDbContext<AppDbContext>(options =>
 			{
 				string connectionString = builder.Configuration.GetConnectionString("AppMvcConnectionString");
+				// options.UseNpgsql(connectionString);
 				options.UseSqlServer(connectionString);
 			});
 

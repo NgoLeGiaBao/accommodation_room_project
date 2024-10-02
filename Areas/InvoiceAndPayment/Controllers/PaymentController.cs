@@ -2,7 +2,7 @@
 
 namespace App.Areas.Payment
 {
-    [Area("Payment")]
+    [Area("InvoiceAndPayment")]
     public class PaymentController : Controller
     {
         [Route("/payment")]

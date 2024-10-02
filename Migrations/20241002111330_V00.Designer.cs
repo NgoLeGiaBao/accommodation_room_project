@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Accommodation_Room_Project_Offical.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240922085204_CrateIdentityUser_V0")]
-    partial class CrateIdentityUser_V0
+    [Migration("20241002111330_V00")]
+    partial class V00
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,7 +35,7 @@ namespace Accommodation_Room_Project_Offical.Migrations
 
                     b.Property<string>("Address")
                         .HasMaxLength(512)
-                        .HasColumnType("nvarchar");
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("Birthday")
                         .HasColumnType("datetime2");
@@ -53,11 +53,11 @@ namespace Accommodation_Room_Project_Offical.Migrations
 
                     b.Property<string>("FullName")
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar");
+                        .HasColumnType("text");
 
                     b.Property<string>("IdentityCard")
                         .HasMaxLength(12)
-                        .HasColumnType("nvarchar");
+                        .HasColumnType("nvarchar(12)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -112,7 +112,137 @@ namespace Accommodation_Room_Project_Offical.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("App.Models.Menu", b =>
+            modelBuilder.Entity("App.Models.Asset", b =>
+                {
+                    b.Property<int>("AssetID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AssetID"));
+
+                    b.Property<string>("AssetName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("CategoryAssetID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Condition")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<decimal>("Cost")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("NextMaintenanceDueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("PurchaseDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("AssetID");
+
+                    b.HasIndex("CategoryAssetID");
+
+                    b.ToTable("Assets");
+                });
+
+            modelBuilder.Entity("App.Models.CategoryAsset", b =>
+                {
+                    b.Property<int>("CategoryAssetID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryAssetID"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("CategoryAssetID");
+
+                    b.ToTable("CategoryAssets");
+                });
+
+            modelBuilder.Entity("App.Models.OwnAsset", b =>
+                {
+                    b.Property<int>("OwnAssetID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AssetID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoomID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("OwnAssetID", "AssetID", "RoomID");
+
+                    b.HasIndex("AssetID");
+
+                    b.HasIndex("RoomID");
+
+                    b.ToTable("OwnAsset");
+                });
+
+            modelBuilder.Entity("App.Models.RentalContract", b =>
+                {
+                    b.Property<int>("ContractID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoomID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("EndupDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("PElectricityPerKw")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PRentalRoomPerM")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PServicePerK")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PWaterPerK")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Rules")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ContractID", "RoomID", "UserID");
+
+                    b.HasIndex("RoomID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("RentalContract");
+                });
+
+            modelBuilder.Entity("App.Models.RentalProperty", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -120,30 +250,108 @@ namespace Accommodation_Room_Project_Offical.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("MenuDateBegin")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
 
-                    b.Property<bool>("MenuHide")
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal>("ElectricityPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Facilities")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<string>("MenuLink")
+                    b.Property<int>("NumberOfRooms")
+                        .HasColumnType("int");
+
+                    b.Property<string>("OwnerName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("MenuMeta")
+                    b.Property<string>("OwnerPhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PropertyImage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PropertyName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("MenuName")
+                    b.Property<string>("PropertyType")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar");
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("TotalArea")
+                        .HasColumnType("float");
+
+                    b.Property<decimal>("WaterPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Menu");
+                    b.HasIndex("AppUserId");
+
+                    b.ToTable("RentalProperty");
+                });
+
+            modelBuilder.Entity("App.Models.Room", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<double>("Area")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MaximumNumberOfPeople")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("RentalPropertyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RoomName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RentalPropertyId");
+
+                    b.ToTable("Room");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -279,6 +487,77 @@ namespace Accommodation_Room_Project_Offical.Migrations
                     b.ToTable("UserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("App.Models.Asset", b =>
+                {
+                    b.HasOne("App.Models.CategoryAsset", "CategoryAsset")
+                        .WithMany("Assets")
+                        .HasForeignKey("CategoryAssetID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CategoryAsset");
+                });
+
+            modelBuilder.Entity("App.Models.OwnAsset", b =>
+                {
+                    b.HasOne("App.Models.Asset", "Asset")
+                        .WithMany("OwnAssets")
+                        .HasForeignKey("AssetID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("App.Models.Room", "Room")
+                        .WithMany("OwnAssets")
+                        .HasForeignKey("RoomID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Asset");
+
+                    b.Navigation("Room");
+                });
+
+            modelBuilder.Entity("App.Models.RentalContract", b =>
+                {
+                    b.HasOne("App.Models.Room", "Room")
+                        .WithMany("RentalContracts")
+                        .HasForeignKey("RoomID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("App.Models.AppUser", "AppUser")
+                        .WithMany("RentalContracts")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Room");
+                });
+
+            modelBuilder.Entity("App.Models.RentalProperty", b =>
+                {
+                    b.HasOne("App.Models.AppUser", "AppUser")
+                        .WithMany("RentalProperties")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+                });
+
+            modelBuilder.Entity("App.Models.Room", b =>
+                {
+                    b.HasOne("App.Models.RentalProperty", "RentalProperty")
+                        .WithMany("Rooms")
+                        .HasForeignKey("RentalPropertyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RentalProperty");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -328,6 +607,35 @@ namespace Accommodation_Room_Project_Offical.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("App.Models.AppUser", b =>
+                {
+                    b.Navigation("RentalContracts");
+
+                    b.Navigation("RentalProperties");
+                });
+
+            modelBuilder.Entity("App.Models.Asset", b =>
+                {
+                    b.Navigation("OwnAssets");
+                });
+
+            modelBuilder.Entity("App.Models.CategoryAsset", b =>
+                {
+                    b.Navigation("Assets");
+                });
+
+            modelBuilder.Entity("App.Models.RentalProperty", b =>
+                {
+                    b.Navigation("Rooms");
+                });
+
+            modelBuilder.Entity("App.Models.Room", b =>
+                {
+                    b.Navigation("OwnAssets");
+
+                    b.Navigation("RentalContracts");
                 });
 #pragma warning restore 612, 618
         }
