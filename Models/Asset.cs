@@ -8,35 +8,26 @@ namespace App.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int AssetID { get; set; } // Mã số nhận dạng tài sản
-
+        public int AssetID { get; set; }
         [Required]
         [StringLength(100)]
-        public string AssetName { get; set; } // Tên tài sản
-
-        public int CategoryAssetID { get; set; } // Khóa ngoại đến danh mục tài sản
-
+        public string AssetName { get; set; }
+        public int CategoryAssetID { get; set; }
         [ForeignKey("CategoryAssetID")]
-        public virtual CategoryAsset CategoryAsset { get; set; } // Danh mục tài sản
-
+        public virtual CategoryAsset CategoryAsset { get; set; }
         [Required]
-        public DateTime PurchaseDate { get; set; } // Ngày mua
-
+        public DateTime PurchaseDate { get; set; }
         [Required]
         [Column(TypeName = "decimal(18, 2)")]
-        public decimal Cost { get; set; } // Giá thành (đơn vị là đồng Việt Nam)
-
+        public decimal Cost { get; set; }
         [StringLength(50)]
-        public string Condition { get; set; } // Tình trạng
-
+        public string Condition { get; set; }
         [StringLength(100)]
-        public string Location { get; set; } // Vị trí
-
-        public DateTime? NextMaintenanceDueDate { get; set; } // Ngày bảo trì tiếp theo
-
+        public string Location { get; set; }
+        public DateTime? NextMaintenanceDueDate { get; set; }
         [StringLength(255)]
-        public string ImagePath { get; set; } // Đường dẫn đến hình ảnh
-        public virtual ICollection<OwnAsset> OwnAssets { get; set; } // Danh sách các phòng sở hữu tài sản
+        public string ImagePath { get; set; }
+        public virtual ICollection<OwnAsset> OwnAssets { get; set; }
 
     }
 

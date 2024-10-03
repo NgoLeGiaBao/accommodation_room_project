@@ -5,16 +5,13 @@ namespace App.Models
     public class OwnNotification
     {
         [Key, Column(Order = 0)]
-        public int NotificationId { get; set; } // Khóa ngoại đến bảng Notification
-
+        public int NotificationId { get; set; }
         [Key, Column(Order = 1)]
-        public string UserId { get; set; } // Khóa ngoại đến bảng User
-
+        public string UserId { get; set; }
         [ForeignKey("NotificationId")]
-        public Notification Notification { get; set; } // Mối quan hệ với Notification
-
+        public Notification Notification { get; set; }
         [ForeignKey("UserId")]
-        public AppUser AppUsers { get; set; } // Mối quan hệ với User
+        public AppUser AppUsers { get; set; }
     }
 
 }

@@ -6,23 +6,18 @@ namespace App.Models
     public class OwnAsset
     {
         [Key]
-        public int OwnAssetID { get; set; } // Khóa chính của bảng OwnAsset
-
+        public int OwnAssetID { get; set; }
         [DataType(DataType.DateTime)]
         [Display(Name = "Created Date")]
         public DateTime CreatedDate { get; set; }
-
         [Required]
-        public int AssetID { get; set; } // Khóa ngoại đến tài sản
-
+        public int AssetID { get; set; }
         [Required]
-        public int RoomID { get; set; } // Khóa ngoại đến phòng
-
+        public int RoomID { get; set; }
         [ForeignKey("AssetID")]
-        public virtual Asset Asset { get; set; } // Tài sản liên kết
-
+        public virtual Asset Asset { get; set; }
         [ForeignKey("RoomID")]
-        public virtual Room Room { get; set; } // Phòng liên kết
+        public virtual Room Room { get; set; }
 
     }
 }

@@ -4,6 +4,7 @@ using App.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Accommodation_Room_Project_Offical.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241003105120_V02")]
+    partial class V02
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -203,11 +206,11 @@ namespace Accommodation_Room_Project_Offical.Migrations
                     b.Property<decimal>("AdditionalServiceFee")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<DateTime>("DateInvoice")
+                        .HasColumnType("datetime2");
+
                     b.Property<double>("ElectricityUsage")
                         .HasColumnType("float");
-
-                    b.Property<DateTime>("InvoiceDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");

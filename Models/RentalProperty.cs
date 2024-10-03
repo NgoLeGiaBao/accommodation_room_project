@@ -8,58 +8,40 @@ namespace App.Models
     {
         [Key]
         public int Id { get; set; }
-
         [Required]
         [StringLength(100)]
         public string PropertyName { get; set; }
-
         [Required]
         [StringLength(100)]
         public string OwnerName { get; set; }
-
         [Required]
         [StringLength(512)]
         public string Address { get; set; }
-
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = "Number of rooms must be greater than 0.")]
         public int NumberOfRooms { get; set; }
-
         [Required]
         [Range(1, double.MaxValue, ErrorMessage = "Total area must be greater than 0.")]
         public double TotalArea { get; set; }
-
         [Required]
         [StringLength(50)]
         public string PropertyType { get; set; }
-
         public string Facilities { get; set; }
-
         [Required]
         [DataType(DataType.Currency)]
         public decimal ElectricityPrice { get; set; }
-
         [Required]
         [DataType(DataType.Currency)]
         public decimal WaterPrice { get; set; }
-
         [Required]
         [Phone]
         public string OwnerPhoneNumber { get; set; }
-
         [DataType(DataType.Date)]
         public DateTime StartDate { get; set; }
-
         public string PropertyImage { get; set; }
         public bool IsActive { get; set; }
-
-        // Foreign key for AppUser
         public string AppUserId { get; set; }
-
-        // Navigation property for AppUser
         public AppUser AppUser { get; set; }
-
-        // Navigation property for related rooms
         public ICollection<Room> Rooms { get; set; } = new List<Room>();
     }
 }

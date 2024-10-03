@@ -10,7 +10,8 @@ namespace App.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            // Bỏ đi tiền tố ASP.NET trong tên bảng
+
+            // Rename all tables that start with "AspNet"
             foreach (var entity in modelBuilder.Model.GetEntityTypes())
             {
                 var tableName = entity.GetTableName();
@@ -45,16 +46,16 @@ namespace App.Models
             // Establish the relationship between RentalContract and Room
             modelBuilder.Entity<RentalContract>()
                 .HasOne(rc => rc.Room)
-                .WithMany(r => r.RentalContracts) // Specify the collection in Room
+                .WithMany(r => r.RentalContracts)
                 .HasForeignKey(rc => rc.RoomID)
-                .OnDelete(DeleteBehavior.Cascade); // Allow cascading deletes for contracts
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Establish the relationship between RentalContract and AppUser
             modelBuilder.Entity<RentalContract>()
                 .HasOne(rc => rc.AppUser)
-                .WithMany(au => au.RentalContracts) // Specify the collection in AppUser
+                .WithMany(au => au.RentalContracts)
                 .HasForeignKey(rc => rc.UserID)
-                .OnDelete(DeleteBehavior.Cascade); // Allow cascading deletes for contracts    
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Define the composite primary key for CategoryAsset
             modelBuilder.Entity<CategoryAsset>()
@@ -62,45 +63,43 @@ namespace App.Models
                 .WithOne(a => a.CategoryAsset)
                 .HasForeignKey(a => a.CategoryAssetID);
 
-            // Định nghĩa mối quan hệ một-nhiều giữa CategoryAsset và Asset
+            // Define the one-to-many relationship between CategoryAsset and Asset
             modelBuilder.Entity<CategoryAsset>()
                 .HasMany(c => c.Assets)
                 .WithOne(a => a.CategoryAsset)
                 .HasForeignKey(a => a.CategoryAssetID)
-                .OnDelete(DeleteBehavior.Cascade); // Cho phép xóa đệ quy
+                .OnDelete(DeleteBehavior.Cascade);
 
-            // Định nghĩa mối quan hệ nhiều-nhiều giữa Asset và Room qua OwnAsset
+            // Define the composite primary key for between Asset and Room through OwnAsset
             modelBuilder.Entity<OwnAsset>()
-                .HasKey(oa => new { oa.OwnAssetID, oa.AssetID, oa.RoomID }); // Khóa chính là sự kết hợp của AssetID và RoomID
+                .HasKey(oa => new { oa.OwnAssetID, oa.AssetID, oa.RoomID });
 
             modelBuilder.Entity<OwnAsset>()
                 .HasOne(oa => oa.Asset)
                 .WithMany(a => a.OwnAssets)
                 .HasForeignKey(oa => oa.AssetID)
-                .OnDelete(DeleteBehavior.Cascade); // Cho phép xóa đệ quy khi xóa tài sản
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<OwnAsset>()
                 .HasOne(oa => oa.Room)
                 .WithMany(r => r.OwnAssets)
                 .HasForeignKey(oa => oa.RoomID)
-                .OnDelete(DeleteBehavior.Cascade); // Cho phép xóa đệ quy khi xóa phòng
+                .OnDelete(DeleteBehavior.Cascade);
 
-            // Cấu hình mối quan hệ giữa User và Notification
+            // Define the one-to-many relationship between User and Notification
             modelBuilder.Entity<Notification>()
                 .HasOne(n => n.Creator)
                 .WithMany(u => u.CreatedNotifications)
                 .HasForeignKey(n => n.CreatorUserId)
-                .OnDelete(DeleteBehavior.Cascade); // Xóa thông báo khi người tạo bị xóa
+                .OnDelete(DeleteBehavior.Cascade);
 
-            // Cấu hình mối quan hệ giữa Notification và CategoryNotification
+            // Define the one-to-one relationship between Notification and CategoryNotification
             modelBuilder.Entity<Notification>()
                 .HasOne(n => n.CategoryNotification)
                 .WithMany(c => c.Notifications)
-                .HasForeignKey(n => n.CategoryNoID); // Khóa ngoại
+                .HasForeignKey(n => n.CategoryNoID);
 
-
-
-
+            // Define the composite primary key for between Notification and AppUser through Own notification
             modelBuilder.Entity<Notification>()
                 .HasKey(n => n.NotificationId);
 
@@ -111,13 +110,23 @@ namespace App.Models
                 .HasOne(on => on.Notification)
                 .WithMany(n => n.OwnNotifications)
                 .HasForeignKey(on => on.NotificationId)
-                .OnDelete(DeleteBehavior.Restrict); // Ngăn chặn xóa cascade
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<OwnNotification>()
                 .HasOne(on => on.AppUsers)
                 .WithMany(u => u.OwnNotifications)
                 .HasForeignKey(on => on.UserId)
-                .OnDelete(DeleteBehavior.Restrict); // Ngăn chặn xóa cascade
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Define the one-to-many relationship between Invoice and Room
+            modelBuilder.Entity<Room>()
+                .HasMany(r => r.Invoices)
+                .WithOne(i => i.Room)
+                .HasForeignKey(i => i.RoomId);
+
+            modelBuilder.Entity<Invoice>()
+                .HasIndex(i => i.QRCodeImage)
+                .IsUnique();
         }
 
         // Các DbSet cho các thực thể
@@ -126,5 +135,9 @@ namespace App.Models
         public DbSet<RentalContract> RentalContracts { get; set; }
         public DbSet<CategoryAsset> CategoryAssets { get; set; }
         public DbSet<Asset> Assets { get; set; }
+        public DbSet<OwnAsset> OwnAssets { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<OwnNotification> OwnNotifications { get; set; }
+        public DbSet<Invoice> Invoices { get; set; }
     }
 }
