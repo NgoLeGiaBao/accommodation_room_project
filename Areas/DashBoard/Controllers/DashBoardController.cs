@@ -5,7 +5,7 @@ namespace App.Areas.DashBoard
     [Area("DashBoard")]
     public class DashBoardController : Controller
     {
-        [Route("/")]
+        [Route("/dashboard")]
         public IActionResult Index()
         {
             return View();

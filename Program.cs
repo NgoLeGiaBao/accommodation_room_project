@@ -20,8 +20,8 @@ namespace App
 			builder.Services.AddDbContext<AppDbContext>(options =>
 			{
 				string connectionString = builder.Configuration.GetConnectionString("AppMvcConnectionString");
-				// options.UseNpgsql(connectionString);
-				options.UseSqlServer(connectionString);
+				options.UseNpgsql(connectionString);
+				// options.UseSqlServer(connectionString);
 			});
 
 			builder.Services.AddSingleton<IFileProvider>(
@@ -31,6 +31,13 @@ namespace App
 			builder.Services.AddIdentity<AppUser, IdentityRole>()
 						.AddEntityFrameworkStores<AppDbContext>()
 						.AddDefaultTokenProviders();
+			// Configure authorize
+			builder.Services.ConfigureApplicationCookie(options =>
+			{
+				options.LoginPath = "/";
+				// options.LogoutPath = "/Identity/Account/Logout";
+				// options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+			});
 
 			var app = builder.Build();
 			// Configure the HTTP request pipeline.
@@ -47,11 +54,12 @@ namespace App
 
 			app.UseRouting();
 
+			app.UseAuthentication();
 			app.UseAuthorization();
 
 			app.MapControllerRoute(
 				name: "default",
-				pattern: "{area=Dashboard}/{controller=Dashboard}/{action=Index}/{id?}"
+				pattern: "{area=Account}/{controller=Login}/{action=Index}"
 			);
 
 			app.Run();
