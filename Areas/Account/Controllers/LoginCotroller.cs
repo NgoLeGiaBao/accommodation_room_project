@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using App.Models;
 using App.Areas.Account.Models;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using Humanizer;
 [Area("Account")]
 public class LoginController : Controller
 {
@@ -13,6 +15,7 @@ public class LoginController : Controller
         _signInManager = signInManager;
         _userManager = userManager;
     }
+
 
     [BindProperty]
     public InputModel Input { get; set; }
@@ -36,11 +39,12 @@ public class LoginController : Controller
 
             if (result.Succeeded)
             {
-                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                if (!string.IsNullOrEmpty(returnUrl) && returnUrl != "/" && Url.IsLocalUrl(returnUrl))
                 {
                     return LocalRedirect(returnUrl);
                 }
                 return RedirectToAction("Index", "Dashboard", new { area = "Dashboard" });
+
             }
         }
         ViewBag.LoginFailed = true;

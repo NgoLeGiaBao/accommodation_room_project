@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel;
 
 namespace App.Models
 {
@@ -12,70 +9,70 @@ namespace App.Models
         [Key]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Tên tài sản là bắt buộc.")]
-        [StringLength(100, ErrorMessage = "Tên tài sản không được vượt quá 100 ký tự.")]
-        [Display(Name = "Tên Tài Sản", Prompt = "Nhập tên tài sản...")]
+        [Required(ErrorMessage = "Property name is required.")]
+        [StringLength(100, ErrorMessage = "Property name cannot exceed 100 characters.")]
+        [Display(Name = "Property Name", Prompt = "Enter property name...")]
         public string PropertyName { get; set; }
 
-        [Required(ErrorMessage = "Tên chủ sở hữu là bắt buộc.")]
-        [StringLength(100, ErrorMessage = "Tên chủ sở hữu không được vượt quá 100 ký tự.")]
-        [Display(Name = "Tên Chủ Sở Hữu", Prompt = "Nhập tên chủ sở hữu...")]
+        [Required(ErrorMessage = "Owner name is required.")]
+        [StringLength(100, ErrorMessage = "Owner name cannot exceed 100 characters.")]
+        [Display(Name = "Owner Name", Prompt = "Enter owner name...")]
         public string OwnerName { get; set; }
 
-        [Required(ErrorMessage = "Địa chỉ là bắt buộc.")]
-        [StringLength(512, ErrorMessage = "Địa chỉ không được vượt quá 512 ký tự.")]
-        [Display(Name = "Địa Chỉ", Prompt = "Nhập địa chỉ...")]
+        [Required(ErrorMessage = "Address is required.")]
+        [StringLength(512, ErrorMessage = "Address cannot exceed 512 characters.")]
+        [Display(Name = "Address", Prompt = "Enter address...")]
         public string Address { get; set; }
 
-        [Required(ErrorMessage = "Số phòng là bắt buộc.")]
-        [Range(1, int.MaxValue, ErrorMessage = "Số phòng phải lớn hơn 0.")]
-        [Display(Name = "Số Phòng", Prompt = "Nhập số phòng...")]
+        [Required(ErrorMessage = "Number of rooms is required.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Number of rooms must be greater than 0.")]
+        [Display(Name = "Number of Rooms", Prompt = "Enter number of rooms...")]
         public int NumberOfRooms { get; set; }
 
-        [Required(ErrorMessage = "Diện tích tổng là bắt buộc.")]
-        [Range(1, double.MaxValue, ErrorMessage = "Diện tích phải lớn hơn 0.")]
-        [Display(Name = "Diện Tích Tổng", Prompt = "Nhập diện tích tổng?...")]
+        [Required(ErrorMessage = "Total area is required.")]
+        [Range(1, double.MaxValue, ErrorMessage = "Total area must be greater than 0.")]
+        [Display(Name = "Total Area", Prompt = "Enter total area...")]
         public double TotalArea { get; set; }
 
-        [Required(ErrorMessage = "Loại tài sản là bắt buộc.")]
-        [StringLength(50, ErrorMessage = "Loại tài sản không được vượt quá 50 ký tự.")]
-        [Display(Name = "Loại Tài Sản", Prompt = "Nhập loại tài sản...")]
+        [Required(ErrorMessage = "Property type is required.")]
+        [StringLength(50, ErrorMessage = "Property type cannot exceed 50 characters.")]
+        [Display(Name = "Property Type", Prompt = "Enter property type...")]
         public string PropertyType { get; set; }
 
-        [Display(Name = "Tiện Nghi", Prompt = "Nhập các tiện nghi...")]
+        [Display(Name = "Facilities", Prompt = "Enter facilities...")]
         public string Facilities { get; set; }
 
-        [Required(ErrorMessage = "Giá điện là bắt buộc.")]
+        [Required(ErrorMessage = "Electricity price is required.")]
         [DataType(DataType.Currency)]
-        [Display(Name = "Giá Điện", Prompt = "Nhập giá điện...")]
+        [Display(Name = "Electricity Price", Prompt = "Enter electricity price...")]
         public decimal ElectricityPrice { get; set; }
 
-        [Required(ErrorMessage = "Giá nước là bắt buộc.")]
+        [Required(ErrorMessage = "Water price is required.")]
         [DataType(DataType.Currency)]
-        [Display(Name = "Giá Nước", Prompt = "Nhập giá nước...")]
+        [Display(Name = "Water Price", Prompt = "Enter water price...")]
         public decimal WaterPrice { get; set; }
 
-        [Required(ErrorMessage = "Số điện thoại chủ sở hữu là bắt buộc.")]
-        [Phone(ErrorMessage = "Số điện thoại không hợp lệ.")]
-        [Display(Name = "Số Điện Thoại Chủ Sở Hữu", Prompt = "Nhập số điện thoại chủ sở hữu...")]
+        [Required(ErrorMessage = "Owner's phone number is required.")]
+        [Phone(ErrorMessage = "Invalid phone number.")]
+        [Display(Name = "Owner's Phone Number", Prompt = "Enter owner's phone number...")]
         public string OwnerPhoneNumber { get; set; }
 
-        [Required(ErrorMessage = "Ngày bắt đầu là bắt buộc.")]
+        [Required(ErrorMessage = "Start date is required.")]
         [DataType(DataType.Date)]
-        [Display(Name = "Ngày Bắt Đầu", Prompt = "Nhập ngày bắt đầu...")]
+        [Display(Name = "Start Date", Prompt = "Enter start date...")]
         public DateTime StartDate { get; set; }
 
-        [Display(Name = "Hình Ảnh Tài Sản", Prompt = "Chọn đường dẫn đến hình ảnh tài sản...")]
+        [Display(Name = "Property Image", Prompt = "Select the path to the property image...")]
         public string? PropertyImage { get; set; }
 
-        [Display(Name = "Trạng Thái Hoạt Động")]
+        [Display(Name = "Active Status")]
         public bool IsActive { get; set; }
 
-        [Display(Name = "Người Dùng Ứng Dụng")]
-        public string AppUserId { get; set; }
-        public AppUser AppUser { get; set; }
+        [Display(Name = "Application User")]
+        public string? AppUserId { get; set; }
+        public AppUser? AppUser { get; set; }
 
-        [Display(Name = "Danh Sách Phòng")]
+        [Display(Name = "Room List")]
         public ICollection<Room> Rooms { get; set; } = new List<Room>();
     }
 }

@@ -53,7 +53,6 @@ namespace App
 			app.UseStaticFiles();
 
 			app.UseRouting();
-
 			app.UseAuthentication();
 			app.UseAuthorization();
 
@@ -61,7 +60,6 @@ namespace App
 				name: "default",
 				pattern: "{area=Account}/{controller=Login}/{action=Index}"
 			);
-
 			app.Run();
 		}
 	}

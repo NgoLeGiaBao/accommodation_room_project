@@ -2,6 +2,7 @@
 using App.Models;
 using System.ComponentModel;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace App.Areas.Room
 {
@@ -10,9 +11,13 @@ namespace App.Areas.Room
     public class RoomController : Controller
     {
         private readonly AppDbContext _appDbContext;
-        public RoomController(AppDbContext appDbContext)
+        private readonly UserManager<AppUser> _userManager;
+
+
+        public RoomController(AppDbContext appDbContext, UserManager<AppUser> userManager)
         {
             _appDbContext = appDbContext;
+            _userManager = userManager;
         }
 
 
@@ -54,13 +59,29 @@ namespace App.Areas.Room
         [Route("/create-home")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateHome(RentalProperty model, IFormFile propertyImage)
+        public async Task<IActionResult> CreateHome(RentalProperty model, IFormFile[]? propertyImage)
         {
-            model.StartDate = model.StartDate.ToUniversalTime();
-            model.IsActive = true;
-            _appDbContext.RentalProperties.Add(model);
-            await _appDbContext.SaveChangesAsync();
-            return Content(model.PropertyName.ToString());
+            // Get user logged in
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null)
+            {
+                model.AppUserId = user.Id.ToString();
+            }
+
+            // Check validation
+            if (ModelState.IsValid)
+            {
+                model.StartDate = model.StartDate.ToUniversalTime();
+                model.IsActive = true;
+                _appDbContext.RentalProperties.Add(model);
+                await _appDbContext.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Rental property created successfully.";
+                return RedirectToAction("CreateHome");
+            }
+
+            // Data is not validated
+            TempData["FailureMessage"] = "Rental property created successfully, please try again.";
+            return View(model);
         }
 
         [Route("/create-room")]

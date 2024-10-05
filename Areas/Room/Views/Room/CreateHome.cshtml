@@ -1,130 +1,19 @@
-@* <div class="container-fluid">
-<div class="row">
-<div class="col-lg-12">
-<div class="card">
-<div class="card-body">
-<!-- Centered card title -->
-<h2 class="card-title text-center">Add New Rental Property</h2>
-<div class="basic-form">
-<form action="/submitNewHome" method="POST">
-<!-- Property Name -->
-<div class="form-row">
-<div class="form-group col-md-6">
-<label>Property Name</label>
-<input type="text" class="form-control" name="homeName"
-placeholder="Enter property name" required>
-</div>
-<div class="form-group col-md-6">
-<label>Owner Name</label>
-<input type="text" class="form-control" name="ownerName"
-placeholder="Enter owner's name" required>
-</div>
-</div>
-
-<!-- Address -->
-<div class="form-group">
-<label>Address</label>
-<input type="text" class="form-control" name="address" placeholder="Enter address"
-required>
-</div>
-
-<div class="form-row">
-<!-- Number of Rooms -->
-<div class="form-group col-md-6">
-<label>Number of Rooms</label>
-<input type="number" class="form-control" name="roomCount"
-placeholder="Enter number of rooms" required>
-</div>
-
-<!-- Owner's Phone Number -->
-<div class="form-group col-md-6">
-<label>Owner's Phone Number</label>
-<input type="tel" class="form-control" name="ownerPhone"
-placeholder="Enter phone number" required>
-</div>
-</div>
-
-<div class="form-row">
-<!-- Total Area -->
-<div class="form-group col-md-6">
-<label>Total Area (m²)</label>
-<input type="number" class="form-control" name="totalArea"
-placeholder="Enter total area" required>
-</div>
-
-<!-- Property Type -->
-<div class="form-group col-md-6">
-<label>Property Type</label>
-<select class="form-control" name="type" required>
-<option selected="selected">Choose type...</option>
-<option value="Low-cost">Low-cost</option>
-<option value="High-end">High-end</option>
-<option value="Student rooms">Student rooms</option>
-</select>
-</div>
-</div>
-
-<!-- Facilities -->
-<div class="form-group">
-<label>Facilities</label>
-<textarea class="form-control" name="facilities" rows="3"
-placeholder="Wi-Fi, parking, air-conditioning, security cameras, ..."
-required></textarea>
-</div>
-<div class="form-row">
-<!-- Electricity Price -->
-<div class="form-group col-md-6">
-<label>Electricity Price (VND/kWh)</label>
-<input type="number" class="form-control" name="electricPrice"
-placeholder="Enter electricity price" required>
-</div>
-
-<!-- Water Price -->
-<div class="form-group col-md-6">
-<label>Water Price (VND/m³)</label>
-<input type="number" class="form-control" name="waterPrice"
-placeholder="Enter water price" required>
-</div>
-</div>
-
-<!-- Start Date -->
-<div class="form-group">
-<label>Start Date</label>
-<input type="date" class="form-control" name="startDate" required>
-</div>
-
-<!-- Property Image -->
-<div class="form-group">
-<label>Property Image</label>
-<input type="file" class="form-control-file" name="homeImage">
-</div>
-
-<div class="text-center">
-<button type="submit" class="btn btn-dark btn-lg px-5">Add Home</button>
-</div>
-</form>
-</div>
-</div>
-</div>
-</div>
-
-</div>
-</div> *@
-
-
 @model App.Models.RentalProperty
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12">
-            <div class="card">
+            <div class="card shadow-sm">
                 <div class="card-body">
-                    <h2 class="card-title text-center">Thêm Tài Sản Cho Thuê</h2>
+                    <h2 class="text-center lh-base mb-4">Add Rental Property</h2>
+                    <partial name="_SuccessMessage" />
+                    <partial name="_FailureMessage" />
                     <div class="basic-form">
                         <form asp-action="CreateHome" method="POST" enctype="multipart/form-data">
-                            <!-- Property Name -->
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    @Html.LabelFor(m => m.PropertyName)
+                                    @Html.LabelFor(m => m.PropertyName, new { @class = "control-label" })
                                     @Html.EditorFor(m => m.PropertyName, new
                                         {
                                             htmlAttributes = new
@@ -133,12 +22,12 @@ placeholder="Enter water price" required>
                                              "form-control"
                                             }
                                         })
-                                    @Html.ValidationMessageFor(m => m.PropertyName)
+                                    @Html.ValidationMessageFor(m => m.PropertyName, "", new { @class = "text-danger" })
                                 </div>
 
                                 <!-- Owner Name -->
                                 <div class="form-group col-md-6">
-                                    @Html.LabelFor(m => m.OwnerName)
+                                    @Html.LabelFor(m => m.OwnerName, new { @class = "control-label" })
                                     @Html.EditorFor(m => m.OwnerName, new
                                         {
                                             htmlAttributes = new
@@ -147,24 +36,24 @@ placeholder="Enter water price" required>
                                              "form-control"
                                             }
                                         })
-                                    @Html.ValidationMessageFor(m => m.OwnerName)
+                                    @Html.ValidationMessageFor(m => m.OwnerName, "", new { @class = "text-danger" })
                                 </div>
                             </div>
 
                             <!-- Address -->
                             <div class="form-group">
-                                @Html.LabelFor(m => m.Address)
+                                @Html.LabelFor(m => m.Address, new { @class = "control-label" })
                                 @Html.EditorFor(m => m.Address, new
                                     {
                                         htmlAttributes = new { @class = "form-control" }
                                     })
-                                @Html.ValidationMessageFor(m => m.Address)
+                                @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
                             </div>
 
                             <div class="form-row">
                                 <!-- Number of Rooms -->
                                 <div class="form-group col-md-6">
-                                    @Html.LabelFor(m => m.NumberOfRooms)
+                                    @Html.LabelFor(m => m.NumberOfRooms, new { @class = "control-label" })
                                     @Html.EditorFor(m => m.NumberOfRooms, new
                                         {
                                             htmlAttributes = new
@@ -174,12 +63,12 @@ placeholder="Enter water price" required>
                                                 type = "number"
                                             }
                                         })
-                                    @Html.ValidationMessageFor(m => m.NumberOfRooms)
+                                    @Html.ValidationMessageFor(m => m.NumberOfRooms, "", new { @class = "text-danger" })
                                 </div>
 
                                 <!-- Owner Phone Number -->
                                 <div class="form-group col-md-6">
-                                    @Html.LabelFor(m => m.OwnerPhoneNumber)
+                                    @Html.LabelFor(m => m.OwnerPhoneNumber, new { @class = "control-label" })
                                     @Html.EditorFor(m => m.OwnerPhoneNumber, new
                                         {
                                             htmlAttributes = new
@@ -189,14 +78,17 @@ placeholder="Enter water price" required>
                                                 type = "tel"
                                             }
                                         })
-                                    @Html.ValidationMessageFor(m => m.OwnerPhoneNumber)
+                                    @Html.ValidationMessageFor(m => m.OwnerPhoneNumber, "", new
+                                        {
+                                            @class = "text-danger"
+                                        })
                                 </div>
                             </div>
 
                             <div class="form-row">
                                 <!-- Total Area -->
                                 <div class="form-group col-md-6">
-                                    @Html.LabelFor(m => m.TotalArea)
+                                    @Html.LabelFor(m => m.TotalArea, new { @class = "control-label" })
                                     @Html.EditorFor(m => m.TotalArea, new
                                         {
                                             htmlAttributes = new
@@ -206,41 +98,41 @@ placeholder="Enter water price" required>
                                                 type = "number"
                                             }
                                         })
-                                    @Html.ValidationMessageFor(m => m.TotalArea)
+                                    @Html.ValidationMessageFor(m => m.TotalArea, "", new { @class = "text-danger" })
                                 </div>
 
                                 <!-- Property Type -->
                                 <div class="form-group col-md-6">
-                                    @Html.LabelFor(m => m.PropertyType)
+                                    @Html.LabelFor(m => m.PropertyType, new { @class = "control-label" })
                                     @Html.DropDownListFor(m => m.PropertyType,
                                              new SelectList(new List<SelectListItem>
                                     {
                                     new SelectListItem { Value = "Low-cost", Text = "Giá rẻ" },
                                     new SelectListItem { Value = "High-end", Text = "Cao cấp" },
                                     new SelectListItem { Value = "Student rooms", Text = "Phòng sinh viên" }
-                                    }, "Value", "Text"), "Chọn loại...", new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(m => m.PropertyType)
+                                    }, "Value", "Text"),
+                                             "Chọn loại...",
+                                             new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.PropertyType, "", new { @class = "text-danger" })
                                 </div>
                             </div>
 
-                            <!-- Facilities (Dynamically Bound Placeholder) -->
+                            <!-- Facilities -->
                             <div class="form-group">
-                                @Html.LabelFor(m => m.Facilities)
-                                @Html.EditorFor(m => m.Facilities, new
+                                @Html.LabelFor(m => m.Facilities, new { @class = "control-label" })
+                                @Html.TextAreaFor(m => m.Facilities, new
                                     {
-                                        htmlAttributes = new
-                                        {
-                                            @class = "form-control",
-                                            rows = 3
-                                        }
+                                        @class = "form-control",
+                                        rows = 3,
+                                        placeholder = "Enter facilities, e.g., Wi-Fi, parking, air-conditioning..."
                                     })
-                                @Html.ValidationMessageFor(m => m.Facilities)
+                                @Html.ValidationMessageFor(m => m.Facilities, "", new { @class = "text-danger" })
                             </div>
 
                             <div class="form-row">
                                 <!-- Electricity Price -->
                                 <div class="form-group col-md-6">
-                                    @Html.LabelFor(m => m.ElectricityPrice)
+                                    @Html.LabelFor(m => m.ElectricityPrice, new { @class = "control-label" })
                                     @Html.EditorFor(m => m.ElectricityPrice, new
                                         {
                                             htmlAttributes = new
@@ -250,12 +142,15 @@ placeholder="Enter water price" required>
                                                 type = "number"
                                             }
                                         })
-                                    @Html.ValidationMessageFor(m => m.ElectricityPrice)
+                                    @Html.ValidationMessageFor(m => m.ElectricityPrice, "", new
+                                        {
+                                            @class = "text-danger"
+                                        })
                                 </div>
 
                                 <!-- Water Price -->
                                 <div class="form-group col-md-6">
-                                    @Html.LabelFor(m => m.WaterPrice)
+                                    @Html.LabelFor(m => m.WaterPrice, new { @class = "control-label" })
                                     @Html.EditorFor(m => m.WaterPrice, new
                                         {
                                             htmlAttributes = new
@@ -265,13 +160,13 @@ placeholder="Enter water price" required>
                                                 type = "number"
                                             }
                                         })
-                                    @Html.ValidationMessageFor(m => m.WaterPrice)
+                                    @Html.ValidationMessageFor(m => m.WaterPrice, "", new { @class = "text-danger" })
                                 </div>
                             </div>
 
                             <!-- Start Date -->
                             <div class="form-group">
-                                @Html.LabelFor(m => m.StartDate)
+                                @Html.LabelFor(m => m.StartDate, new { @class = "control-label" })
                                 @Html.EditorFor(m => m.StartDate, new
                                     {
                                         htmlAttributes = new
@@ -280,23 +175,28 @@ placeholder="Enter water price" required>
                                             type = "date"
                                         }
                                     })
-                                @Html.ValidationMessageFor(m => m.StartDate)
+                                @Html.ValidationMessageFor(m => m.StartDate, "", new { @class = "text-danger" })
                             </div>
 
                             <!-- Property Image -->
                             <div class="form-group">
-                                @Html.LabelFor(m => m.PropertyImage)
-                                @Html.TextBoxFor(m => m.PropertyImage, new
-                                    {
-                                        type = "file",
-                                        @class = "form-control-file"
-                                    })
-                                @Html.ValidationMessageFor(m => m.PropertyImage)
+                                @Html.LabelFor(m => m.PropertyImage, new { @class = "control-label" })
+                                <div class="custom-file">
+                                    @Html.TextBoxFor(m => m.PropertyImage, new
+                                        {
+                                            type = "file",
+                                            @class =
+                                             "custom-file-input",
+                                            id = "propertyImage",
+                                            multiple = "multiple"
+                                        })
+                                    <label class="custom-file-label" for="propertyImage">Choose files</label>
+                                </div>
+                                @Html.ValidationMessageFor(m => m.PropertyImage, "", new { @class = "text-danger" })
                             </div>
 
-                            <!-- Submit Button -->
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-dark btn-lg px-5">Thêm Tài Sản</button>
+                            <div class="text-center mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg px-5">Add Rental Property</button>
                             </div>
                         </form>
                     </div>
@@ -305,3 +205,29 @@ placeholder="Enter water price" required>
         </div>
     </div>
 </div>
+
+@section AdditionalLinkCSS {
+    <style>
+        .text-danger {
+            display: inline-block;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        .custom-file-label::after {
+            content: "Browse";
+        }
+    </style>
+}
+
+@section AdditionalLinkJavascript {
+    <script>
+        document.getElementById("propertyImage").addEventListener("change", function (event) {
+            const input = event.target;
+            const label = input.nextElementSibling;
+            const fileNames = Array.from(input.files).map(file => file.name).join(", ");
+            label.textContent = fileNames || "Choose files";
+        });
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+}
