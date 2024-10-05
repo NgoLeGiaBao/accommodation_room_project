@@ -27,28 +27,6 @@ namespace App.Areas.Room
             return View();
         }
 
-        [Route("/edit-room/{id?}")]
-        [HttpGet]
-        public IActionResult EditRoom(int id)
-        {
-            return View();
-        }
-
-        [Route("/edit-home/{id?}")]
-        [HttpGet]
-        public IActionResult EditHome(int id)
-        {
-            return View();
-        }
-
-
-        [Route("/room-delete/{id?}")]
-        [HttpGet]
-        public IActionResult Delete(int id)
-        {
-            return Content(id.ToString());
-        }
-
         [Route("/create-home")]
         [HttpGet]
         public IActionResult CreateHome()
@@ -82,6 +60,66 @@ namespace App.Areas.Room
             // Data is not validated
             TempData["FailureMessage"] = "Rental property created successfully, please try again.";
             return View(model);
+        }
+
+        [Route("/edit-home/{id?}")]
+        [HttpGet]
+        public IActionResult EditHome(int id)
+        {
+            var rentalProperty = _appDbContext.RentalProperties.Find(id);
+            if (rentalProperty != null)
+            {
+                return View(rentalProperty);
+            }
+            return NotFound();
+        }
+
+        [Route("/edit-home/{id?}")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditHome(RentalProperty model)
+        {
+            if (ModelState.IsValid)
+            {
+                model.StartDate = model.StartDate.ToUniversalTime();
+                model.IsActive = true;
+                _appDbContext.RentalProperties.Update(model);
+                _appDbContext.SaveChanges();
+                TempData["SuccessMessage"] = "Rental property updated successfully.";
+                return RedirectToAction("EditHome");
+            }
+            TempData["FailureMessage"] = "Rental property updated failurely, please try again.";
+            return View(model);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        [Route("/edit-room/{id?}")]
+        [HttpGet]
+        public IActionResult EditRoom(int id)
+        {
+            return View();
+        }
+
+
+
+
+        [Route("/room-delete/{id?}")]
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            return Content(id.ToString());
         }
 
         [Route("/create-room")]
