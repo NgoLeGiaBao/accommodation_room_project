@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using App.Models;
-using System.ComponentModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace App.Areas.Room
 {
@@ -92,25 +93,81 @@ namespace App.Areas.Room
             return View(model);
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-        [Route("/edit-room/{id?}")]
+        [Route("/create-room/{homeId:int?}")]
         [HttpGet]
-        public IActionResult EditRoom(int id)
+        public IActionResult CreateRoom()
         {
             return View();
         }
+
+        [Route("/create-room/{homeId:int?}")]
+        [HttpPost]
+        public async Task<IActionResult> CreateRoomAsync(App.Models.Room room, int homeId)
+        {
+            var home = await _appDbContext.RentalProperties.FindAsync(homeId);
+            if (home != null && ModelState.IsValid)
+            {
+                room.RentalPropertyId = home.Id;
+                _appDbContext.Rooms.Add(room);
+                await _appDbContext.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Room created successfully.";
+                return RedirectToAction("CreateRoom");
+            }
+            TempData["FailureMessage"] = "Room created failurely, please try again.";
+            return View(room);
+        }
+
+        [Route("/edit-room")]
+        [HttpGet]
+        public async Task<IActionResult> EditRoom(int homeId, int roomId)
+        {
+            if (homeId == 0 || roomId == 0)
+                return NotFound();
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+                return NotFound();
+
+            var room = _appDbContext.Rooms
+                        .Include(r => r.RentalProperty)
+                        .Where(r => r.Id == roomId
+                        && r.RentalPropertyId == homeId
+                        && r.RentalProperty.AppUserId == user.Id.ToString())
+                        .FirstOrDefault();
+            if (room == null)
+                return NotFound();
+            return View(room);
+        }
+
+        [Route("/edit-room")]
+        [HttpPost]
+        public async Task<IActionResult> EditRoom(App.Models.Room room, int homeId, int roomId)
+        {
+            if (ModelState.IsValid)
+            {
+                var existingRoom = await _appDbContext.Rooms.FindAsync(roomId);
+                if (existingRoom == null)
+                    return NotFound();
+
+                existingRoom.RoomName = room.RoomName;
+                existingRoom.Description = room.Description;
+                if (existingRoom.RentalPropertyId != homeId)
+                    existingRoom.RentalPropertyId = homeId;
+
+                // Save the changes asynchronously
+                await _appDbContext.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Room updated successfully.";
+                return View(existingRoom);
+            }
+            TempData["FailureMessage"] = "Room update failed, please try again.";
+            return View(room);
+        }
+
+
+
+
+
+
 
 
 
@@ -122,11 +179,6 @@ namespace App.Areas.Room
             return Content(id.ToString());
         }
 
-        [Route("/create-room")]
-        public IActionResult CreateRoom()
-        {
-            return View();
-        }
 
         [Route("/view-room")]
         public IActionResult ViewRoom()

@@ -65,7 +65,8 @@
                                 <span>Available 4</span> | <span>About to expire 2</span> | <span>Rented 7</span>
                             </div>
                             <div class="action-buttons mb-2">
-                                <a asp-controller="Room" asp-action="CreateRoom" class="btn btn-primary me-2 ">
+                                <a asp-controller="Room" asp-action="CreateRoom" asp-route-homeId="30"
+                                    class="btn btn-primary me-2 ">
                                     <i class="fas fa-plus"></i> Add room
                                 </a>
                                 <a asp-controller="Room" asp-action="EditHome" asp-route-id="30"
@@ -90,8 +91,8 @@
                                             Room Status: <span class="badge badge-primary px-2">Sale</span>
                                         </p>
                                         <div class="d-flex justify-content-center">
-                                            <a asp-controller="Room" asp-action="EditRoom"
-                                                class="btn btn-primary ">Edit</a>
+                                            <a asp-controller="Room" asp-action="EditRoom" asp-route-homeId="30"
+                                                asp-route-roomId="6" class="btn btn-primary">Edit</a>
                                             <a asp-controller="Room" asp-action="ViewRoom"
                                                 class="btn btn-secondary margin-room-update">View</a>
                                         </div>

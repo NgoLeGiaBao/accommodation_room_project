@@ -1,60 +1,184 @@
-﻿<div class="container-fluid">
+﻿@* <div class="container-fluid">
+<div class="row">
+<div class="col-lg-12">
+<div class="card">
+<div class="card-body">
+<!-- Centered card title -->
+<h4 class="card-title text-center">Edit Room</h4>
+<div class="basic-form">
+<form action="/submitNewRoom" method="POST">
+<div class="form-row">
+<!-- Diện Tích -->
+<div class="form-group col-md-6">
+<label>Diện Tích (m²)</label>
+<input type="number" class="form-control" name="area" placeholder="Nhập diện tích"
+required>
+</div>
+
+<!-- Số Phòng -->
+<div class="form-group col-md-6">
+<label>Số Phòng</label>
+<input type="number" class="form-control" name="roomCount"
+placeholder="Nhập số phòng" required>
+</div>
+</div>
+
+<div class="form-row">
+<!-- Số Lượng Người Ở Tối Đa -->
+<div class="form-group col-md-6">
+<label>Số Lượng Người Ở Tối Đa</label>
+<input type="number" class="form-control" name="maxOccupants"
+placeholder="Nhập số lượng người tối đa" required>
+</div>
+
+<!-- Giá Thuê -->
+<div class="form-group col-md-6">
+<label>Giá Thuê (VND/tháng)</label>
+<input type="number" class="form-control" name="rentalPrice"
+placeholder="Nhập giá thuê" required>
+</div>
+</div>
+
+<!-- Tiện Nghi -->
+<div class="form-group">
+<label>Tiện Nghi</label>
+<textarea class="form-control" name="facilities" rows="3"
+placeholder="Nhập tiện nghi..." required></textarea>
+</div>
+
+<!-- Nút Gửi -->
+<div class="text-center">
+<button type="submit" class="btn btn-dark btn-lg px-5">Edit Room</button>
+</div>
+</form>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div> *@
+@model App.Models.Room
+<div class="container-fluid">
     <div class="row">
         <div class="col-lg-12">
-            <div class="card">
+            <div class="card shadow-sm">
                 <div class="card-body">
-                    <!-- Centered card title -->
-                    <h4 class="card-title text-center">Edit Room</h4>
+                    <h2 class="text-center lh-base mb-4">Edit A New Room</h2>
+                    <partial name="_SuccessMessage" />
+                    <partial name="_FailureMessage" />
                     <div class="basic-form">
-                        <form action="/submitNewRoom" method="POST">
+                        <form asp-action="EditRoom" asp-route-homeId="@Model.RentalPropertyId" asp-route-roomId="@Model.Id"
+                             method="POST" enctype="multipart/form-data">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                             <div class="form-row">
-                                <!-- Diện Tích -->
+                                <!-- Room Name -->
                                 <div class="form-group col-md-6">
-                                    <label>Diện Tích (m²)</label>
-                                    <input type="number" class="form-control" name="area" placeholder="Nhập diện tích"
-                                        required>
+                                    @Html.LabelFor(m => m.RoomName, new { @class = "control-label" })
+                                    @Html.EditorFor(m => m.RoomName, new
+                                        {
+                                            htmlAttributes = new { @class = "form-control" }
+                                        })
+                                    @Html.ValidationMessageFor(m => m.RoomName, "", new { @class = "text-danger" })
                                 </div>
 
-                                <!-- Số Phòng -->
+                                <!-- Area -->
                                 <div class="form-group col-md-6">
-                                    <label>Số Phòng</label>
-                                    <input type="number" class="form-control" name="roomCount"
-                                        placeholder="Nhập số phòng" required>
+                                    @Html.LabelFor(m => m.Area, new { @class = "control-label" })
+                                    @Html.EditorFor(m => m.Area, new
+                                        {
+                                            htmlAttributes = new
+                                            {
+                                                @class = "form-control",
+                                                type = "number"
+                                            }
+                                        })
+                                    @Html.ValidationMessageFor(m => m.Area, "", new { @class = "text-danger" })
                                 </div>
                             </div>
 
                             <div class="form-row">
-                                <!-- Số Lượng Người Ở Tối Đa -->
+                                <!-- Maximum Number of People -->
                                 <div class="form-group col-md-6">
-                                    <label>Số Lượng Người Ở Tối Đa</label>
-                                    <input type="number" class="form-control" name="maxOccupants"
-                                        placeholder="Nhập số lượng người tối đa" required>
+                                    @Html.LabelFor(m => m.MaximumNumberOfPeople, new { @class = "control-label" })
+                                    @Html.EditorFor(m => m.MaximumNumberOfPeople, new
+                                        {
+                                            htmlAttributes = new
+                                            {
+                                                @class = "form-control",
+                                                type = "number"
+                                            }
+                                        })
+                                    @Html.ValidationMessageFor(m => m.MaximumNumberOfPeople, "", new
+                                        {
+                                            @class =
+                                             "text-danger"
+                                        })
                                 </div>
 
-                                <!-- Giá Thuê -->
+                                <!-- Price -->
                                 <div class="form-group col-md-6">
-                                    <label>Giá Thuê (VND/tháng)</label>
-                                    <input type="number" class="form-control" name="rentalPrice"
-                                        placeholder="Nhập giá thuê" required>
+                                    @Html.LabelFor(m => m.Price, new { @class = "control-label" })
+                                    @Html.EditorFor(m => m.Price, new
+                                        {
+                                            htmlAttributes = new
+                                            {
+                                                @class = "form-control",
+                                                type = "number"
+                                            }
+                                        })
+                                    @Html.ValidationMessageFor(m => m.Price, "", new { @class = "text-danger" })
                                 </div>
                             </div>
 
-                            <!-- Tiện Nghi -->
+                            <!-- Description -->
                             <div class="form-group">
-                                <label>Tiện Nghi</label>
-                                <textarea class="form-control" name="facilities" rows="3"
-                                    placeholder="Nhập tiện nghi..." required></textarea>
+                                @Html.LabelFor(m => m.Description, new { @class = "control-label" })
+                                @Html.TextAreaFor(m => m.Description, new
+                                    {
+                                        @class = "form-control",
+                                        rows = 3,
+                                        placeholder = "Enter room description..."
+                                    })
+                                @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
                             </div>
 
-                            <!-- Nút Gửi -->
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-dark btn-lg px-5">Edit Room</button>
+                            <div class="container mt-6">
+                                <div class="text-center">
+                                    <div class="row">
+                                        <!-- Nút Back to Home -->
+                                        <div class="col-12 col-md-6 mb-3">
+                                            <a asp-action="Index" class="btn btn-light btn-lg w-100">
+                                                Back to Home
+                                            </a>
+                                        </div>
+                                        <!-- Nút Create Room -->
+                                        <div class="col-12 col-md-6 mb-3">
+                                            <button type="submit" class="btn btn-dark btn-lg w-100">
+                                                Update A Room
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
+
+@section AdditionalLinkCSS {
+    <style>
+        .text-danger {
+            display: inline-block;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+    </style>
+}
+
+@section AdditionalLinkJavascript {
+    <partial name="_ValidationScriptsPartial" />
+}
