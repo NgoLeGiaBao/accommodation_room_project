@@ -1,57 +1,58 @@
 ﻿document.addEventListener('DOMContentLoaded', function () {
-    // Thực hiện cuộc gọi AJAX để tải danh sách tab
+    // Load rental properties
     $.ajax({
-        url: '/get-list-rental-property', // Thay đổi thành URL endpoint của bạn
+        url: '/get-list-rental-property', // Change to your endpoint
         method: 'POST',
         dataType: 'json',
         success: function (data) {
             var tabList = $('#tab-list');
-            tabList.empty(); // Xóa các mục hiện tại
-            console.log(data);
+            tabList.empty(); // Clear current items
 
-            // Lặp qua dữ liệu và thêm các mục vào danh sách
+            // Check if there is an active tab stored in local storage
+            let activeTabId = localStorage.getItem('activeTab');
+
+            // Loop through data and add items to the list
             $.each(data.rentalProperties, function (index, item) {
-                console.log(item);
-                var activeClass = index === 0 ? 'active' : ''; // Đặt class active cho mục đầu tiên
+                var activeClass = item.id == activeTabId ? 'active' : (index === 0 && !activeTabId ? 'active' : ''); // Only activate the first tab if no active tab is stored
                 var tabItem = `<li class="nav-item">
                     <a class="nav-link ${activeClass}" href="javascript:void(0);" data-id="${item.id}">${item.propertyName}</a>
                 </li>`;
                 tabList.append(tabItem);
             });
 
-            // Tải danh sách phòng trọ cho tab đầu tiên
-            loadRooms(data.rentalProperties[0].id);
+            // Load rooms for the active or first rental property
+            loadRooms(activeTabId || data.rentalProperties[0].id);
 
-            // Thêm sự kiện click cho các liên kết tab
-            const navLinks = document.querySelectorAll('.nav-link');
-            console.log(navLinks);
-            navLinks.forEach(link => {
-                link.addEventListener('click', function (event) {
-                    event.preventDefault(); // Ngăn chặn hành động mặc định cho tab
-                    navLinks.forEach(link => link.classList.remove('active'));
-                    this.classList.add('active');
-                    loadRooms(this.getAttribute('data-id'));
-                });
+            // Add click event for tab links
+            $('.nav-link').on('click', function (event) {
+                event.preventDefault(); // Prevent default action
+                $('.nav-link').removeClass('active'); // Remove active class from all links
+                $(this).addClass('active'); // Add active class to clicked link
+
+                // Save current tab ID in local storage
+                localStorage.setItem('activeTab', $(this).data('id'));
+
+                // Load rooms for the selected rental property
+                loadRooms($(this).data('id'));
             });
         },
         error: function (xhr, status, error) {
-            console.error("AJAX Error:", status, error); // Xử lý lỗi
+            console.error("AJAX Error:", status, error); // Handle error
         }
     });
 
-    // Hàm tải danh sách phòng trọ
-    function loadRooms(homeId) {
+    function loadRooms(homeId, pageNumber = 1) {
         $.ajax({
             url: `/get-list-room/${homeId}`,
-            method: 'POST', // Đảm bảo rằng controller cũng xử lý POST
+            method: 'POST',
+            data: { pageNumber: pageNumber, pageSize: 8 }, // Send pagination info
             dataType: 'json',
-            success: function (rooms) {
+            success: function (response) {
                 var roomList = $('#room-list');
-                roomList.empty(); // Xóa danh sách phòng hiện tại
+                roomList.empty(); // Clear current room list
 
-                // Lặp qua dữ liệu và thêm vào danh sách phòng
-                $.each(rooms, function (index, room) {
-                    // Tạo URL cho EditRoom và ViewRoom
+                // Loop through data and add rooms to the list
+                $.each(response.rooms, function (index, room) {
                     var editUrl = `/edit-room?homeId=${homeId}&roomId=${room.id}`;
                     var viewUrl = `/view-room?homeId=${homeId}&roomId=${room.id}`;
 
@@ -72,15 +73,69 @@
                         </div>
                     </div>`;
                     roomList.append(roomItem);
-                    roomList.append(roomItem);
-                    roomList.append(roomItem);
-                    roomList.append(roomItem);
-                    roomList.append(roomItem);
                 });
+
+                // Update pagination
+                updatePagination(response.totalCount, homeId, pageNumber);
             },
             error: function (xhr, status, error) {
-                console.error("Error loading rooms:", status, error); // Xử lý lỗi
+                console.error("Error loading rooms:", status, error); // Handle error
             }
         });
+    }
+
+    function updatePagination(totalCount, homeId, currentPage) {
+        var pageSize = 8; // Number of rooms per page
+        var totalPages = Math.ceil(totalCount / pageSize);
+        var paginationList = $('#pagination-list');
+        paginationList.empty(); // Clear current pagination
+
+        // Add Previous button
+        var previousClass = (currentPage === 1 || totalPages <= 1) ? 'disabled' : '';
+        paginationList.append(
+            `<li class="page-item ${previousClass}">
+                <a class="page-link" href="#" data-page="${currentPage - 1}" data-home-id="${homeId}" tabindex="-1">Previous</a>
+            </li>`
+        );
+
+        // Create page buttons
+        for (var i = 1; i <= totalPages; i++) {
+            var activeClass = currentPage === i ? 'active' : '';
+            paginationList.append(
+                `<li class="page-item ${activeClass}">
+                    <a class="page-link" href="#" data-page="${i}" data-home-id="${homeId}">${i}</a>
+                </li>`
+            );
+        }
+
+        // Add Next button
+        var nextClass = (currentPage === totalPages || totalPages <= 1) ? 'disabled' : '';
+        paginationList.append(
+            `<li class="page-item ${nextClass}">
+                <a class="page-link" href="#" data-page="${currentPage + 1}" data-home-id="${homeId}">Next</a>
+            </li>`
+        );
+
+        // Attach events to pagination links
+        $('.page-link').on('click', function (event) {
+            event.preventDefault(); // Prevent default action
+            var page = $(this).data('page');
+            var homeId = $(this).data('home-id');
+
+            // Only load if not disabled
+            if (page > 0 && page <= totalPages) {
+                loadRooms(homeId, page); // Load rooms for selected page
+            }
+        });
+    }
+
+    // When the page loads, check for saved tab
+    let activeTabId = localStorage.getItem('activeTab');
+    if (activeTabId) {
+        // Find and activate the corresponding tab
+        $(`.nav-link[data-id="${activeTabId}"]`).trigger('click'); // Simulate click on the saved tab
+    } else {
+        // If no saved tab, select the first tab
+        $('.nav-link').first().trigger('click');
     }
 });

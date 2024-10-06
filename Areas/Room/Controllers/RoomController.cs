@@ -111,7 +111,8 @@ namespace App.Areas.Room
                 _appDbContext.Rooms.Add(room);
                 await _appDbContext.SaveChangesAsync();
                 TempData["SuccessMessage"] = "Room created successfully.";
-                return RedirectToAction("CreateRoom");
+                // return RedirectToAction("CreateRoom");
+                return View(room);
             }
             TempData["FailureMessage"] = "Room created failurely, please try again.";
             return View(room);
@@ -163,8 +164,8 @@ namespace App.Areas.Room
             return View(room);
         }
 
-        // [HttpPost]
         [Route("/get-list-rental-property")]
+        [HttpPost]
         public async Task<IActionResult> GetListRentalProperty()
         {
             try
@@ -198,17 +199,21 @@ namespace App.Areas.Room
             }
         }
 
-        // [HttpPost]
         [Route("/get-list-room/{homeId}")]
-        public async Task<IActionResult> GetListRoom(int homeId)
+        [HttpPost]
+        public async Task<IActionResult> GetListRoom(int homeId, int pageNumber = 1, int pageSize = 8)
         {
             try
             {
-                // Lấy ID của người dùng hiện tại
                 var currentUserId = _userManager.GetUserId(User);
-                // Truy vấn danh sách phòng theo homeId và người dùng hiện tại
+                var totalCount = await _appDbContext.Rooms
+                    .CountAsync(r => r.RentalPropertyId == homeId && r.RentalProperty.AppUserId == currentUserId);
+
+                // Fetch the correct page of rooms
                 var rooms = await _appDbContext.Rooms
                     .Where(r => r.RentalPropertyId == homeId && r.RentalProperty.AppUserId == currentUserId)
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
                     .Select(r => new
                     {
                         r.Id,
@@ -217,14 +222,14 @@ namespace App.Areas.Room
                         r.Status
                     })
                     .ToListAsync();
-                return Json(rooms);
+
+                return Json(new { totalCount, rooms });
             }
             catch (Exception ex)
             {
                 return StatusCode(500, "Internal server error.");
             }
         }
-
 
 
 
