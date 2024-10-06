@@ -163,8 +163,67 @@ namespace App.Areas.Room
             return View(room);
         }
 
+        // [HttpPost]
+        [Route("/get-list-rental-property")]
+        public async Task<IActionResult> GetListRentalProperty()
+        {
+            try
+            {
+                // Check if the user is authenticated
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    return NotFound(new { success = 0, message = "User not found" });
+                }
 
+                // Get rental properties owned by user
+                var rentalProperties = await _appDbContext.RentalProperties
+                    .Where(rp => rp.AppUserId == user.Id.ToString())
+                    .Select(rp => new
+                    {
+                        rp.Id,
+                        rp.PropertyName
+                    })
+                    .ToListAsync();
 
+                return Json(new
+                {
+                    success = 1,
+                    rentalProperties
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { success = 0, message = "Internal server error", error = ex.Message });
+            }
+        }
+
+        // [HttpPost]
+        [Route("/get-list-room/{homeId}")]
+        public async Task<IActionResult> GetListRoom(int homeId)
+        {
+            try
+            {
+                // Lấy ID của người dùng hiện tại
+                var currentUserId = _userManager.GetUserId(User);
+                // Truy vấn danh sách phòng theo homeId và người dùng hiện tại
+                var rooms = await _appDbContext.Rooms
+                    .Where(r => r.RentalPropertyId == homeId && r.RentalProperty.AppUserId == currentUserId)
+                    .Select(r => new
+                    {
+                        r.Id,
+                        r.RoomName,
+                        r.Price,
+                        r.Status
+                    })
+                    .ToListAsync();
+                return Json(rooms);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error.");
+            }
+        }
 
 
 

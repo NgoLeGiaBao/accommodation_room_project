@@ -1,8 +1,11 @@
-﻿using App.ExtendMethods;
+﻿using System.Security.Cryptography.Xml;
+using App.ExtendMethods;
 using App.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using Newtonsoft.Json;
+
 
 
 namespace App
@@ -14,7 +17,12 @@ namespace App
 			var builder = WebApplication.CreateBuilder(args);
 
 			// Add services to the container.
-			builder.Services.AddControllersWithViews();
+			builder.Services.AddControllersWithViews()
+				.AddNewtonsoftJson(options =>
+				{
+					options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+
+				});
 
 			// Configure to connect database
 			builder.Services.AddDbContext<AppDbContext>(options =>

@@ -44,19 +44,8 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header">
-                        <ul class="nav nav-tabs card-header-tabs">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="#">83 - Lê Văn Lương</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">87 - Hoàng Diệu</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">139 - Trường Trinh</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">231 - Nguyễn Thị Thập</a>
-                            </li>
+                        <ul class="nav nav-tabs card-header-tabs" id="tab-list">
+                            @* Load list apartment *@
                         </ul>
                     </div>
                     <div class="card-body">
@@ -79,26 +68,28 @@
                             </div>
                         </div>
                         <hr />
-                        <div class="row">
+                        <div class="row" id="room-list">
                             <!-- Cards are responsive now -->
-                            <div class="col-lg-3 col-md-6 mb-4">
-                                <div class="card text-center">
-                                    <div class="card-body">
-                                        <h5 class="card-title">P-001</h5>
-                                        <p class="card-text ">
-                                            Room Price: 4000
-                                            </br>
-                                            Room Status: <span class="badge badge-primary px-2">Sale</span>
-                                        </p>
-                                        <div class="d-flex justify-content-center">
-                                            <a asp-controller="Room" asp-action="EditRoom" asp-route-homeId="30"
-                                                asp-route-roomId="6" class="btn btn-primary">Edit</a>
-                                            <a asp-controller="Room" asp-action="ViewRoom"
-                                                class="btn btn-secondary margin-room-update">View</a>
-                                        </div>
-                                    </div>
-                                </div>
+                            @* <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="card text-center">
+                            <div class="card-body">
+                            <h5 class="card-title">P-001</h5>
+                            <p class="card-text ">
+                            Room Price: 4000
+                            </br>
+                            Room Status: <span class="badge badge-primary px-2">Sale</span>
+                            </p>
+                            <div class="d-flex justify-content-center">
+                            <a asp-controller="Room" asp-action="EditRoom" asp-route-homeId="30"
+                            asp-route-roomId="6" class="btn btn-primary">Edit</a>
+                            <a asp-controller="Room" asp-action="ViewRoom"
+                            class="btn btn-secondary margin-room-update">View</a>
                             </div>
+                            </div>
+                            </div>
+                            </div> *@
+                            @* Load list room *@
+
                         </div>
                         <partial name="_Paging"></partial>
                     </div>
