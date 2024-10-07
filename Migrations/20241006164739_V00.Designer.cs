@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Accommodation_Room_Project_Offical.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241004092453_V00")]
+    [Migration("20241006164739_V00")]
     partial class V00
     {
         /// <inheritdoc />
@@ -107,7 +107,7 @@ namespace Accommodation_Room_Project_Offical.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("App.Models.Asset", b =>
@@ -363,10 +363,6 @@ namespace Accommodation_Room_Project_Offical.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("character varying(512)");
 
-                    b.Property<string>("AppUserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<decimal>("ElectricityPrice")
                         .HasColumnType("numeric");
 
@@ -390,7 +386,6 @@ namespace Accommodation_Room_Project_Offical.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("PropertyImage")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("PropertyName")
@@ -413,8 +408,6 @@ namespace Accommodation_Room_Project_Offical.Migrations
                         .HasColumnType("numeric");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
 
                     b.ToTable("RentalProperty");
                 });
@@ -452,7 +445,6 @@ namespace Accommodation_Room_Project_Offical.Migrations
                         .HasColumnType("character varying(100)");
 
                     b.Property<string>("Status")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -460,6 +452,23 @@ namespace Accommodation_Room_Project_Offical.Migrations
                     b.HasIndex("RentalPropertyId");
 
                     b.ToTable("Room");
+                });
+
+            modelBuilder.Entity("App.Models.UserRentalProperty", b =>
+                {
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("text")
+                        .HasColumnOrder(1);
+
+                    b.Property<int>("RentalPropertyId")
+                        .HasColumnType("integer")
+                        .HasColumnOrder(2);
+
+                    b.HasKey("AppUserId", "RentalPropertyId");
+
+                    b.HasIndex("RentalPropertyId");
+
+                    b.ToTable("UserRentalProperties");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -485,7 +494,7 @@ namespace Accommodation_Room_Project_Offical.Migrations
                         .IsUnique()
                         .HasDatabaseName("RoleNameIndex");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("AspNetRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -510,7 +519,7 @@ namespace Accommodation_Room_Project_Offical.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("RoleClaims", (string)null);
+                    b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -535,7 +544,7 @@ namespace Accommodation_Room_Project_Offical.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserClaims", (string)null);
+                    b.ToTable("AspNetUserClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -557,7 +566,7 @@ namespace Accommodation_Room_Project_Offical.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserLogins", (string)null);
+                    b.ToTable("AspNetUserLogins", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -572,7 +581,7 @@ namespace Accommodation_Room_Project_Offical.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("UserRoles", (string)null);
+                    b.ToTable("AspNetUserRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -591,7 +600,7 @@ namespace Accommodation_Room_Project_Offical.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("UserTokens", (string)null);
+                    b.ToTable("AspNetUserTokens", (string)null);
                 });
 
             modelBuilder.Entity("App.Models.Asset", b =>
@@ -692,17 +701,6 @@ namespace Accommodation_Room_Project_Offical.Migrations
                     b.Navigation("Room");
                 });
 
-            modelBuilder.Entity("App.Models.RentalProperty", b =>
-                {
-                    b.HasOne("App.Models.AppUser", "AppUser")
-                        .WithMany("RentalProperties")
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("AppUser");
-                });
-
             modelBuilder.Entity("App.Models.Room", b =>
                 {
                     b.HasOne("App.Models.RentalProperty", "RentalProperty")
@@ -710,6 +708,25 @@ namespace Accommodation_Room_Project_Offical.Migrations
                         .HasForeignKey("RentalPropertyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("RentalProperty");
+                });
+
+            modelBuilder.Entity("App.Models.UserRentalProperty", b =>
+                {
+                    b.HasOne("App.Models.AppUser", "AppUser")
+                        .WithMany("UserRentalProperties")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("App.Models.RentalProperty", "RentalProperty")
+                        .WithMany("UserRentalProperties")
+                        .HasForeignKey("RentalPropertyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
 
                     b.Navigation("RentalProperty");
                 });
@@ -773,7 +790,7 @@ namespace Accommodation_Room_Project_Offical.Migrations
 
                     b.Navigation("RentalContracts");
 
-                    b.Navigation("RentalProperties");
+                    b.Navigation("UserRentalProperties");
                 });
 
             modelBuilder.Entity("App.Models.Asset", b =>
@@ -799,6 +816,8 @@ namespace Accommodation_Room_Project_Offical.Migrations
             modelBuilder.Entity("App.Models.RentalProperty", b =>
                 {
                     b.Navigation("Rooms");
+
+                    b.Navigation("UserRentalProperties");
                 });
 
             modelBuilder.Entity("App.Models.Room", b =>

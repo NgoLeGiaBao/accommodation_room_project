@@ -12,8 +12,8 @@ namespace App.Models
         [Required]
         [StringLength(100)]
         public string AssetName { get; set; }
-        public int CategoryAssetID { get; set; }
         [ForeignKey("CategoryAssetID")]
+        public int CategoryAssetID { get; set; }
         public virtual CategoryAsset CategoryAsset { get; set; }
         [Required]
         public DateTime PurchaseDate { get; set; }

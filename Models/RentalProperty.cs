@@ -69,8 +69,8 @@ namespace App.Models
         public bool IsActive { get; set; }
 
         [Display(Name = "Application User")]
-        public string? AppUserId { get; set; }
-        public AppUser? AppUser { get; set; }
+        // Navigation property for the many-to-many relationship
+        public virtual ICollection<UserRentalProperty> UserRentalProperties { get; set; } = new List<UserRentalProperty>();
 
         [Display(Name = "Room List")]
         public ICollection<Room> Rooms { get; set; } = new List<Room>();

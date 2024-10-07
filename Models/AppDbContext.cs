@@ -9,8 +9,15 @@ namespace App.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
+            //-- Bỏ đi tiền tố ASP NET trong model builder --//
+            foreach (var entity in modelBuilder.Model.GetEntityTypes())
+            {
+                var tableName = entity.GetTableName();
+                if (tableName.StartsWith("AspNet"))
+                {
+                    entity.SetTableName(tableName.Substring(6));
+                }
+            }
             // Rename all tables that start with "AspNet"
             foreach (var entity in modelBuilder.Model.GetEntityTypes())
             {
@@ -27,12 +34,6 @@ namespace App.Models
                 .IsUnique();
 
             //  Define the composite primary key for Rental Property
-            modelBuilder.Entity<RentalProperty>()
-                .HasOne(rp => rp.AppUser)
-                .WithMany(au => au.RentalProperties)
-                .HasForeignKey(rp => rp.AppUserId)
-                .OnDelete(DeleteBehavior.Restrict);
-
             modelBuilder.Entity<RentalProperty>()
                 .HasMany(rp => rp.Rooms)
                 .WithOne(r => r.RentalProperty)
@@ -127,7 +128,25 @@ namespace App.Models
             modelBuilder.Entity<Invoice>()
                 .HasIndex(i => i.QRCodeImage)
                 .IsUnique();
+
+
+            // Configure composite primary key for UserRentalProperty
+            modelBuilder.Entity<UserRentalProperty>()
+                .HasKey(ur => new { ur.AppUserId, ur.RentalPropertyId });
+
+            modelBuilder.Entity<UserRentalProperty>()
+                .HasOne(ur => ur.AppUser)
+                .WithMany(u => u.UserRentalProperties)
+                .HasForeignKey(ur => ur.AppUserId);
+
+            modelBuilder.Entity<UserRentalProperty>()
+                .HasOne(ur => ur.RentalProperty)
+                .WithMany(rp => rp.UserRentalProperties)
+                .HasForeignKey(ur => ur.RentalPropertyId);
+
+            base.OnModelCreating(modelBuilder);
         }
+
 
         // Các DbSet cho các thực thể
         public DbSet<RentalProperty> RentalProperties { get; set; }
@@ -139,5 +158,6 @@ namespace App.Models
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<OwnNotification> OwnNotifications { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
+        public DbSet<UserRentalProperty> UserRentalProperties { get; set; }
     }
 }

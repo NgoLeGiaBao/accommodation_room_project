@@ -6,19 +6,29 @@ namespace App.Models
 {
     public class AppUser : IdentityUser
     {
-        [StringLength(12, MinimumLength = 12)]
-        [RegularExpression(@"^\d{12}$", ErrorMessage = "IdentityCard must contain exactly 12 digits.")]
+        [StringLength(12, MinimumLength = 12, ErrorMessage = "Identity card must be exactly 12 digits.")]
+        [RegularExpression(@"^\d{12}$", ErrorMessage = "Identity card must contain exactly 12 digits.")]
+        [Display(Name = "Identity Card", Prompt = "Enter identity card...")]
         public string? IdentityCard { get; set; }
+
         [Column(TypeName = "text")]
-        [StringLength(100)]
+        [StringLength(100, ErrorMessage = "Full name cannot be longer than 100 characters.")]
+        [Display(Name = "Full Name", Prompt = "Enter full name...")]
         public string? FullName { get; set; }
+
+        [Display(Name = "Sex")]
         public bool Sex { get; set; }
+
         [DataType(DataType.Date)]
+        [Display(Name = "Birthday")]
         public DateTime? Birthday { get; set; }
+
         [Column(TypeName = "text")]
-        [StringLength(512)]
+        [StringLength(512, ErrorMessage = "Address cannot be longer than 512 characters.")]
+        [Display(Name = "Address", Prompt = "Enter address...")]
         public string? Address { get; set; }
-        public virtual ICollection<RentalProperty> RentalProperties { get; set; } = new List<RentalProperty>();
+        // Navigation property for the many-to-many relationship
+        public virtual ICollection<UserRentalProperty> UserRentalProperties { get; set; } = new List<UserRentalProperty>();
         public virtual ICollection<RentalContract> RentalContracts { get; set; } = new List<RentalContract>();
         public ICollection<Notification> CreatedNotifications { get; set; }
         public ICollection<OwnNotification> OwnNotifications { get; set; }

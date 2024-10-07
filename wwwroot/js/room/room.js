@@ -4,6 +4,7 @@
         url: '/get-list-rental-property', // Change to your endpoint
         method: 'POST',
         dataType: 'json',
+
         success: function (data) {
             var tabList = $('#tab-list');
             tabList.empty(); // Clear current items
@@ -13,15 +14,15 @@
 
             // Loop through data and add items to the list
             $.each(data.rentalProperties, function (index, item) {
-                var activeClass = item.id == activeTabId ? 'active' : (index === 0 && !activeTabId ? 'active' : ''); // Only activate the first tab if no active tab is stored
+                var activeClass = item.rentalPropertyId == activeTabId ? 'active' : (index === 0 && !activeTabId ? 'active' : ''); // Activate first tab if no active tab is stored
                 var tabItem = `<li class="nav-item">
-                    <a class="nav-link ${activeClass}" href="javascript:void(0);" data-id="${item.id}">${item.propertyName}</a>
+                    <a class="nav-link ${activeClass}" href="javascript:void(0);" data-id="${item.rentalPropertyId}">${item.propertyName}</a>
                 </li>`;
                 tabList.append(tabItem);
             });
 
             // Load rooms for the active or first rental property
-            loadRooms(activeTabId || data.rentalProperties[0].id);
+            loadRooms(activeTabId || data.rentalProperties[0].rentalPropertyId);
 
             // Add click event for tab links
             $('.nav-link').on('click', function (event) {
@@ -53,8 +54,8 @@
 
                 // Loop through data and add rooms to the list
                 $.each(response.rooms, function (index, room) {
-                    var editUrl = `/edit-room?homeId=${homeId}&roomId=${room.id}`;
-                    var viewUrl = `/view-room?homeId=${homeId}&roomId=${room.id}`;
+                    var editUrl = `/edit-room?rentalPropertyId=${homeId}&roomId=${room.id}`;
+                    var viewUrl = `/view-room?rentalPropertyId=${homeId}&roomId=${room.id}`;
 
                     var roomItem = `<div class="col-lg-3 col-md-6 mb-4">
                         <div class="card text-center">

@@ -68,7 +68,7 @@ placeholder="Nhập tiện nghi..." required></textarea>
                     <partial name="_SuccessMessage" />
                     <partial name="_FailureMessage" />
                     <div class="basic-form">
-                        <form asp-action="EditRoom" asp-route-homeId="@Model.RentalPropertyId" asp-route-roomId="@Model.Id"
+                        <form asp-action="EditRoom" asp-route-rentalPropertyId="@Model.RentalPropertyId" asp-route-roomId="@Model.Id"
                              method="POST" enctype="multipart/form-data">
                             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                             <div class="form-row">

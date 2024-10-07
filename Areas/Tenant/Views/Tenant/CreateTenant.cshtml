@@ -1,78 +1,120 @@
-﻿<div class="container-fluid">
+﻿@model App.Models.AppUser
+
+<div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
                     <div class="form-validation">
-                        <form class="form-valide" action="#" method="post">
+                        <form asp-action="CreateTenant" method="post">
                             <div class="form-group row">
-                                <label class="col-lg-4 col-form-label" for="val-fullname">
-                                    Họ và tên <span class="text-danger">*</span>
-                                </label>
+                                @Html.LabelFor(m => m.FullName, new { @class = "col-lg-4 col-form-label" })
                                 <div class="col-lg-6">
-                                    <input type="text" class="form-control" id="val-fullname" name="val-fullname"
-                                        placeholder="Nhập họ và tên..">
+                                    @Html.EditorFor(m => m.FullName, new
+                                        {
+                                            htmlAttributes = new
+                                            {
+                                                @class = "form-control",
+                                                placeholder = "Enter full name.."
+                                            }
+                                        })
+                                    @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger" })
                                 </div>
                             </div>
+
                             <div class="form-group row">
-                                <label class="col-lg-4 col-form-label" for="val-email">
-                                    Email <span class="text-danger">*</span>
-                                </label>
+                                @Html.LabelFor(m => m.Email, new { @class = "col-lg-4 col-form-label" })
                                 <div class="col-lg-6">
-                                    <input type="email" class="form-control" id="val-email" name="val-email"
-                                        placeholder="Nhập email hợp lệ..">
+                                    @Html.EditorFor(m => m.Email, new
+                                        {
+                                            htmlAttributes = new
+                                            {
+                                                @class = "form-control",
+                                                placeholder = "Enter valid email.."
+                                            }
+                                        })
+                                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                                 </div>
                             </div>
+
                             <div class="form-group row">
-                                <label class="col-lg-4 col-form-label" for="val-phone">
-                                    Số điện thoại <span class="text-danger">*</span>
-                                </label>
+                                @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-lg-4 col-form-label" })
                                 <div class="col-lg-6">
-                                    <input type="text" class="form-control" id="val-phone" name="val-phone"
-                                        placeholder="Nhập số điện thoại..">
+                                    @Html.EditorFor(m => m.PhoneNumber, new
+                                        {
+                                            htmlAttributes = new
+                                            {
+                                                @class = "form-control",
+                                                placeholder = "Enter phone number.."
+                                            }
+                                        })
+                                    @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
                                 </div>
                             </div>
+
                             <div class="form-group row">
-                                <label class="col-lg-4 col-form-label" for="val-birthdate">
-                                    Ngày tháng năm sinh <span class="text-danger">*</span>
-                                </label>
+                                @Html.LabelFor(m => m.Birthday, new { @class = "col-lg-4 col-form-label" })
                                 <div class="col-lg-6">
-                                    <input type="date" class="form-control" id="val-birthdate" name="val-birthdate">
+                                    @Html.EditorFor(m => m.Birthday, new
+                                        {
+                                            htmlAttributes = new
+                                            {
+                                                @class = "form-control",
+                                                type = "date"
+                                            }
+                                        })
+                                    @Html.ValidationMessageFor(m => m.Birthday, "", new { @class = "text-danger" })
                                 </div>
                             </div>
+
                             <div class="form-group row">
-                                <label class="col-lg-4 col-form-label" for="val-address">
-                                    Địa chỉ thường trú <span class="text-danger">*</span>
-                                </label>
+                                @Html.LabelFor(m => m.Address, new { @class = "col-lg-4 col-form-label" })
                                 <div class="col-lg-6">
-                                    <input type="text" class="form-control" id="val-address" name="val-address"
-                                        placeholder="Nhập địa chỉ..">
+                                    @Html.EditorFor(m => m.Address, new
+                                        {
+                                            htmlAttributes = new
+                                            {
+                                                @class = "form-control",
+                                                placeholder = "Enter address.."
+                                            }
+                                        })
+                                    @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
                                 </div>
                             </div>
+
                             <div class="form-group row">
-                                <label class="col-lg-4 col-form-label">Giới tính <span
-                                        class="text-danger">*</span></label>
+                                @Html.LabelFor(m => m.Sex, new { @class = "col-lg-4 col-form-label" })
                                 <div class="col-lg-6">
-                                    <select class="form-control" id="val-gender" name="val-gender">
-                                        <option value="">Vui lòng chọn</option>
-                                        <option value="male">Nam</option>
-                                        <option value="female">Nữ</option>
-                                        <option value="other">Khác</option>
-                                    </select>
+                                    @Html.DropDownListFor(m => m.Sex,
+                                             new SelectList(new List<SelectListItem>
+                                    {
+                                    new SelectListItem { Value = "", Text = "Please select" },
+                                    new SelectListItem { Value = "male", Text = "Male" },
+                                    new SelectListItem { Value = "female", Text = "Female" },
+                                    new SelectListItem { Value = "other", Text = "Other" }
+                                    }, "Value", "Text", Model.Sex), new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.Sex, "", new { @class = "text-danger" })
                                 </div>
                             </div>
+
                             <div class="form-group row">
-                                <label class="col-lg-4 col-form-label" for="val-cccd">
-                                    Số CCCD <span class="text-danger">*</span>
-                                </label>
+                                @Html.LabelFor(m => m.IdentityCard, new { @class = "col-lg-4 col-form-label" })
                                 <div class="col-lg-6">
-                                    <input type="text" class="form-control" id="val-cccd" name="val-cccd"
-                                        placeholder="Nhập số CCCD..">
+                                    @Html.EditorFor(m => m.IdentityCard, new
+                                        {
+                                            htmlAttributes = new
+                                            {
+                                                @class = "form-control",
+                                                placeholder = "Enter identity card number.."
+                                            }
+                                        })
+                                    @Html.ValidationMessageFor(m => m.IdentityCard, "", new { @class = "text-danger" })
                                 </div>
                             </div>
+
                             <div class="form-group row">
                                 <div class="col-lg-8 ml-auto">
-                                    <button type="submit" class="btn btn-primary">Gửi</button>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
                                 </div>
                             </div>
                         </form>
@@ -82,3 +124,7 @@
         </div>
     </div>
 </div>
+@section AdditionalLinkJavascript {
+
+    <partial name="_ValidationScriptsPartial" />
+}

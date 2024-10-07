@@ -44,22 +44,35 @@ namespace App.Areas.Room
             var user = await _userManager.GetUserAsync(User);
             if (user != null)
             {
-                model.AppUserId = user.Id.ToString();
-            }
+                // Create a new UserRentalProperty entity to establish the relationship
+                var userRentalProperty = new UserRentalProperty
+                {
+                    AppUserId = user.Id, // User ID from the current user
+                    RentalPropertyId = model.Id // RentalPropertyId will be assigned after saving
+                };
 
-            // Check validation
-            if (ModelState.IsValid)
-            {
-                model.StartDate = model.StartDate.ToUniversalTime();
-                model.IsActive = true;
-                _appDbContext.RentalProperties.Add(model);
-                await _appDbContext.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Rental property created successfully.";
-                return RedirectToAction("CreateHome");
+                // Check validation
+                if (ModelState.IsValid)
+                {
+                    model.StartDate = model.StartDate.ToUniversalTime();
+                    model.IsActive = true;
+
+                    // Add the rental property first
+                    _appDbContext.RentalProperties.Add(model);
+                    await _appDbContext.SaveChangesAsync(); // Save changes to get the generated ID
+
+                    // Now add the user-rental relationship
+                    userRentalProperty.RentalPropertyId = model.Id; // Set RentalPropertyId after saving
+                    _appDbContext.UserRentalProperties.Add(userRentalProperty);
+                    await _appDbContext.SaveChangesAsync();
+
+                    TempData["SuccessMessage"] = "Rental property created successfully.";
+                    return RedirectToAction("CreateHome");
+                }
             }
 
             // Data is not validated
-            TempData["FailureMessage"] = "Rental property created successfully, please try again.";
+            TempData["FailureMessage"] = "Rental property creation failed, please try again.";
             return View(model);
         }
 
@@ -120,29 +133,32 @@ namespace App.Areas.Room
 
         [Route("/edit-room")]
         [HttpGet]
-        public async Task<IActionResult> EditRoom(int homeId, int roomId)
+        public async Task<IActionResult> EditRoom(int rentalPropertyId, int roomId)
         {
-            if (homeId == 0 || roomId == 0)
+            if (rentalPropertyId == 0 || roomId == 0)
                 return NotFound();
 
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
                 return NotFound();
 
-            var room = _appDbContext.Rooms
-                        .Include(r => r.RentalProperty)
-                        .Where(r => r.Id == roomId
-                        && r.RentalPropertyId == homeId
-                        && r.RentalProperty.AppUserId == user.Id.ToString())
-                        .FirstOrDefault();
+
+            var room = await _appDbContext.Rooms
+                .Include(r => r.RentalProperty)
+                .ThenInclude(rp => rp.UserRentalProperties)
+                .FirstOrDefaultAsync(r => r.Id == roomId &&
+                                           r.RentalPropertyId == rentalPropertyId &&
+                                           r.RentalProperty.UserRentalProperties.Any(urp => urp.AppUserId == user.Id));
+
             if (room == null)
                 return NotFound();
+
             return View(room);
         }
 
         [Route("/edit-room")]
         [HttpPost]
-        public async Task<IActionResult> EditRoom(App.Models.Room room, int homeId, int roomId)
+        public async Task<IActionResult> EditRoom(App.Models.Room room, int rentalPropertyId, int roomId)
         {
             if (ModelState.IsValid)
             {
@@ -152,8 +168,8 @@ namespace App.Areas.Room
 
                 existingRoom.RoomName = room.RoomName;
                 existingRoom.Description = room.Description;
-                if (existingRoom.RentalPropertyId != homeId)
-                    existingRoom.RentalPropertyId = homeId;
+                if (existingRoom.RentalPropertyId != rentalPropertyId)
+                    existingRoom.RentalPropertyId = rentalPropertyId;
 
                 // Save the changes asynchronously
                 await _appDbContext.SaveChangesAsync();
@@ -177,13 +193,13 @@ namespace App.Areas.Room
                     return NotFound(new { success = 0, message = "User not found" });
                 }
 
-                // Get rental properties owned by user
-                var rentalProperties = await _appDbContext.RentalProperties
-                    .Where(rp => rp.AppUserId == user.Id.ToString())
-                    .Select(rp => new
+                // Get rental properties associated with the user through the UserRentalProperty relationship
+                var rentalProperties = await _appDbContext.UserRentalProperties
+                    .Where(urp => urp.AppUserId == user.Id) // Check User ID directly
+                    .Select(urp => new
                     {
-                        rp.Id,
-                        rp.PropertyName
+                        RentalPropertyId = urp.RentalPropertyId,
+                        PropertyName = urp.RentalProperty.PropertyName // Ensure you include the property name
                     })
                     .ToListAsync();
 
@@ -200,18 +216,23 @@ namespace App.Areas.Room
         }
 
         [Route("/get-list-room/{homeId}")]
-        [HttpPost]
+        // [HttpPost]
         public async Task<IActionResult> GetListRoom(int homeId, int pageNumber = 1, int pageSize = 8)
         {
             try
             {
                 var currentUserId = _userManager.GetUserId(User);
-                var totalCount = await _appDbContext.Rooms
-                    .CountAsync(r => r.RentalPropertyId == homeId && r.RentalProperty.AppUserId == currentUserId);
+
+                // Count total rooms belonging to the user's rental property
+                var totalCount = await _appDbContext.UserRentalProperties
+                    .Where(ur => ur.AppUserId == currentUserId && ur.RentalPropertyId == homeId)
+                    .SelectMany(ur => ur.RentalProperty.Rooms) // Lấy danh sách các phòng từ RentalProperty
+                    .CountAsync();
 
                 // Fetch the correct page of rooms
-                var rooms = await _appDbContext.Rooms
-                    .Where(r => r.RentalPropertyId == homeId && r.RentalProperty.AppUserId == currentUserId)
+                var rooms = await _appDbContext.UserRentalProperties
+                    .Where(ur => ur.AppUserId == currentUserId && ur.RentalPropertyId == homeId)
+                    .SelectMany(ur => ur.RentalProperty.Rooms) // Lấy danh sách các phòng từ RentalProperty
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
                     .Select(r => new
@@ -227,8 +248,9 @@ namespace App.Areas.Room
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Internal server error.");
+                return StatusCode(500, new { success = 0, message = "Internal server error.", error = ex.Message });
             }
+
         }
 
 
