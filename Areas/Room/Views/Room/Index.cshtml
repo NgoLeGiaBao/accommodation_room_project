@@ -49,23 +49,8 @@
                         </ul>
                     </div>
                     <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
-                            <div class="status-info mb-2">
-                                <span>Available 4</span> | <span>About to expire 2</span> | <span>Rented 7</span>
-                            </div>
-                            <div class="action-buttons mb-2">
-                                <a asp-controller="Room" asp-action="CreateRoom" asp-route-homeId="30"
-                                    class="btn btn-primary me-2 ">
-                                    <i class="fas fa-plus"></i> Add room
-                                </a>
-                                <a asp-controller="Room" asp-action="EditHome" asp-route-id="30"
-                                    class="btn btn-info me-2 ">
-                                    <i class="fas fa-edit"></i> Update home
-                                </a>
-                                @* <a href="#" class="btn btn-danger ">
-                                <i class="fas fa-trash"></i> Delete home
-                                </a> *@
-                            </div>
+                        <div class="d-flex justify-content-between align-items-center flex-wrap mb-3" id="btn-action">
+                            @* Load button action *@
                         </div>
                         <hr />
                         <div class="row" id="room-list">

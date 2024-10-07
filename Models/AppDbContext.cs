@@ -159,5 +159,6 @@ namespace App.Models
         public DbSet<OwnNotification> OwnNotifications { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<UserRentalProperty> UserRentalProperties { get; set; }
+        public DbSet<AppUser> AppUsers { get; set; }
     }
 }

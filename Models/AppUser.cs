@@ -30,7 +30,7 @@ namespace App.Models
         // Navigation property for the many-to-many relationship
         public virtual ICollection<UserRentalProperty> UserRentalProperties { get; set; } = new List<UserRentalProperty>();
         public virtual ICollection<RentalContract> RentalContracts { get; set; } = new List<RentalContract>();
-        public ICollection<Notification> CreatedNotifications { get; set; }
-        public ICollection<OwnNotification> OwnNotifications { get; set; }
+        public virtual ICollection<Notification> CreatedNotifications { get; set; } = new List<Notification>();
+        public virtual ICollection<OwnNotification> OwnNotifications { get; set; } = new List<OwnNotification>();
     }
 }

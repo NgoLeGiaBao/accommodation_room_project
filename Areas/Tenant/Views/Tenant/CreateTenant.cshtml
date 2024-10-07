@@ -7,96 +7,7 @@
                 <div class="card-body">
                     <div class="form-validation">
                         <form asp-action="CreateTenant" method="post">
-                            <div class="form-group row">
-                                @Html.LabelFor(m => m.FullName, new { @class = "col-lg-4 col-form-label" })
-                                <div class="col-lg-6">
-                                    @Html.EditorFor(m => m.FullName, new
-                                        {
-                                            htmlAttributes = new
-                                            {
-                                                @class = "form-control",
-                                                placeholder = "Enter full name.."
-                                            }
-                                        })
-                                    @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                @Html.LabelFor(m => m.Email, new { @class = "col-lg-4 col-form-label" })
-                                <div class="col-lg-6">
-                                    @Html.EditorFor(m => m.Email, new
-                                        {
-                                            htmlAttributes = new
-                                            {
-                                                @class = "form-control",
-                                                placeholder = "Enter valid email.."
-                                            }
-                                        })
-                                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-lg-4 col-form-label" })
-                                <div class="col-lg-6">
-                                    @Html.EditorFor(m => m.PhoneNumber, new
-                                        {
-                                            htmlAttributes = new
-                                            {
-                                                @class = "form-control",
-                                                placeholder = "Enter phone number.."
-                                            }
-                                        })
-                                    @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                @Html.LabelFor(m => m.Birthday, new { @class = "col-lg-4 col-form-label" })
-                                <div class="col-lg-6">
-                                    @Html.EditorFor(m => m.Birthday, new
-                                        {
-                                            htmlAttributes = new
-                                            {
-                                                @class = "form-control",
-                                                type = "date"
-                                            }
-                                        })
-                                    @Html.ValidationMessageFor(m => m.Birthday, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                @Html.LabelFor(m => m.Address, new { @class = "col-lg-4 col-form-label" })
-                                <div class="col-lg-6">
-                                    @Html.EditorFor(m => m.Address, new
-                                        {
-                                            htmlAttributes = new
-                                            {
-                                                @class = "form-control",
-                                                placeholder = "Enter address.."
-                                            }
-                                        })
-                                    @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                @Html.LabelFor(m => m.Sex, new { @class = "col-lg-4 col-form-label" })
-                                <div class="col-lg-6">
-                                    @Html.DropDownListFor(m => m.Sex,
-                                             new SelectList(new List<SelectListItem>
-                                    {
-                                    new SelectListItem { Value = "", Text = "Please select" },
-                                    new SelectListItem { Value = "male", Text = "Male" },
-                                    new SelectListItem { Value = "female", Text = "Female" },
-                                    new SelectListItem { Value = "other", Text = "Other" }
-                                    }, "Value", "Text", Model.Sex), new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(m => m.Sex, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-
+                            <!-- Identity Card -->
                             <div class="form-group row">
                                 @Html.LabelFor(m => m.IdentityCard, new { @class = "col-lg-4 col-form-label" })
                                 <div class="col-lg-6">
@@ -105,13 +16,95 @@
                                             htmlAttributes = new
                                             {
                                                 @class = "form-control",
-                                                placeholder = "Enter identity card number.."
+                                                placeholder = "Enter identity card number..",
+                                                onblur = "checkIdentityCard(this)" // Call JS function on blur
                                             }
                                         })
                                     @Html.ValidationMessageFor(m => m.IdentityCard, "", new { @class = "text-danger" })
                                 </div>
                             </div>
 
+                            <!-- Full Name -->
+                            <div class="form-group row">
+                                @Html.LabelFor(m => m.FullName, new { @class = "col-lg-4 col-form-label" })
+                                <div class="col-lg-6">
+                                    @Html.EditorFor(m => m.FullName, new
+                                        {
+                                            htmlAttributes = new { @class = "form-control", placeholder = "Enter full name.." }
+                                        })
+                                    @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="form-group row">
+                                @Html.LabelFor(m => m.Email, new { @class = "col-lg-4 col-form-label" })
+                                <div class="col-lg-6">
+                                    @Html.EditorFor(m => m.Email, new
+                                        {
+                                            htmlAttributes = new { @class = "form-control", placeholder = "Enter valid email.." }
+                                        })
+                                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <!-- Phone Number -->
+                            <div class="form-group row">
+                                @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-lg-4 col-form-label" })
+                                <div class="col-lg-6">
+                                    @Html.EditorFor(m => m.PhoneNumber, new
+                                        {
+                                            htmlAttributes = new { @class = "form-control", placeholder = "Enter phone number.." }
+                                        })
+                                    @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <!-- Birthday -->
+                            <div class="form-group row">
+                                @Html.LabelFor(m => m.Birthday, new { @class = "col-lg-4 col-form-label" })
+                                <div class="col-lg-6">
+                                    @Html.EditorFor(m => m.Birthday, new
+                                        {
+                                            htmlAttributes = new { @class = "form-control", type = "date" }
+                                        })
+                                    @Html.ValidationMessageFor(m => m.Birthday, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <!-- Address -->
+                            <div class="form-group row">
+                                @Html.LabelFor(m => m.Address, new { @class = "col-lg-4 col-form-label" })
+                                <div class="col-lg-6">
+                                    @Html.EditorFor(m => m.Address, new
+                                        {
+                                            htmlAttributes = new { @class = "form-control", placeholder = "Enter address.." }
+                                        })
+                                    @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <!-- Sex -->
+                            <div class="form-group row">
+                                @Html.LabelFor(m => m.Sex, new { @class = "col-lg-4 col-form-label" })
+                                <div class="col-lg-6 d-flex">
+                                    <div class="form-check">
+                                        <input type="radio" id="male" name="Sex" value="true" 
+                                               class="form-check-input" 
+                                               @(Model.Sex == true ? "checked" : "") />
+                                        <label class="form-check-label" for="male">Male</label>
+                                    </div>
+                                    <div class="form-check ml-3">
+                                        <input type="radio" id="female" name="Sex" value="false" 
+                                               class="form-check-input" 
+                                               @(Model.Sex == false ? "checked" : "") />
+                                        <label class="form-check-label" for="female">Female</label>
+                                    </div>
+                                    @Html.ValidationMessageFor(m => m.Sex, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
                             <div class="form-group row">
                                 <div class="col-lg-8 ml-auto">
                                     <button type="submit" class="btn btn-primary">Submit</button>
@@ -124,7 +117,56 @@
         </div>
     </div>
 </div>
-@section AdditionalLinkJavascript {
 
-    <partial name="_ValidationScriptsPartial" />
+@section AdditionalLinkJavascript {
+   <script>
+var previousIdentityCard = ''; 
+function checkIdentityCard(input) {
+    var identityCard = $(input).val().trim();
+    
+    if (identityCard !== previousIdentityCard) {
+        previousIdentityCard = identityCard; 
+        clearFormFields();
+        if (identityCard !== '') {
+            $.ajax({
+                url: '/check-identity-card',
+                method: 'POST',
+                data: { identityCard: identityCard },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.exists) {
+                        // Autofill other form fields
+                        $('#FullName').val(data.fullName);
+                        $('#Email').val(data.email);
+                        $('#PhoneNumber').val(data.phoneNumber);
+                        $('#Birthday').val(data.birthday);
+                        $('#Address').val(data.address);
+                        
+                        // Set radio buttons based on sex
+                        $('#male').prop('checked', data.sex); 
+                        $('#female').prop('checked', !data.sex); 
+                    } else {
+                       
+                        clearFormFields();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error checking identity card:', status, error);
+                }
+            });
+        }
+    }
+}
+
+function clearFormFields() {
+    // Xóa tất cả các trường thông tin
+    $('#FullName').val('');
+    $('#Email').val('');
+    $('#PhoneNumber').val('');
+    $('#Birthday').val('');
+    $('#Address').val('');
+    $('#male').prop('checked', false);
+    $('#female').prop('checked', false);
+}
+</script>
 }

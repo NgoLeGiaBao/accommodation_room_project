@@ -1,7 +1,7 @@
 ﻿document.addEventListener('DOMContentLoaded', function () {
     // Load rental properties
     $.ajax({
-        url: '/get-list-rental-property', // Change to your endpoint
+        url: '/get-list-rental-property',
         method: 'POST',
         dataType: 'json',
 
@@ -49,9 +49,32 @@
             data: { pageNumber: pageNumber, pageSize: 8 }, // Send pagination info
             dataType: 'json',
             success: function (response) {
+                // Get elements by Id
+                var btnAction = $('#btn-action');
                 var roomList = $('#room-list');
-                roomList.empty(); // Clear current room list
 
+                // Clear data
+                btnAction.empty();
+                roomList.empty();
+
+                // Load btn action
+                var createRoomUrl = `/create-room/${homeId}`;
+                var editRoomUrl = `/edit-home/${homeId}`;
+                btnAction.append(`
+                            <div class="status-info mb-2">
+                                <span>Available 4</span> | <span>About to expire 2</span> | <span>Rented 7</span>
+                            </div>
+                            <div class="action-buttons mb-2">
+                                <a href = ${createRoomUrl}
+                                    class="btn btn-primary me-2 ">
+                                    <i class="fas fa-plus"></i> Add room
+                                </a>
+                                <a href = ${editRoomUrl}
+                                    class="btn btn-info me-2 ">
+                                    <i class="fas fa-edit"></i> Update home
+                                </a>
+                            </div>
+                    `);
                 // Loop through data and add rooms to the list
                 $.each(response.rooms, function (index, room) {
                     var editUrl = `/edit-room?rentalPropertyId=${homeId}&roomId=${room.id}`;
