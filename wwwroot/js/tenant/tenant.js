@@ -4,38 +4,50 @@ document.addEventListener('DOMContentLoaded', function () {
         url: '/get-list-rental-property',
         method: 'POST',
         dataType: 'json',
-
         success: function (data) {
+            console.log('Rental Properties Data:', data); // Kiểm tra dữ liệu
             var tabList = $('#tab-list');
+            // var btnAction = $('#btn-action');
+
             tabList.empty(); // Clear current items
+            // btnAction.empty();
 
-            // Check if there is an active tab stored in local storage
+            // btnAction.append(`
+            //     <div class="status-info mb-2">
+            //                 <span>Available 4</span> | <span>About to expire 2</span> | <span>Rented 7</span>
+            //                 </div>
+            //                 <div class="action-buttons mb-2">
+            //                 <a asp-controller="Room" asp-action="CreateRoom" class="btn btn-primary me-2 ">
+            //                 <i class="fas fa-plus"></i> Add Tenant
+            //                 </a>
+            //                 <a asp-controller="Room" asp-action="EditHome" class="btn btn-info me-2 ">
+            //                 <i class="fas fa-edit"></i> Export list
+            //                 </a>
+            //                 </div>
+            //                 </hr> 
+            //     `)
+
             let activeTabId = localStorage.getItem('activeTab');
+            if (data.rentalProperties && data.rentalProperties.length > 0) {
+                $.each(data.rentalProperties, function (index, item) {
+                    var activeClass = item.rentalPropertyId == activeTabId ? 'active' : (index === 0 && !activeTabId ? 'active' : '');
+                    var tabItem = `<li class="nav-item">
+                        <a class="nav-link ${activeClass}" href="javascript:void(0);" data-id="${item.rentalPropertyId}">${item.propertyName}</a>
+                    </li>`;
+                    tabList.append(tabItem);
+                });
 
-            // Loop through data and add items to the list
-            $.each(data.rentalProperties, function (index, item) {
-                var activeClass = item.rentalPropertyId == activeTabId ? 'active' : (index === 0 && !activeTabId ? 'active' : ''); // Activate first tab if no active tab is stored
-                var tabItem = `<li class="nav-item">
-                    <a class="nav-link ${activeClass}" href="javascript:void(0);" data-id="${item.rentalPropertyId}">${item.propertyName}</a>
-                </li>`;
-                tabList.append(tabItem);
-            });
+                loadUsers(activeTabId || data.rentalProperties[0].rentalPropertyId);
 
-            // Load users for the active or first rental property
-            loadUsers(activeTabId || data.rentalProperties[0].rentalPropertyId);
-
-            // Add click event for tab links
-            $('.nav-link').on('click', function (event) {
-                event.preventDefault(); // Prevent default action
-                $('.nav-link').removeClass('active'); // Remove active class from all links
-                $(this).addClass('active'); // Add active class to clicked link
-
-                // Save current tab ID in local storage
-                localStorage.setItem('activeTab', $(this).data('id'));
-
-                // Load users for the selected rental property
-                loadUsers($(this).data('id'));
-            });
+                // Add click event for tab links
+                $('.nav-link').on('click', function (event) {
+                    event.preventDefault();
+                    $('.nav-link').removeClass('active');
+                    $(this).addClass('active');
+                    localStorage.setItem('activeTab', $(this).data('id'));
+                    loadUsers($(this).data('id'));
+                });
+            }
         },
         error: function (xhr, status, error) {
             console.error("AJAX Error:", status, error); // Handle error
@@ -44,29 +56,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function loadUsers(homeId) {
         $.ajax({
-            url: `/get-list-user/${homeId}`, // Change URL to get user data
+            url: `/get-list-user/${homeId}`,
             method: 'POST',
             dataType: 'json',
             success: function (response) {
-                // Get the table body by ID
-                var userList = $('#user-list tbody'); // Assuming you have a table with ID 'user-list'
-                userList.empty(); // Clear existing user data
+                if ($.fn.DataTable.isDataTable('#user-list')) {
+                    $('#user-list').DataTable().destroy();
+                }
 
-                // Check if there are users to display
-                if (response.users.length === 0) {
+                var userList = $('#user-list tbody');
+                userList.empty();
+
+                if (response.users && response.users.length === 0) {
                     userList.append('<tr><td colspan="9" class="text-center">No users found</td></tr>');
                     return;
                 }
-
-                // Loop through data and add users to the table
+                console.log(response.users)
                 $.each(response.users, function (index, user) {
+
                     var userRow = `<tr>
                         <td>${user.id}</td>
-                        <td>${user.name}</td>
-                        <td>${user.gender}</td>
-                        <td>${user.dob}</td>
-                        <td>${user.idCardNumber}</td>
-                        <td>${user.phone}</td>
+                        <td>${user.fullName}</td>
+                        <td>${user.sex ? 'Male' : 'Female'}</td>
+                        <td>${formatDate(user.birthday)}</td>
+                        <td>${user.identityCard}</td>
+                        <td>${user.phoneNumber}</td>
                         <td>${user.email}</td>
                         <td>${user.address}</td>
                         <td>
@@ -80,25 +94,36 @@ document.addEventListener('DOMContentLoaded', function () {
                             </span>
                         </td>
                     </tr>`;
-                    userList.append(userRow); // Append the new row to the table body
+                    userList.append(userRow);
                 });
 
+                $('#user-list').DataTable({
+                    responsive: true
+                });
 
-
+                $('[data-toggle="tooltip"]').tooltip();
             },
             error: function (xhr, status, error) {
-                console.error("Error loading users:", status, error); // Handle error
+                console.error("Error loading users:", status, error);
             }
+        });
+    }
+
+    // Formate date
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('vi-VN', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
         });
     }
 
     // When the page loads, check for saved tab
     let activeTabId = localStorage.getItem('activeTab');
     if (activeTabId) {
-        // Find and activate the corresponding tab
-        $(`.nav-link[data-id="${activeTabId}"]`).trigger('click'); // Simulate click on the saved tab
+        $(`.nav-link[data-id="${activeTabId}"]`).trigger('click');
     } else {
-        // If no saved tab, select the first tab
         $('.nav-link').first().trigger('click');
     }
 });

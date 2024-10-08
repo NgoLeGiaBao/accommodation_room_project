@@ -71,8 +71,8 @@
                             <a asp-controller="Room" asp-action="EditHome" class="btn btn-info me-2 ">
                             <i class="fas fa-edit"></i> Export list
                             </a>
-                            </div> *@
-                            <hr>
+                            </div>
+                            </hr> *@
                             <div class="table-responsive">
                                 <table class="table table-striped table-bordered zero-configuration" id="user-list">
                                     <thead>
@@ -94,7 +94,6 @@
                                 </table>
                             </div>
                         </div>
-                        <hr />
                     </div>
                 </div>
             </div>
@@ -126,13 +125,16 @@
 @section AdditionalLinkCSS {
     <link href="../css/site.css" rel="stylesheet">
     <link href="../plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
+
 }
 
 @* Link Javascript*@
 @section AdditionalLinkJavascript {
-    <script src="~/js/tenant/tenant.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../plugins/tables/js/jquery.dataTables.min.js"></script>
     <script src="../plugins/tables/js/datatable/dataTables.bootstrap4.min.js"></script>
     <script src="../plugins/tables/js/datatable-init/datatable-basic.min.js"></script>
+    <script src="~/js/tenant/tenant.js"></script>
+
 }
