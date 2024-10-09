@@ -55,13 +55,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 statusInfo.append(`<span>Available 4</span> | <span>About to expire 2</span> | <span>Rented 7</span>`);
 
-                var createTenantUrl = `/create-tenant/${homeId}`;
+                var createAssestEquipmentUrl = `create-asset-equipment/${homeId}`;
                 var exportTenantUrl = `/edit-home/${homeId}`;
                 btnAction.append(`
                                 <div class="action-buttons mb-2">
-                                    <a href = ${createTenantUrl}
+                                    <a href = ${createAssestEquipmentUrl}
                                         class="btn btn-primary me-2 ">
-                                        <i class="fas fa-plus"></i> Add tenant
+                                        <i class="fas fa-plus"></i> Add Asset and Equipment
                                     </a>
                                     <a href = ${exportTenantUrl}
                                         class="btn btn-info me-2 ">

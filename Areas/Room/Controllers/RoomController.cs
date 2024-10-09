@@ -61,8 +61,15 @@ namespace App.Areas.Room
                     _appDbContext.RentalProperties.Add(model);
                     await _appDbContext.SaveChangesAsync(); // Save changes to get the generated ID
 
+                    // Create a new room and link it to the created rental property
+                    App.Models.Room room = new Models.Room();
+                    room.RoomName = "Warehouse";
+                    room.Description = "Warehouse is used to store items.";
+                    room.RentalPropertyId = model.Id; // Link the room to the rental property
+
                     // Now add the user-rental relationship
                     userRentalProperty.RentalPropertyId = model.Id; // Set RentalPropertyId after saving
+                    _appDbContext.Rooms.Add(room);
                     _appDbContext.UserRentalProperties.Add(userRentalProperty);
                     await _appDbContext.SaveChangesAsync();
 
@@ -231,18 +238,19 @@ namespace App.Areas.Room
 
                 // Fetch the correct page of rooms
                 var rooms = await _appDbContext.UserRentalProperties
-                    .Where(ur => ur.AppUserId == currentUserId && ur.RentalPropertyId == homeId)
-                    .SelectMany(ur => ur.RentalProperty.Rooms) // Lấy danh sách các phòng từ RentalProperty
-                    .Skip((pageNumber - 1) * pageSize)
-                    .Take(pageSize)
-                    .Select(r => new
-                    {
-                        r.Id,
-                        r.RoomName,
-                        r.Price,
-                        r.Status
-                    })
-                    .ToListAsync();
+                .Where(ur => ur.AppUserId == currentUserId && ur.RentalPropertyId == homeId)
+                .SelectMany(ur => ur.RentalProperty.Rooms)
+                .Where(r => r.IsActive == true) // Thêm điều kiện kiểm tra IsActive
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(r => new
+                {
+                    r.Id,
+                    r.RoomName,
+                    r.Price,
+                    r.Status
+                })
+                .ToListAsync();
 
                 return Json(new { totalCount, rooms });
             }

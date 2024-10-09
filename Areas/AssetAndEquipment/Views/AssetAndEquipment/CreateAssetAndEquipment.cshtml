@@ -1,0 +1,176 @@
+@model App.Models.Asset
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="text-center lh-base mb-4">Add A New Asset</h2>
+                    <partial name="_SuccessMessage" />
+                    <partial name="_FailureMessage" />
+                    <div class="basic-form">
+                        <form asp-action="CreateAssetAndEquipment" method="POST" enctype="multipart/form-data">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            <div class="form-row">
+                                <!-- Asset Name -->
+                                <div class="form-group col-md-6">
+                                    @Html.LabelFor(m => m.AssetName, new { @class = "control-label" })
+                                    @Html.EditorFor(m => m.AssetName, new
+                                        {
+                                            htmlAttributes = new
+                                            {
+                                                @class = "form-control",
+                                                placeholder = "Enter asset name"
+                                            }
+                                        })
+                                    @Html.ValidationMessageFor(m => m.AssetName, "", new { @class = "text-danger" })
+                                </div>
+
+                                <!-- CategoryAssetID -->
+                                <div class="form-group col-md-6">
+                                    @Html.LabelFor(m => m.CategoryAssetID, new { @class = "control-label" })
+                                    @Html.DropDownListFor(m => m.CategoryAssetID,
+                                             (IEnumerable<SelectListItem>)ViewData["Categories"], "Select Category", new
+                                             {
+                                                 @class
+                                             = "form-control"
+                                             })
+                                    @Html.ValidationMessageFor(m => m.CategoryAssetID, "", new
+                                        {
+                                            @class = "text-danger"
+                                        })
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <!-- Purchase Date -->
+                                <div class="form-group col-md-6">
+                                    @Html.LabelFor(m => m.PurchaseDate, new { @class = "control-label" })
+                                    @Html.EditorFor(m => m.PurchaseDate, new
+                                        {
+                                            htmlAttributes = new
+                                            {
+                                                @class = "form-control",
+                                                type = "date"
+                                            }
+                                        })
+                                    @Html.ValidationMessageFor(m => m.PurchaseDate, "", new { @class = "text-danger" })
+                                </div>
+
+                                <!-- Cost -->
+                                <div class="form-group col-md-6">
+                                    @Html.LabelFor(m => m.Cost, new { @class = "control-label" })
+                                    @Html.EditorFor(m => m.Cost, new
+                                        {
+                                            htmlAttributes = new
+                                            {
+                                                @class = "form-control",
+                                                type = "number",
+                                                step = "0.01",
+                                                placeholder = "Enter cost"
+                                            }
+                                        })
+                                    @Html.ValidationMessageFor(m => m.Cost, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <!-- Condition -->
+                                <div class="form-group col-md-6">
+                                    @Html.LabelFor(m => m.Condition, new { @class = "control-label" })
+                                    @Html.DropDownListFor(m => m.Condition,
+                                             (IEnumerable<SelectListItem>)ViewData["Statuses"], "Select Statue", new
+                                             {
+                                                 @class =
+                                             "form-control"
+                                             })
+                                    @Html.ValidationMessageFor(m => m.Condition, "", new { @class = "text-danger" })
+                                </div>
+
+                                <!-- Location -->
+                                <div class="form-group col-md-6">
+                                    @Html.LabelFor(m => m.Location, new { @class = "control-label" })
+                                    @Html.DropDownListFor(m => m.Location,
+                                             (IEnumerable<SelectListItem>)ViewData["Rooms"], "Select Room", new
+                                             {
+                                                 @class =
+                                             "form-control"
+                                             })
+                                    @Html.ValidationMessageFor(m => m.Location, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <!-- Next Maintenance Due Date -->
+                                <div class="form-group col-md-6">
+                                    @Html.LabelFor(m => m.NextMaintenanceDueDate, new { @class = "control-label" })
+                                    @Html.EditorFor(m => m.NextMaintenanceDueDate, new
+                                        {
+                                            htmlAttributes = new
+                                            {
+                                                @class = "form-control",
+                                                type = "date"
+                                            }
+                                        })
+                                    @Html.ValidationMessageFor(m => m.NextMaintenanceDueDate, "", new
+                                        {
+                                            @class =
+                                             "text-danger"
+                                        })
+                                </div>
+
+                                <!-- ImagePath -->
+                                <div class="form-group col-md-6">
+                                    @Html.LabelFor(m => m.ImagePath, new { @class = "control-label" })
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" asp-for="ImagePath" multiple
+                                            accept="image/*" id="propertyImage" />
+                                        <label class="custom-file-label" for="propertyImage">Choose files</label>
+                                    </div>
+                                    @Html.ValidationMessageFor(m => m.ImagePath, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="container mt-6">
+                                <div class="text-center">
+                                    <div class="row">
+                                        <!-- Back to Home Button -->
+                                        <div class="col-12 col-md-6 mb-3">
+                                            <a asp-action="Index" class="btn btn-light btn-lg w-100">Back to Home</a>
+                                        </div>
+                                        <!-- Create Asset Button -->
+                                        <div class="col-12 col-md-6 mb-3">
+                                            <button type="submit" class="btn btn-dark btn-lg w-100">Create New
+                                                Asset</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section AdditionalLinkCSS {
+    <style>
+        .text-danger {
+            display: inline-block;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+    </style>
+}
+
+@section AdditionalLinkJavascript {
+    <script>
+        document.querySelector('.custom-file-input').addEventListener('change', function (e) {
+            var fileName = Array.from(this.files).map(file => file.name).join(', ');
+            var label = this.nextElementSibling;
+            label.innerText = fileName ? fileName : "Choose files";
+        });
+    </script>
+}
