@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function () {
         method: 'POST',
         dataType: 'json',
         success: function (data) {
-            // Get element by id
             var tabList = $('#tab-list');
             tabList.empty();
 
@@ -19,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     tabList.append(tabItem);
                 });
 
-                loadUsers(activeTabId || data.rentalProperties[0].rentalPropertyId);
+                loadAssets(activeTabId || data.rentalProperties[0].rentalPropertyId);
 
                 // Add click event for tab links
                 $('.nav-link').on('click', function (event) {
@@ -27,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     $('.nav-link').removeClass('active');
                     $(this).addClass('active');
                     localStorage.setItem('activeTab', $(this).data('id'));
-                    loadUsers($(this).data('id'));
+                    loadAssets($(this).data('id'));
                 });
             }
         },
@@ -36,80 +35,56 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    function loadUsers(homeId) {
+    function loadAssets(homeId) {
         $.ajax({
-            url: `/get-list-user/${homeId}`,
+            url: `/get-list-assets/${homeId}`,
             method: 'POST',
             dataType: 'json',
             success: function (response) {
-                if ($.fn.DataTable.isDataTable('#user-list')) {
-                    $('#user-list').DataTable().destroy();
+                if ($.fn.DataTable.isDataTable('#asset-list')) {
+                    $('#asset-list').DataTable().destroy();
                 }
 
-                var userList = $('#user-list tbody');
-                var btnAction = $('#btn-action');
-                var statusInfo = $('#status-info');
+                var assetList = $('#asset-list tbody');
+                assetList.empty();
 
-                btnAction.empty();
-                statusInfo.empty();
-
-                statusInfo.append(`<span>Available 4</span> | <span>About to expire 2</span> | <span>Rented 7</span>`);
-
-                var createAssestEquipmentUrl = `create-asset-equipment/${homeId}`;
-                var exportTenantUrl = `/edit-home/${homeId}`;
-                btnAction.append(`
-                                <div class="action-buttons mb-2">
-                                    <a href = ${createAssestEquipmentUrl}
-                                        class="btn btn-primary me-2 ">
-                                        <i class="fas fa-plus"></i> Add Asset and Equipment
-                                    </a>
-                                    <a href = ${exportTenantUrl}
-                                        class="btn btn-info me-2 ">
-                                        <i class="fas fa-edit"></i> Export file
-                                    </a>
-                                </div>`);
-                userList.empty();
-
-                if (response.users && response.users.length === 0) {
-                    userList.append('<tr><td colspan="9" class="text-center">No users found</td></tr>');
+                if (response.assets && response.assets.length === 0) {
+                    assetList.append('<tr><td colspan="9" class="text-center">No assets found</td></tr>');
                     return;
                 }
 
-                $.each(response.users, function (index, user) {
-                    var userRow = `<tr>
+                $.each(response.assets, function (index, asset) {
+                    var assetRow = `<tr>
                         <td>${index + 1}</td>
-                        <td>${user.fullName}</td>
-                        <td>${user.sex ? 'Male' : 'Female'}</td>
-                        <td>${formatDate(user.birthday)}</td>
-                        <td>${user.identityCard}</td>
-                        <td>${user.address}</td>
+                        <td>${asset.assetName}</td>
+                        <td>${asset.category}</td>
+                        <td>${formatDate(asset.purchaseDate)}</td>
+                        <td>${asset.cost}</td>
+                        <td>${asset.condition}</td>
+                        <td>${asset.roomName}</td>
+                        <td>${formatDate(asset.nextMaintenanceDueDate)}</td>
                         <td>
-                            <span>
-                                <a href="/edit-user/${user.id}" data-toggle="tooltip" data-placement="top" title="Edit">
-                                    <i class="fa fa-pencil color-muted m-r-5"></i>
-                                </a>
-                                <a href="/view-user/${user.id}" data-toggle="tooltip" data-placement="top" title="View">
-                                    <i class="fa fa-eye color-info"></i>
-                                </a>
-                            </span>
+                            <a href="/edit-asset/${asset.assetID}" data-toggle="tooltip" title="Edit">
+                                <i class="fa fa-pencil color-muted m-r-5"></i>
+                            </a>
                         </td>
                     </tr>`;
-                    userList.append(userRow);
+                    assetList.append(assetRow);
                 });
 
-                $('#user-list').DataTable({
+                $('#asset-list').DataTable({
                     responsive: true
                 });
 
                 $('[data-toggle="tooltip"]').tooltip();
             },
             error: function (xhr, status, error) {
-                console.error("Error loading users:", status, error);
+                console.error("Error loading assets:", status, error);
             }
         });
     }
 
-    // Formate date
+    // Format date function
     function formatDate(dateString) {
         const date = new Date(dateString);
         return date.toLocaleDateString('vi-VN', {
@@ -119,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // When the page loads, check for saved tab
+    // Check for saved tab
     let activeTabId = localStorage.getItem('activeTab');
     if (activeTabId) {
         $(`.nav-link[data-id="${activeTabId}"]`).trigger('click');

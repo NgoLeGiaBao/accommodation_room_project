@@ -92,11 +92,36 @@ namespace Areas.AssetAndEquipment
             }
 
             ViewData["Rooms"] = new SelectList(await _appDbContext.Rooms.Where(r => r.RentalPropertyId == homeId).ToListAsync(), "Id", "RoomName");
-            var errors = ModelState.Values
-                .SelectMany(v => v.Errors)
-                .Select(e => e.ErrorMessage)
-                .ToList();
             return View(assetAndEquipment);
         }
+
+        [Route("/get-list-assets/{homeId:int}")]
+        // [HttpPost]
+        public async Task<IActionResult> GetAssets(int homeId)
+        {
+            var now = DateTime.UtcNow; // Ensure you're using UTC
+            var assets = await _appDbContext.Assets
+                .Where(a => a.OwnAssets.Any(o => o.Room.RentalPropertyId == homeId))
+                .Select(a => new
+                {
+                    a.AssetID,
+                    a.AssetName,
+                    Category = a.CategoryAsset.Name,
+                    PurchaseDate = a.PurchaseDate,
+                    Cost = a.Cost,
+                    Condition = a.Condition,
+                    RoomName = a.OwnAssets.Select(o => o.Room.RoomName).FirstOrDefault(), // Get the room name
+                    NextMaintenanceDueDate = a.NextMaintenanceDueDate,
+                    DaysUntilDue = a.NextMaintenanceDueDate.HasValue
+                        ? (a.NextMaintenanceDueDate.Value - now).Days
+                        : (int?)null
+                })
+                .ToListAsync();
+
+            return Json(new { assets });
+        }
+
     }
+
+
 }

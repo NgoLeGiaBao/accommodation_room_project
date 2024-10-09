@@ -74,45 +74,22 @@
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-striped table-bordered zero-configuration text-center"
-                                    id="assest-equipment-list">
+                                    id="asset-list">
                                     <thead>
                                         <tr>
-                                            <th>Asset ID</th>
+                                            <th>#</th>
                                             <th>Asset Name</th>
                                             <th>Category</th>
                                             <th>Purchase Date</th>
-                                            <th>Cost (VND)</th>
+                                            <th>Cost</th>
                                             <th>Condition</th>
-                                            <th>Location</th>
-                                            <th>Next Maintenance Due Date</th> <!-- Cột ngày bảo trì tiếp theo -->
-                                            <th>Days Until Due</th> <!-- Cột số ngày còn lại đến hạn bảo trì -->
+                                            <th>Room Name</th>
+                                            <th>Next Maintenance Due Date</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>A001</td>
-                                            <td>Computer</td>
-                                            <td>Electronics</td>
-                                            <td>01/01/2020</td>
-                                            <td>20,000,000</td>
-                                            <td>Good</td>
-                                            <td>Office 1</td>
-                                            <td>01/12/2024</td> <!-- Ngày bảo trì tiếp theo -->
-                                            <td>61</td> <!-- Số ngày còn lại đến hạn bảo trì -->
-                                            <td>
-                                                <span>
-                                                    <a asp-controller="Asset" asp-action="EditAsset" asp-route-id="1"
-                                                        data-toggle="tooltip" data-placement="top" title="Edit">
-                                                        <i class="fa fa-pencil color-muted m-r-5"></i>
-                                                    </a>
-                                                    <a href="#basicModal" data-toggle="modal" title="Remove">
-                                                        <i class="fa fa-close color-danger"></i>
-                                                    </a>
-                                                </span>
-                                            </td>
-                                        </tr>
-                                        <!-- Add more rows as needed -->
+                                        @* Get data *@
                                     </tbody>
                                 </table>
                             </div>
