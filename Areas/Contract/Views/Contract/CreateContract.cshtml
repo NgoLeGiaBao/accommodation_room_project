@@ -1,0 +1,434 @@
+@model App.Areas.Contract.InputModel
+@{
+    var landloardInformation = ViewData["LandloardInformation"] as App.Models.RentalProperty;
+    var rooms = ViewData["Rooms"] as List<SelectListItem>;
+}
+<form asp-action="CreateContract" method="POST" enctype="multipart/form-data">
+    <div id="accordion-three" class="accordion">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0" data-toggle="collapse" data-target="#collapseTenantLandlordInfo" aria-expanded="true"
+                    aria-controls="collapseTenantLandlordInfo"><i class="fa" aria-hidden="true"></i>
+                    Rental Party Information
+                </h5>
+            </div>
+            <div id="collapseTenantLandlordInfo" class="collapse show" data-parent="#accordion-three">
+                <div class="card-body">
+                    <h6 class="personal-information">Landlord Information</h6>
+                    <div class="row">
+                        <div class="col-md-4 ">
+                            <p><strong>Full Name:</strong> @landloardInformation.OwnerName</p>
+                        </div>
+                        <div class="col-md-4 ">
+                            <p><strong>Identity Card: </strong>@landloardInformation.OwnerPhoneNumber</p>
+                        </div>
+                        <div class="col-md-4 ">
+                            <p><strong>Contact Number:</strong> @landloardInformation.OwnerPhoneNumber</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 ">
+                            <p><strong>Date of Birth:</strong> @landloardInformation.StartDate</p>
+                        </div>
+                        <div class="col-md-8 ">
+                            <p><strong>Address:</strong> @landloardInformation.Address</p>
+                        </div>
+                    </div>
+                    <hr />
+                    <h6 class="personal-information">Tenant Information</h6>
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            @Html.LabelFor(m => m.appUser.IdentityCard, new { @class = "control-label" })
+                            @Html.EditorFor(m => m.appUser.IdentityCard, new
+                                {
+                                    htmlAttributes = new
+                                    {
+                                        @class = "form-control",
+                                        placeholder = "Enter Identity Card number...",
+                                        onblur = "checkIdentityCard(this)",
+                                        id = "IdentityCard"
+                                    }
+                                })
+                            @Html.ValidationMessageFor(m => m.appUser.IdentityCard, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-4 form-group">
+                            @Html.LabelFor(m => m.appUser.FullName, new { @class = "control-label" })
+                            @Html.EditorFor(m => m.appUser.FullName, new
+                                {
+                                    htmlAttributes = new
+                                    {
+                                        @class = "form-control",
+                                        placeholder = "Enter full name...",
+                                        id = "FullName"
+                                    }
+                                })
+                            @Html.ValidationMessageFor(m => m.appUser.FullName, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-4 form-group">
+                            @Html.LabelFor(m => m.appUser.Sex, new { @class = "control-label" })
+                            @Html.DropDownListFor(m => m.appUser.Sex, new List<SelectListItem>
+                            {
+                            new SelectListItem { Text = "Male", Value = "true" },
+                            new SelectListItem { Text = "Female", Value = "false" }
+                            }, "Select Sex", new { @class = "form-control", id = "Sex" })
+                            @Html.ValidationMessageFor(m => m.appUser.Sex, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            @Html.LabelFor(m => m.appUser.Birthday, new { @class = "control-label" })
+                            @Html.EditorFor(m => m.appUser.Birthday, new
+                                {
+                                    htmlAttributes = new
+                                    {
+                                        @class = "form-control",
+                                        type = "date",
+                                        id = "Birthday"
+                                    }
+                                })
+                            @Html.ValidationMessageFor(m => m.appUser.Birthday, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-4 form-group">
+                            @Html.LabelFor(m => m.appUser.PhoneNumber, new { @class = "control-label" })
+                            @Html.EditorFor(m => m.appUser.PhoneNumber, new
+                                {
+                                    htmlAttributes = new
+                                    {
+                                        @class = "form-control",
+                                        placeholder = "Enter phone number...",
+                                        id = "PhoneNumber"
+                                    }
+                                })
+                            @Html.ValidationMessageFor(m => m.appUser.PhoneNumber, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-4 form-group">
+                            @Html.LabelFor(m => m.appUser.Email, new { @class = "control-label" })
+                            @Html.EditorFor(m => m.appUser.Email, new
+                                {
+                                    htmlAttributes = new
+                                    {
+                                        @class = "form-control",
+                                        placeholder = "Enter email address...",
+                                        id = "Email"
+                                    }
+                                })
+                            @Html.ValidationMessageFor(m => m.appUser.Email, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            @Html.LabelFor(m => m.appUser.Address, new { @class = "control-label" })
+                            @Html.EditorFor(m => m.appUser.Address, new
+                                {
+                                    htmlAttributes = new
+                                    {
+                                        @class = "form-control",
+                                        placeholder = "Enter current address...",
+                                        id = "Address"
+                                    }
+                                })
+                            @Html.ValidationMessageFor(m => m.appUser.Address, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0 collapsed" data-toggle="collapse" data-target="#collapseRoomInfo" aria-expanded="false"
+                    aria-controls="collapseRoomInfo"><i class="fa" aria-hidden="true"></i> Room Information</h5>
+            </div>
+            <div id="collapseRoomInfo" class="collapse" data-parent="#accordion-three">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <label for="RoomName">Room Name</label>
+                            <select id="RoomName" class="form-control" onchange="fetchRoomDetails();">
+                                <option value="" disabled selected>Select a room...</option>
+                                @if (rooms != null && rooms.Any())
+                                {
+                                    foreach (var room in rooms)
+                                    {
+                                        <option value="@room.Value">@room.Text</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="" disabled>No rooms available</option>
+                                }
+                            </select>
+                            @Html.HiddenFor(m => m.RoomId)
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body p-0">
+                                    <h4 class="card-title personal-information">List Asset In Room</h4>
+                                    <div class="table-responsive">
+                                        <table class="table header-border">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">Asset Name</th>
+                                                    <th scope="col">Condition</th>
+                                                    <th scope="col">Location</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="assetList">
+                                                <!-- Assets will be dynamically injected here -->
+                                                <tr>
+                                                    <td colspan="4">Select a room to view assets</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h6 class="personal-information">Room Information</h6>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <p><strong>Room Name:</strong> <span id="roomName">-</span></p>
+                                </div>
+                                <div class="col-lg-6">
+                                    <p><strong>Maxiumum Occupancy:</strong> <span id="roomCode">-</span></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <p><strong>Room Area:</strong> <span id="roomArea">-</span></p>
+                                </div>
+                                <div class="col-lg-6">
+                                    <p><strong>Rental Price:</strong> <span id="rentalPrice">-</span></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <p><strong>Deposit:</strong> <span id="deposit">-</span></p>
+                                </div>
+                                <div class="col-lg-6">
+                                    <p><strong>Room Description:</strong> <span id="roomType">-</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0 collapsed" data-toggle="collapse" data-target="#collapseContractInfo"
+                    aria-expanded="false" aria-controls="collapseContractInfo"><i class="fa" aria-hidden="true"></i>
+                    Contract Information</h5>
+            </div>
+            <div id="collapseContractInfo" class="collapse" data-parent="#accordion-three">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            @Html.LabelFor(m => m.rentalContract.StartedDate, new { @class = "control-label" })
+                            @Html.EditorFor(m => m.rentalContract.StartedDate, new
+                                {
+                                    htmlAttributes = new
+                                    {
+                                        @class = "form-control",
+                                        type = "date" // Specify the type as date for date picker
+                                    }
+                                })
+                            @Html.ValidationMessageFor(m => m.rentalContract.StartedDate, "", new
+                                {
+                                    @class =
+                                     "text-danger"
+                                })
+                        </div>
+                        <div class="col-md-6 form-group">
+                            @Html.LabelFor(m => m.rentalContract.EndupDate, new { @class = "control-label" })
+                            @Html.EditorFor(m => m.rentalContract.EndupDate, new
+                                {
+                                    htmlAttributes = new
+                                    {
+                                        @class = "form-control",
+                                        type = "date" // Specify the type as date for date picker
+                                    }
+                                })
+                            @Html.ValidationMessageFor(m => m.rentalContract.EndupDate, "", new
+                                {
+                                    @class = "text-danger"
+                                })
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 form-group">
+                            @Html.LabelFor(m => m.rentalContract.Rules, new { @class = "control-label" })
+                            @Html.TextAreaFor(m => m.rentalContract.Rules, new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "Enter violation terms...",
+                                    rows = 4
+                                })
+                            @Html.ValidationMessageFor(m => m.rentalContract.Rules, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="container mt-6">
+            <div class="text-center">
+                <div class="row">
+                    <!-- Nút Back to Home -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <a asp-action="Index" class="btn btn-light btn-lg w-100">
+                            Back to Home
+                        </a>
+                    </div>
+                    <!-- Nút Update Rental Property -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <button type="submit" class="btn btn-dark btn-lg w-100">
+                            Create Rental Property
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@* Link CSS*@
+@section AdditionalLinkCSS {
+    @* <link href="../css/site.css" rel="stylesheet">
+<link href="../plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet"> *@
+    <style>
+        .personal-information {
+            text-align: center !important;
+            margin-bottom: 20px !important;
+            font-weight: bold !important;
+            font-size: 1.5rem !important;
+        }
+    </style>
+}
+
+@* Link Javascript*@
+@* @section AdditionalLinkJavascript { *@
+@* <script src="../js/contract/contract.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../plugins/tables/js/jquery.dataTables.min.js"></script>
+<script src="../plugins/tables/js/datatable/dataTables.bootstrap4.min.js"></script>
+<script src="../plugins/tables/js/datatable-init/datatable-basic.min.js"></script> *@
+
+@* } *@
+@section AdditionalLinkJavascript {
+    <script>
+        // check-identity-card
+        var previousIdentityCard = '';
+        function checkIdentityCard(input) {
+            var identityCard = $(input).val().trim();
+
+            if (identityCard !== previousIdentityCard) {
+                previousIdentityCard = identityCard;
+                clearFormFields();
+                if (identityCard !== '') {
+                    $.ajax({
+                        url: '/check-identity-card',
+                        method: 'POST',
+                        data: { identityCard: identityCard },
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data.exists) {
+                                // Autofill other form fields using their IDs
+                                $('#FullName').val(data.fullName);
+                                $('#Email').val(data.email);
+                                $('#PhoneNumber').val(data.phoneNumber);
+                                $('#Birthday').val(data.birthday);
+                                $('#Address').val(data.address);
+
+                                // Set dropdown based on sex
+                                if (data.sex === true) {
+                                    $('#Sex').val('true'); // Set dropdown to Male
+                                } else {
+                                    $('#Sex').val('false'); // Set dropdown to Female
+                                }
+                            } else {
+                                clearFormFields();
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error checking identity card:', status, error);
+                        }
+                    });
+                }
+            }
+        }
+
+        function clearFormFields() {
+            // Xóa tất cả các trường thông tin
+            $('#FullName').val('');
+            $('#Email').val('');
+            $('#PhoneNumber').val('');
+            $('#Birthday').val('');
+            $('#Address').val('');
+            $('#Sex').val(''); // Clear dropdown selection
+        }
+
+        // Get Room Information and assets - equipment in room
+        function fetchRoomDetails() {
+            var roomId = $('#RoomName').val();
+            $('#RoomId').val(roomId);
+
+            if (roomId) {
+                $.ajax({
+                    url: `/get-room-information/${roomId}`,
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success) {
+                            console.log('Room details:', response);
+                            // Update Room Details
+                            $('#roomName').text(response.room.roomName);
+                            $('#roomCode').text(response.room.maximumNumberOfPeople);
+                            $('#roomArea').text(response.room.area + ' m²');
+                            $('#rentalPrice').text('$' + response.room.price + '/month');
+                            $('#deposit').text('$' + response.room.price);
+                            $('#roomType').text(response.room.description);
+
+                            // Update Asset List
+                            var assetList = '';
+                            response.assets.forEach(function (asset, index) {
+                                assetList += `
+                                                                                                                                    <tr>
+                                                                                                                                        <td>${index + 1}</td>
+                                                                                                                                        <td>${asset.assetName}</td>
+                                                                                                                                        <td>${asset.condition}</td>
+                                                                                                                                    </tr>
+                                                                                                                                `;
+                            });
+
+                            if (response.assets.length === 0) {
+                                assetList = '<tr><td colspan="3">No assets available for this room.</td></tr>';
+                            }
+
+                            $('#assetList').html(assetList);
+                        } else {
+                            $('#assetList').html('<tr><td colspan="3">Room not found.</td></tr>');
+                        }
+                    },
+                    error: function () {
+                        $('#assetList').html('<tr><td colspan="3">Error retrieving room details.</td></tr>');
+                    }
+                });
+            }
+        }
+    </script>
+}

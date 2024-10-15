@@ -25,6 +25,7 @@ namespace Areas.AssetAndEquipment
             return View();
         }
 
+
         [Route("/create-asset-equipment/{homeId:int?}")]
         [HttpGet]
         public IActionResult CreateAssetAndEquipment(int homeId)

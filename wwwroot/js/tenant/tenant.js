@@ -52,6 +52,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 btnAction.empty();
                 statusInfo.empty();
+                userList.empty();
+
 
                 statusInfo.append(`<span>Available 4</span> | <span>About to expire 2</span> | <span>Rented 7</span>`);
 
@@ -68,8 +70,6 @@ document.addEventListener('DOMContentLoaded', function () {
                                         <i class="fas fa-edit"></i> Export file
                                     </a>
                                 </div>`);
-                userList.empty();
-
                 if (response.users && response.users.length === 0) {
                     userList.append('<tr><td colspan="9" class="text-center">No users found</td></tr>');
                     return;

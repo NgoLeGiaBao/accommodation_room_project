@@ -44,8 +44,30 @@ document.addEventListener('DOMContentLoaded', function () {
                 if ($.fn.DataTable.isDataTable('#asset-list')) {
                     $('#asset-list').DataTable().destroy();
                 }
-
+                var btnAction = $('#btn-action');
+                var statusInfo = $('#status-info');
                 var assetList = $('#asset-list tbody');
+
+
+                btnAction.empty();
+                statusInfo.empty();
+
+                var createAssetUrl = `/create-asset-equipment/${homeId}`;
+                var exportAssetUrl = `/create-asset-equipment/${homeId}`;
+                btnAction.append(`
+                                <div class="action-buttons mb-2">
+                                    <a href = ${createAssetUrl}
+                                        class="btn btn-primary me-2 ">
+                                        <i class="fas fa-plus"></i> Add Asset And Equipment
+                                    </a>
+                                    <a href = ${exportAssetUrl}
+                                        class="btn btn-info me-2 ">
+                                        <i class="fas fa-edit"></i> Export file
+                                    </a>
+                                </div>`);
+                statusInfo.append(`<span>Available 4</span> | <span>About to expire 2</span> | <span>Rented 7</span>`);
+
+
                 assetList.empty();
 
                 if (response.assets && response.assets.length === 0) {
