@@ -102,10 +102,14 @@ namespace App.Areas.Contract
         [HttpPost]
         public async Task<IActionResult> CreateContract(InputModel inputModel, int homeId)
         {
+            // Check RentalProperty exist
+            var landloardInformation = _appDbContext.RentalProperties.Find(homeId);
+            if (landloardInformation == null) return NotFound();
+
             // Check room exist
-            var roomExists = _appDbContext.Rooms.Any(r => r.Id == inputModel.RoomId);
-            var rentalPropertyExists = _appDbContext.RentalProperties.Any(r => r.Id == homeId);
-            if (!roomExists || !rentalPropertyExists)
+            var roomExists = _appDbContext.Rooms.FirstOrDefault(r => r.Id == inputModel.RoomId);
+            var rentalPropertyExists = _appDbContext.RentalProperties.FirstOrDefault(r => r.Id == homeId);
+            if (roomExists == null || rentalPropertyExists == null)
             {
                 // Process here
                 return NotFound();
@@ -158,6 +162,14 @@ namespace App.Areas.Contract
                 {
                     UserID = existingUser.Id,
                     RoomID = inputModel.RoomId,
+                    StartedDate = inputModel.rentalContract.StartedDate.ToUniversalTime(),
+                    EndupDate = inputModel.rentalContract.EndupDate.ToUniversalTime(),
+                    PElectricityPerKw = landloardInformation.ElectricityPrice,
+                    PWaterPerK = landloardInformation.WaterPrice,
+                    PServicePerK = 1000,
+                    PRentalRoomPerM = roomExists.Price,
+                    Rules = inputModel.rentalContract.Rules,
+                    PersonalSignContract = existingUser.Id
                 };
 
                 _appDbContext.RentalContracts.Add(rentalContract);
