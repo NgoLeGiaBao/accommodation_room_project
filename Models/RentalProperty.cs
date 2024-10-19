@@ -7,7 +7,8 @@ namespace App.Models
     public class RentalProperty
     {
         [Key]
-        public int Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public string? Id { get; set; }
 
         [Required(ErrorMessage = "Property name is required.")]
         [StringLength(100, ErrorMessage = "Property name cannot exceed 100 characters.")]
@@ -51,6 +52,11 @@ namespace App.Models
         [DataType(DataType.Currency)]
         [Display(Name = "Water Price", Prompt = "Enter water price...")]
         public decimal WaterPrice { get; set; }
+
+        [Required(ErrorMessage = "Service price is required.")]
+        [DataType(DataType.Currency)]
+        [Display(Name = "Other Service Price", Prompt = "Enter other service price...")]
+        public decimal OtherService { get; set; }
 
         [Required(ErrorMessage = "Owner's phone number is required.")]
         [Phone(ErrorMessage = "Invalid phone number.")]

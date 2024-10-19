@@ -1,86 +1,111 @@
-﻿<!-- #/ container -->
+﻿@{
+    var hasRentalProperty = ViewBag.HasRentalProperties;
+}
 <div class="container-fluid">
-    <div class="col-12 mb-30">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card text-center">
-                    <div class="card-body card-modifed">
-                        <div class="d-flex justify-content-between align-items-center flex-wrap">
-                            <div class="status-info mb-2">
-                                <select id="room-status" class="form-select input-height"
-                                    aria-label="Chọn trạng thái phòng">
-                                    <option value="all">Room status</option>
-                                    <option value="available">Available </option>
-                                    <option value="abouttoexpire">About to expire</option>
-                                    <option value="rented">Rented</option>
-                                </select>
-                                <!-- Room Number Field -->
-                                <input class="input-height input-room" type="text" id="room-number"
-                                    placeholder="Enter number room" aria-label="Nhập số phòng">
-                                <!-- Search Button -->
-                                <a href="#" class="btn btn-primary btn-custom me-2">
-                                    <i class="fas fa-search"></i>
-                                    Search
-                                </a>
-                            </div>
-                            <div class="action-buttons mb-2">
-                                <a asp-controller="Room" asp-action="CreateHome" class="btn btn-primary me-2">
-                                    <i class="fas fa-plus"></i>
-                                    Add home
-                                </a>
-                                @* <a href="#" class="btn btn-info me-2">
+    @if (hasRentalProperty)
+    {
+        <div class="col-12 mb-30">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card text-center">
+                        <div class="card-body card-modifed">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                                <div class="status-info mb-2">
+                                    <select id="room-status" class="form-select input-height"
+                                        aria-label="Chọn trạng thái phòng">
+                                        <option value="all">All Room</option>
+                                        <option value="available">Available </option>
+                                        <option value="abouttoexpire">About to expire</option>
+                                        <option value="rented">Rented</option>
+                                    </select>
+                                    <!-- Room Number Field -->
+                                    <input class="input-height input-room" type="text" id="room-number"
+                                        placeholder="Enter number room" aria-label="Nhập số phòng">
+                                    <!-- Search Button -->
+                                    <a href="#" class="btn btn-primary btn-custom me-2">
+                                        <i class="fas fa-search"></i>
+                                        Search
+                                    </a>
+                                </div>
+                                <div class="action-buttons mb-2">
+                                    <a asp-controller="Room" asp-action="CreateHome" class="btn btn-primary me-2">
+                                        <i class="fas fa-plus"></i>
+                                        Add home
+                                    </a>
+                                    @* <a href="#" class="btn btn-info me-2">
                                 <i class="fas fa-edit"></i>
                                 Enter room from excel
                                 </a> *@
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-12 mb-30">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-header">
-                        <ul class="nav nav-tabs card-header-tabs" id="tab-list">
-                            @* Load list apartment *@
-                        </ul>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center flex-wrap mb-3" id="btn-action">
-                            @* Load button action *@
-                        </div>
-                        <hr />
-                        <div class="row" id="room-list">
-                            @* Load list room *@
-                        </div>
-
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="bootstrap-pagination">
-                                    <nav>
-                                        <ul id="pagination-list" class="pagination justify-content-center">
-                                            <li class="page-item disabled">
-                                                <a class="page-link" href="#" tabindex="-1">Previous</a>
-                                            </li>
-                                            <!-- Các nút phân trang sẽ được thêm vào đây qua JavaScript -->
-                                            <li class="page-item disabled">
-                                                <a class="page-link" href="#">Next</a>
-                                            </li>
-                                        </ul>
-                                    </nav>
                                 </div>
                             </div>
                         </div>
-
-                        @* <partial name="_Paging"></partial> *@
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+        <div class="col-12 mb-30">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <ul class="nav nav-tabs card-header-tabs" id="tab-list">
+                                @* Load list apartment *@
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap mb-3" id="btn-action">
+                                @* Load button action *@
+                            </div>
+                            <hr />
+                            <div class="row" id="room-list">
+                                @* Load list room *@
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="bootstrap-pagination">
+                                        <nav>
+                                            <ul id="pagination-list" class="pagination justify-content-center">
+                                                <li class="page-item disabled">
+                                                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                                </li>
+                                                <!-- Các nút phân trang sẽ được thêm vào đây qua JavaScript -->
+                                                <li class="page-item disabled">
+                                                    <a class="page-link" href="#">Next</a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="col-12 mb-30">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card text-center">
+                        <div class="card-body card-modifed">
+                            @* <div class="d-flex justify-content-end align-items-center flex-wrap">
+                        <div class="action-buttons mb-2">
+                        <a asp-controller="Room" asp-action="CreateHome" class="btn btn-primary me-2">
+                        <i class="fas fa-plus"></i>
+                        Add home
+                        </a>
+                        </div>
+                        </div> *@
+                        </div>
+                        @* Process no availble data *@
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
 </div>
 
 

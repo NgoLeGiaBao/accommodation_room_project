@@ -16,7 +16,7 @@ namespace App.Models
         [Display(Name = "Full Name", Prompt = "Enter full name...")]
         public string? FullName { get; set; }
 
-        [Display(Name = "Sex")]
+        [Display(Name = "Gender", Prompt = "Enter gender...")]
         public bool Sex { get; set; }
 
         [DataType(DataType.Date)]

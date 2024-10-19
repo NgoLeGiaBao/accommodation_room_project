@@ -31,7 +31,7 @@
                                 <div class="form-group col-md-6">
                                     @Html.LabelFor(m => m.CategoryAssetID, new { @class = "control-label" })
                                     @Html.DropDownListFor(m => m.CategoryAssetID,
-                                             (IEnumerable<SelectListItem>)ViewData["Categories"], "Select Category", new
+                                             (IEnumerable<SelectListItem>)ViewData["Categories"], "Choose a category", new
                                              {
                                                  @class
                                              = "form-control"
@@ -76,32 +76,29 @@
                             </div>
 
                             <div class="form-row">
-                                <!-- Condition -->
+                                @* <!-- Condition -->
                                 <div class="form-group col-md-6">
-                                    @Html.LabelFor(m => m.Condition, new { @class = "control-label" })
-                                    @Html.DropDownListFor(m => m.Condition,
-                                             (IEnumerable<SelectListItem>)ViewData["Statuses"], "Select Statue", new
-                                             {
-                                                 @class =
-                                             "form-control"
-                                             })
-                                    @Html.ValidationMessageFor(m => m.Condition, "", new { @class = "text-danger" })
-                                </div>
+                                @Html.LabelFor(m => m.Condition, new { @class = "control-label" })
+                                @Html.DropDownListFor(m => m.Condition,
+                                (IEnumerable<SelectListItem>)ViewData["Statuses"], "Select Statue", new
+                                {
+                                @class =
+                                "form-control"
+                                })
+                                @Html.ValidationMessageFor(m => m.Condition, "", new { @class = "text-danger" })
+                                </div> *@
 
                                 <!-- Location -->
                                 <div class="form-group col-md-6">
                                     @Html.LabelFor(m => m.Location, new { @class = "control-label" })
                                     @Html.DropDownListFor(m => m.Location,
-                                             (IEnumerable<SelectListItem>)ViewData["Rooms"], "Select Room", new
+                                             (IEnumerable<SelectListItem>)ViewData["Rooms"], "Choose a place", new
                                              {
                                                  @class =
                                              "form-control"
                                              })
                                     @Html.ValidationMessageFor(m => m.Location, "", new { @class = "text-danger" })
                                 </div>
-                            </div>
-
-                            <div class="form-row">
                                 <!-- Next Maintenance Due Date -->
                                 <div class="form-group col-md-6">
                                     @Html.LabelFor(m => m.NextMaintenanceDueDate, new { @class = "control-label" })
@@ -119,9 +116,11 @@
                                              "text-danger"
                                         })
                                 </div>
+                            </div>
 
+                            <div class="form-row">
                                 <!-- ImagePath -->
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-12">
                                     @Html.LabelFor(m => m.ImagePath, new { @class = "control-label" })
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" asp-for="ImagePath" multiple

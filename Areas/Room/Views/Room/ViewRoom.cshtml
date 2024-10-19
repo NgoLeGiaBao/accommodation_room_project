@@ -1,109 +1,105 @@
+@model App.Models.Room
 <div class="container-fluid">
     <div class="col-lg-12">
         <div class="card shadow-lg border-light mb-4">
             <div class="card-body">
-                <!-- Centered card title -->
-                <h4 class="card-title text-center font-weight-bold">Thông Tin Phòng Trọ</h4>
-
-                <!-- Thông tin về phòng -->
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <label class="font-weight-semibold">Diện Tích:</label>
-                            <p class="form-control-plaintext mb-0">30 m²</p>
-                        </div>
+                <h4 class="card-title text-center font-weight-bold">Room Information</h4>
+                <div class="row">
+                    <div class="col-md-4 ">
+                        <p><strong>Number room: </strong>@Model.RoomName</p>
                     </div>
-                    <div class="col-md-6">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <label class="font-weight-semibold">Số Phòng:</label>
-                            <p class="form-control-plaintext mb-0">2</p>
-                        </div>
+                    <div class="col-md-4 ">
+                        <p><strong>Area: </strong>@Model.Area m2</p>
+                    </div>
+                    <div class="col-md-4 ">
+                        <p><strong>Maximum Occupancy:</strong> @Model.MaximumNumberOfPeople</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 ">
+                        <p><strong>Time Contract:</strong></p>
+                    </div>
+                    <div class="col-md-4 ">
+                        <p><strong>Room Price: </strong>@Model.Price</p>
+                    </div>
+                    <div class="col-md-4 ">
+                        <p><strong>Room Stauts: </strong>@Model.Status</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 ">
+                        <p class="text-justify"><strong>Description:</strong> @Model.Description</p>
                     </div>
                 </div>
 
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <label class="font-weight-semibold">Số Lượng Người Ở Tối Đa:</label>
-                            <p class="form-control-plaintext mb-0">4</p>
-                        </div>
+                @if (Model.Status == "About to expire")
+                {
+                    @* Process herer *@
+                    <!-- Send Contract Activation Notice Button -->
+                    <div class="text-center mb-4 mt-4">
+                        <button type="button" class="btn btn-primary" onclick="alert('Thông báo hợp đồng đã được gửi!')">
+                            Send Contract Activation Notice</button>
                     </div>
-                    <div class="col-md-6">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <label class="font-weight-semibold">Giá Thuê:</label>
-                            <p class="form-control-plaintext mb-0">2,000,000 VND/tháng</p>
-                        </div>
+                }
+                @if (Model.Status == "Available")
+                {
+                    @* Process herer *@
+                    <!-- Send Contract Activation Notice Button -->
+                    <div class="text-center mb-4 mt-4">
+                        <button type="button" class="btn btn-primary" onclick="alert('Thông báo hợp đồng đã được gửi!')">
+                            Create A New Contract</button>
                     </div>
-                </div>
+                }
 
-                <div class="row mb-3">
-                    <div class="col-md-12">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <label class="font-weight-semibold">Tiện Nghi:</label>
-                            <p class="form-control-plaintext mb-0">Wi-Fi, điều hòa, nhà vệ sinh riêng.</p>
-                        </div>
+                @if (Model.Status == "Rented")
+                {
+                    @* Process herer *@
+                    <!-- Send Contract Activation Notice Button -->
+                    <div class="text-center mb-4 mt-4">
+                        <button type="button" class="btn btn-primary" onclick="alert('Thông báo hợp đồng đã được gửi!')">
+                            Cancel Contract</button>
                     </div>
-                </div>
+                }
 
-                <div class="row mb-4">
-                    <div class="col-md-12">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <label class="font-weight-semibold">Thời Gian Hợp Đồng:</label>
-                            <p class="form-control-plaintext mb-0">Từ ngày 01/10/2024 đến ngày 01/10/2025</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Nút gửi thông báo kích hoạt hợp đồng -->
-                <div class="text-center mb-4">
-                    <button type="button" class="btn btn-primary btn-lg"
-                        onclick="alert('Thông báo hợp đồng đã được gửi!')">Gửi Thông Báo Kích Hoạt Hợp Đồng</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-12">
-        <div class="card shadow-lg border-light mb-4">
-            <div class="card-body">
+                <hr />
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="card mb-4">
                             <div class="card-body">
-                                <h4 class="card-title">Danh sách người thuê</h4>
+                                <h4 class=" text-center font-weight-bold">Tenant List</h4>
                                 <div class="table-responsive">
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
-                                                <th>#</th>
-                                                <th>Tên Sản Phẩm</th>
-                                                <th>Trạng Thái</th>
-                                                <th>Ngày</th>
-                                                <th>Giá</th>
+                                                <th>No.</th>
+                                                <th>Fullname</th>
+                                                <th>Sex</th>
+                                                <th>Date of birth</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <th>1</th>
-                                                <td>Áo Phông Kolor Nam</td>
-                                                <td><span class="badge badge-primary px-2">Giảm Giá</span></td>
-                                                <td>22 Tháng 1</td>
-                                                <td class="color-primary">$21.56</td>
+                                            @* <tr>
+                                            <th>1</th>
+                                            <td>Áo Phông Kolor Nam</td>
+                                            <td><span class="badge badge-primary px-2">Giảm Giá</span></td>
+                                            <td>22 Tháng 1</td>
+                                            <td class="color-primary">$21.56</td>
                                             </tr>
                                             <tr>
-                                                <th>2</th>
-                                                <td>Áo Phông Kolor Nữ</td>
-                                                <td><span class="badge badge-danger px-2">Thuế</span></td>
-                                                <td>30 Tháng 1</td>
-                                                <td class="color-success">$55.32</td>
+                                            <th>2</th>
+                                            <td>Áo Phông Kolor Nữ</td>
+                                            <td><span class="badge badge-danger px-2">Thuế</span></td>
+                                            <td>30 Tháng 1</td>
+                                            <td class="color-success">$55.32</td>
                                             </tr>
                                             <tr>
-                                                <th>3</th>
-                                                <td>Balo Xanh Dành Cho Trẻ Em</td>
-                                                <td><span class="badge badge-success px-2">Kéo Dài</span></td>
-                                                <td>25 Tháng 1</td>
-                                                <td class="color-danger">$14.85</td>
-                                            </tr>
+                                            <th>3</th>
+                                            <td>Balo Xanh Dành Cho Trẻ Em</td>
+                                            <td><span class="badge badge-success px-2">Kéo Dài</span></td>
+                                            <td>25 Tháng 1</td>
+                                            <td class="color-danger">$14.85</td>
+                                            </tr> *@
                                         </tbody>
                                     </table>
                                 </div>
@@ -114,48 +110,48 @@
                     <div class="col-lg-6">
                         <div class="card mb-4">
                             <div class="card-body">
-                                <h4 class="card-title">Trang thiết bị</h4>
+                                <h4 class=" text-center font-weight-bold">Assests And Equipment</h4>
                                 <div class="table-responsive">
                                     <table class="table header-border">
                                         <thead>
                                             <tr>
-                                                <th scope="col">#</th>
-                                                <th scope="col">Họ</th>
-                                                <th scope="col">Tên</th>
-                                                <th scope="col">Tên Người Dùng</th>
+                                                <th scope="col">No.</th>
+                                                <th scope="col">Assest Name</th>
+                                                <th scope="col">Assest Status</th>
+                                                <th scope="col">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <th>1</th>
-                                                <td>Jacklyn</td>
-                                                <td>G.Bearden</td>
-                                                <td>jacklyn</td>
+                                            @* <tr>
+                                            <th>1</th>
+                                            <td>Jacklyn</td>
+                                            <td>G.Bearden</td>
+                                            <td>jacklyn</td>
                                             </tr>
                                             <tr>
-                                                <th>2</th>
-                                                <td>Nancy</td>
-                                                <td>J. Daniels</td>
-                                                <td>daniels</td>
+                                            <th>2</th>
+                                            <td>Nancy</td>
+                                            <td>J. Daniels</td>
+                                            <td>daniels</td>
                                             </tr>
                                             <tr>
-                                                <th>3</th>
-                                                <td>Betty</td>
-                                                <td>R. Christensen</td>
-                                                <td>betty</td>
+                                            <th>3</th>
+                                            <td>Betty</td>
+                                            <td>R. Christensen</td>
+                                            <td>betty</td>
                                             </tr>
                                             <tr>
-                                                <th>4</th>
-                                                <td>Lucinda</td>
-                                                <td>D. Sears</td>
-                                                <td>lucinda</td>
+                                            <th>4</th>
+                                            <td>Lucinda</td>
+                                            <td>D. Sears</td>
+                                            <td>lucinda</td>
                                             </tr>
                                             <tr>
-                                                <th>5</th>
-                                                <td>William</td>
-                                                <td>T. Marks</td>
-                                                <td>williammarks</td>
-                                            </tr>
+                                            <th>5</th>
+                                            <td>William</td>
+                                            <td>T. Marks</td>
+                                            <td>williammarks</td>
+                                            </tr> *@
                                         </tbody>
                                     </table>
                                 </div>

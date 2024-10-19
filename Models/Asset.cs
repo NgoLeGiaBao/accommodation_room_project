@@ -9,7 +9,7 @@ namespace App.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int AssetID { get; set; }
+        public string? AssetID { get; set; }
 
         [Required]
         [StringLength(100)]
@@ -18,7 +18,7 @@ namespace App.Models
 
         [ForeignKey("CategoryAssetID")]
         [Display(Name = "Category", Prompt = "Select category")]
-        public int? CategoryAssetID { get; set; }
+        public string? CategoryAssetID { get; set; }
         public virtual CategoryAsset? CategoryAsset { get; set; }
 
         [Required]
@@ -32,7 +32,7 @@ namespace App.Models
 
         [StringLength(50)]
         [Display(Name = "Condition", Prompt = "Enter asset condition")]
-        public string Condition { get; set; }
+        public string? Condition { get; set; }
 
         [StringLength(100)]
         [Display(Name = "Location", Prompt = "Enter location")]

@@ -60,8 +60,7 @@ namespace Accommodation_Room_Project_Offical.Migrations
                 name: "CategoryAssets",
                 columns: table => new
                 {
-                    CategoryAssetID = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CategoryAssetID = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
@@ -73,8 +72,7 @@ namespace Accommodation_Room_Project_Offical.Migrations
                 name: "CategoryNotification",
                 columns: table => new
                 {
-                    CategoryNoID = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CategoryNoID = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false)
                 },
                 constraints: table =>
@@ -86,8 +84,7 @@ namespace Accommodation_Room_Project_Offical.Migrations
                 name: "RentalProperty",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<string>(type: "text", nullable: false),
                     PropertyName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     OwnerName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Address = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: false),
@@ -97,6 +94,7 @@ namespace Accommodation_Room_Project_Offical.Migrations
                     Facilities = table.Column<string>(type: "text", nullable: false),
                     ElectricityPrice = table.Column<decimal>(type: "numeric", nullable: false),
                     WaterPrice = table.Column<decimal>(type: "numeric", nullable: false),
+                    OtherService = table.Column<decimal>(type: "numeric", nullable: false),
                     OwnerPhoneNumber = table.Column<string>(type: "text", nullable: false),
                     StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     PropertyImage = table.Column<string>(type: "text", nullable: true),
@@ -217,16 +215,15 @@ namespace Accommodation_Room_Project_Offical.Migrations
                 name: "Assets",
                 columns: table => new
                 {
-                    AssetID = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    AssetID = table.Column<string>(type: "text", nullable: false),
                     AssetName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    CategoryAssetID = table.Column<int>(type: "integer", nullable: false),
+                    CategoryAssetID = table.Column<string>(type: "text", nullable: true),
                     PurchaseDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Cost = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
                     Condition = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     Location = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     NextMaintenanceDueDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    ImagePath = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false)
+                    ImagePath = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -243,9 +240,8 @@ namespace Accommodation_Room_Project_Offical.Migrations
                 name: "Notifications",
                 columns: table => new
                 {
-                    NotificationId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    CategoryNoID = table.Column<int>(type: "integer", nullable: false),
+                    NotificationId = table.Column<string>(type: "text", nullable: false),
+                    CategoryNoID = table.Column<string>(type: "text", nullable: false),
                     StatusNotification = table.Column<string>(type: "text", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatorUserId = table.Column<string>(type: "text", nullable: false)
@@ -271,14 +267,13 @@ namespace Accommodation_Room_Project_Offical.Migrations
                 name: "Room",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<string>(type: "text", nullable: false),
                     RoomName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Area = table.Column<double>(type: "double precision", nullable: false),
                     MaximumNumberOfPeople = table.Column<int>(type: "integer", nullable: false),
                     Price = table.Column<decimal>(type: "numeric", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
-                    RentalPropertyId = table.Column<int>(type: "integer", nullable: false),
+                    RentalPropertyId = table.Column<string>(type: "text", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
                     Status = table.Column<string>(type: "text", nullable: true)
                 },
@@ -298,7 +293,7 @@ namespace Accommodation_Room_Project_Offical.Migrations
                 columns: table => new
                 {
                     AppUserId = table.Column<string>(type: "text", nullable: false),
-                    RentalPropertyId = table.Column<int>(type: "integer", nullable: false)
+                    RentalPropertyId = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -321,8 +316,8 @@ namespace Accommodation_Room_Project_Offical.Migrations
                 name: "OwnNotifications",
                 columns: table => new
                 {
-                    NotificationId = table.Column<int>(type: "integer", nullable: false),
-                    UserId = table.Column<string>(type: "text", nullable: false)
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    NotificationId = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -345,16 +340,19 @@ namespace Accommodation_Room_Project_Offical.Migrations
                 name: "Invoices",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<string>(type: "text", nullable: false),
+                    ElectricityForBefore = table.Column<double>(type: "double precision", nullable: false),
+                    WaterUsageForBefore = table.Column<double>(type: "double precision", nullable: false),
                     ElectricityUsage = table.Column<double>(type: "double precision", nullable: false),
                     WaterUsage = table.Column<double>(type: "double precision", nullable: false),
+                    ServiceFee = table.Column<decimal>(type: "numeric", nullable: false),
                     ServiceDetails = table.Column<string>(type: "text", nullable: false),
                     AdditionalServiceFee = table.Column<decimal>(type: "numeric", nullable: false),
+                    TotalMoney = table.Column<decimal>(type: "numeric", nullable: false),
                     InvoiceDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     PaymentDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     QRCodeImage = table.Column<string>(type: "text", nullable: false),
-                    RoomId = table.Column<int>(type: "integer", nullable: false)
+                    RoomId = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -371,9 +369,9 @@ namespace Accommodation_Room_Project_Offical.Migrations
                 name: "OwnAssets",
                 columns: table => new
                 {
-                    OwnAssetID = table.Column<int>(type: "integer", nullable: false),
-                    AssetID = table.Column<int>(type: "integer", nullable: false),
-                    RoomID = table.Column<int>(type: "integer", nullable: false),
+                    OwnAssetID = table.Column<string>(type: "text", nullable: false),
+                    AssetID = table.Column<string>(type: "text", nullable: false),
+                    RoomID = table.Column<string>(type: "text", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -397,8 +395,8 @@ namespace Accommodation_Room_Project_Offical.Migrations
                 name: "RentalContract",
                 columns: table => new
                 {
-                    ContractID = table.Column<int>(type: "integer", nullable: false),
-                    RoomID = table.Column<int>(type: "integer", nullable: false),
+                    ContractID = table.Column<string>(type: "text", nullable: false),
+                    RoomID = table.Column<string>(type: "text", nullable: false),
                     UserID = table.Column<string>(type: "text", nullable: false),
                     StartedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EndupDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -406,7 +404,10 @@ namespace Accommodation_Room_Project_Offical.Migrations
                     PWaterPerK = table.Column<decimal>(type: "numeric", nullable: false),
                     PServicePerK = table.Column<decimal>(type: "numeric", nullable: false),
                     PRentalRoomPerM = table.Column<decimal>(type: "numeric", nullable: false),
-                    Rules = table.Column<string>(type: "text", nullable: false)
+                    Rules = table.Column<string>(type: "text", nullable: true),
+                    Deposit = table.Column<decimal>(type: "numeric", nullable: false),
+                    IsPaid = table.Column<bool>(type: "boolean", nullable: false),
+                    PersonalSignContract = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {

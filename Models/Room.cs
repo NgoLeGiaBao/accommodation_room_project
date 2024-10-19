@@ -7,7 +7,8 @@ namespace App.Models
     public class Room
     {
         [Key]
-        public int Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public string? Id { get; set; }
 
         [Required(ErrorMessage = "Room name is required.")]
         [StringLength(100, ErrorMessage = "Room name cannot be longer than 100 characters.")]
@@ -31,9 +32,10 @@ namespace App.Models
         [Display(Name = "Description", Prompt = "Enter room description...")]
         public string Description { get; set; }
 
-        [Required(ErrorMessage = "Rental Property ID is required.")]
-        public int RentalPropertyId { get; set; }
+        public string? RentalPropertyId { get; set; }
 
+        public double WaterPriceInit { get; set; } = 0;
+        public double ElectricityPriceInit { get; set; } = 0;
         public bool IsActive { get; set; }
 
         [Display(Name = "Status", Prompt = "Enter room status...")]

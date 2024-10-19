@@ -129,7 +129,7 @@
                 clearFormFields();
                 if (identityCard !== '') {
                     $.ajax({
-                        url: '/check-identity-card-HOME',
+                        url: '/check-identity-card',
                         method: 'POST',
                         data: { identityCard: identityCard },
                         dataType: 'json',

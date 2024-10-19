@@ -9,8 +9,9 @@ namespace App.Models
         public string AppUserId { get; set; }  // Foreign key to AppUser
 
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column(Order = 2)]
-        public int RentalPropertyId { get; set; }  // Foreign key to RentalProperty
+        public string RentalPropertyId { get; set; }  // Foreign key to RentalProperty
 
         [ForeignKey("AppUserId")]
         public AppUser AppUser { get; set; }  // Navigation property

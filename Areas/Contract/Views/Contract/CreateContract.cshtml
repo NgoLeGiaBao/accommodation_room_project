@@ -7,6 +7,9 @@
     <div id="accordion-three" class="accordion">
         <div class="card">
             <div class="card-header">
+                <h2 class="text-center lh-base mb-4">Create A New Room</h2>
+                <partial name="_SuccessMessage" />
+                <partial name="_FailureMessage" />
                 <h5 class="mb-0" data-toggle="collapse" data-target="#collapseTenantLandlordInfo" aria-expanded="true"
                     aria-controls="collapseTenantLandlordInfo"><i class="fa" aria-hidden="true"></i>
                     Rental Party Information
@@ -70,7 +73,7 @@
                             {
                             new SelectListItem { Text = "Male", Value = "true" },
                             new SelectListItem { Text = "Female", Value = "false" }
-                            }, "Select Sex", new { @class = "form-control", id = "Sex" })
+                            }, "Choose gender", new { @class = "form-control", id = "Sex" })
                             @Html.ValidationMessageFor(m => m.appUser.Sex, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -407,12 +410,11 @@
                             var assetList = '';
                             response.assets.forEach(function (asset, index) {
                                 assetList += `
-                                                                                                                                    <tr>
-                                                                                                                                        <td>${index + 1}</td>
-                                                                                                                                        <td>${asset.assetName}</td>
-                                                                                                                                        <td>${asset.condition}</td>
-                                                                                                                                    </tr>
-                                                                                                                                `;
+                                        <tr>
+                                            <td>${index + 1}</td>
+                                            <td>${asset.assetName}</td>
+                                            <td>${asset.condition}</td>
+                                        </tr> `;
                             });
 
                             if (response.assets.length === 0) {

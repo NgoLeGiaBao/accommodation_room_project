@@ -37,16 +37,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     function loadUsers(homeId) {
-        var userList = $('#user-list tbody');
         var btnAction = $('#btn-action');
-        var statusInfo = $('#status-info');
-
         btnAction.empty();
-        statusInfo.empty();
-        userList.empty();
-
-
-        statusInfo.append(`<span>Available 4</span> | <span>About to expire 2</span> | <span>Rented 7</span>`);
 
         var createContractUrl = `/create-contract/${homeId}`;
         var exportContractUrl = `/edit-home/${homeId}`;
@@ -61,76 +53,77 @@ document.addEventListener('DOMContentLoaded', function () {
                                         <i class="fas fa-edit"></i> Export file
                                     </a>
                                 </div>`);
-        // $.ajax({
-        //     url: `/get-list-user/${homeId}`,
-        //     method: 'POST',
-        //     dataType: 'json',
-        //     success: function (response) {
-        //         if ($.fn.DataTable.isDataTable('#user-list')) {
-        //             $('#user-list').DataTable().destroy();
-        //         }
+        $.ajax({
+            url: `/get-list-contracts/${homeId}`, // Update the URL to fetch contracts
+            method: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                if ($.fn.DataTable.isDataTable('#contract-list')) {
+                    $('#contract-list').DataTable().destroy();
+                }
 
-        //         var userList = $('#user-list tbody');
-        //         var btnAction = $('#btn-action');
-        //         var statusInfo = $('#status-info');
+                var contractList = $('#contract-list tbody');
+                var btnAction = $('#btn-action');
+                var statusInfo = $('#status-info');
 
-        //         btnAction.empty();
-        //         statusInfo.empty();
-        //         userList.empty();
+                btnAction.empty();
+                statusInfo.empty();
+                contractList.empty();
 
+                // Example status info (adjust based on contract data)
+                statusInfo.append(`<span>All ${response.allContracts}</span> | <span>Soon ${response.pendingContracts}</span> | <span>Active ${response.activeContracts}</span> | <span>Completed ${response.completedContracts}</span>`);
 
-        //         statusInfo.append(`<span>Available 4</span> | <span>About to expire 2</span> | <span>Rented 7</span>`);
+                // Adjust button actions if needed
+                var createContractUrl = `/create-contract/${homeId}`;
+                var exportContractUrl = `/export-contracts/${homeId}`;
+                btnAction.append(`
+                                                        <div class="action-buttons mb-2">
+                                                            <a href = ${createContractUrl}
+                                                                class="btn btn-primary me-2 ">
+                                                                <i class="fas fa-plus"></i> Create Contract
+                                                            </a>
+                                                            <a href = ${exportContractUrl}
+                                                                class="btn btn-info me-2 ">
+                                                                <i class="fas fa-file-export"></i> Export Contracts
+                                                            </a>
+                                                        </div>`);
 
-        //         var createContractUrl = `/create-contract/${homeId}`;
-        //         var exportContractUrl = `/edit-home/${homeId}`;
-        //         btnAction.append(`
-        //                         <div class="action-buttons mb-2">
-        //                             <a href = ${createContractUrl}
-        //                                 class="btn btn-primary me-2 ">
-        //                                 <i class="fas fa-plus"></i> Create tenant
-        //                             </a>
-        //                             <a href = ${exportContractUrl}
-        //                                 class="btn btn-info me-2 ">
-        //                                 <i class="fas fa-edit"></i> Export file
-        //                             </a>
-        //                         </div>`);
-        //         if (response.users && response.users.length === 0) {
-        //             userList.append('<tr><td colspan="9" class="text-center">No users found</td></tr>');
-        //             return;
-        //         }
+                if (response.contracts && response.contracts.length === 0) {
+                    contractList.append('<tr><td colspan="6" class="text-center">No contracts found</td></tr>');
+                    return;
+                }
 
-        //         $.each(response.users, function (index, user) {
-        //             var userRow = `<tr>
-        //                 <td>${index + 1}</td>
-        //                 <td>${user.fullName}</td>
-        //                 <td>${user.sex ? 'Male' : 'Female'}</td>
-        //                 <td>${formatDate(user.birthday)}</td>
-        //                 <td>${user.identityCard}</td>
-        //                 <td>${user.address}</td>
-        //                 <td>
-        //                     <span>
-        //                         <a href="/edit-user/${user.id}" data-toggle="tooltip" data-placement="top" title="Edit">
-        //                             <i class="fa fa-pencil color-muted m-r-5"></i>
-        //                         </a>
-        //                         <a href="/view-user/${user.id}" data-toggle="tooltip" data-placement="top" title="View">
-        //                             <i class="fa fa-eye color-info"></i>
-        //                         </a>
-        //                     </span>
-        //                 </td>
-        //             </tr>`;
-        //             userList.append(userRow);
-        //         });
+                $.each(response.contracts, function (index, contract) {
+                    var contractRow = `<tr>
+                                                <td>${index + 1}</td>
+                                                <td>${contract.tenantName}</td>
+                                                <td>${contract.roomName}</td>
+                                                <td>${formatDate(contract.startingDate)}</td>
+                                                <td>${formatDate(contract.expirationDate)}</td>
+                                                <td>
+                                                    <span>
+                                                        <a href="/edit-contract/${contract.id}" data-toggle="tooltip" data-placement="top" title="Edit">
+                                                            <i class="fa fa-pencil color-muted m-r-5"></i>
+                                                        </a>
+                                                        <a href="/view-contract/${contract.id}" data-toggle="tooltip" data-placement="top" title="View">
+                                                            <i class="fa fa-eye color-info"></i>
+                                                        </a>
+                                                    </span>
+                                                </td>
+                                            </tr>`;
+                    contractList.append(contractRow);
+                });
 
-        //         $('#user-list').DataTable({
-        //             responsive: true
-        //         });
+                $('#contract-list').DataTable({
+                    responsive: true
+                });
 
-        //         $('[data-toggle="tooltip"]').tooltip();
-        //     },
-        //     error: function (xhr, status, error) {
-        //         console.error("Error loading users:", status, error);
-        //     }
-        // });
+                $('[data-toggle="tooltip"]').tooltip();
+            },
+            error: function (xhr, status, error) {
+                console.error("Error loading contracts:", status, error);
+            }
+        });
     }
 
     // Formate date

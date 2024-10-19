@@ -3,6 +3,7 @@ using System;
 using App.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Accommodation_Room_Project_Offical.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241018150528_V02")]
+    partial class V02
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -200,13 +203,10 @@ namespace Accommodation_Room_Project_Offical.Migrations
                     b.Property<DateTime>("InvoiceDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime?>("PaymentDate")
+                    b.Property<DateTime>("PaymentDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("QRCodeImage")
-                        .HasColumnType("text");
-
-                    b.Property<string>("RentalContractId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -215,6 +215,7 @@ namespace Accommodation_Room_Project_Offical.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("ServiceDetails")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<decimal>("ServiceFee")

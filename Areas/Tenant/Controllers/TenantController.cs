@@ -19,21 +19,30 @@ namespace App.Areas.Tenant
             _signInManager = signInManager;
         }
         [Route("information-tenant")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            // Get rental properties by user
+            var user = await _userManager.GetUserAsync(User);
+            var rentalProperties = _appDbContext.UserRentalProperties
+                                .Where(r => r.AppUserId == user.Id)
+                                .ToList();
+
+            ViewBag.HasRentalProperties = false;
+            if (rentalProperties != null && rentalProperties.Any())
+                ViewBag.HasRentalProperties = true;
             return View();
         }
 
-        [Route("/create-tenant/{rentalPropertyId:int?}")]
+        [Route("/create-tenant/{rentalPropertyId}")]
         [HttpGet]
         public IActionResult CreateTenant()
         {
             AppUser appUser = new AppUser();
             return View(appUser);
         }
-        [Route("/create-tenant/{rentalPropertyId:int?}")]
+        [Route("/create-tenant/{rentalPropertyId}")]
         [HttpPost]
-        public async Task<IActionResult> CreateTenant(AppUser appUser, int rentalPropertyId)
+        public async Task<IActionResult> CreateTenant(AppUser appUser, string rentalPropertyId)
         {
             if (ModelState.IsValid)
             {
@@ -102,10 +111,10 @@ namespace App.Areas.Tenant
                 }
             }
 
-            // If we get to this point, something went wrong, return to the view with the current appUser
-            var errors = ModelState.Values.SelectMany(v => v.Errors)
-                      .Select(e => e.ErrorMessage)
-                      .ToList();
+            // If we get to this postring, something went wrong, return to the view with the current appUser
+            // var errors = ModelState.Values.SelectMany(v => v.Errors)
+            //           .Select(e => e.ErrorMessage)
+            //           .ToList();
             // return Content(string.Join(",", errors));
             return View(appUser);
         }
@@ -135,46 +144,59 @@ namespace App.Areas.Tenant
         }
 
 
-        [Route("/get-list-user/{homeId:int}")]
+        [Route("/get-list-user/{homeId}")]
         [HttpPost]
-        public async Task<IActionResult> GetListUser(int homeId)
+        public async Task<IActionResult> GetListUser(string homeId)
         {
             // Get the currently logged-in user
             var currentUser = await _signInManager.UserManager.GetUserAsync(User);
 
             if (currentUser == null)
-            /// <response code="404">No users associated with the property were found.</response>
-            {
                 return Unauthorized(new { message = "User is not authenticated." });
-            }
 
-            // Retrieve users associated with the specified rental property,
-            // excluding the current user
+            // Get the current date
+            var currentDate = DateTime.UtcNow;
+
+            // Count total users associated with the specified rental property, excluding the current user
+            var totalUsers = await _appDbContext.UserRentalProperties
+                .Where(rpu => rpu.RentalPropertyId == homeId && rpu.AppUserId != currentUser.Id) // Exclude current user
+                .CountAsync();
+
+            // Now retrieve user details if needed
             var users = await _appDbContext.UserRentalProperties
                 .Where(rpu => rpu.RentalPropertyId == homeId && rpu.AppUserId != currentUser.Id) // Exclude current user
-                .Include(rpu => rpu.AppUser) // Include user details
-                .Select(rpu => rpu.AppUser)
+                .Include(rpu => rpu.AppUser)
+                .Select(rpu => new
+                {
+                    User = rpu.AppUser,
+                    // Count current rental contracts
+                    CurrentContractsCount = _appDbContext.RentalContracts.Count(rc =>
+                        rc.AppUser.Id == rpu.AppUserId &&
+                        rc.Room.RentalPropertyId == homeId &&
+                        rc.StartedDate <= currentDate && rc.EndupDate >= currentDate),
+
+                    // Count past rental contracts
+                    PastContractsCount = _appDbContext.RentalContracts.Count(rc =>
+                        rc.AppUser.Id == rpu.AppUserId &&
+                        rc.Room.RentalPropertyId == homeId &&
+                        rc.EndupDate < currentDate)
+                })
                 .ToListAsync();
 
-            if (users == null || users.Count == 0)
-            {
-                return NotFound(new { message = "No users found for this property." });
-            }
-
-            return Ok(new { users });
+            return Ok(new { totalUsers, users });
         }
 
 
-        [Route("edit-tenant/{id:int?}")]
+        [Route("edit-tenant/{id}")]
         [HttpGet]
-        public IActionResult EditTenant(int? id)
+        public IActionResult EditTenant(string? id)
         {
             // Kiểm tra id nếu cần
             return View();
         }
         [Route("/tenant-delete/{id?}")]
         [HttpGet]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(string id)
         {
             return Content(id.ToString());
         }

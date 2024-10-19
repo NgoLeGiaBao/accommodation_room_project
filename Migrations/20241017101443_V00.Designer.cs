@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Accommodation_Room_Project_Offical.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241006164739_V00")]
+    [Migration("20241017101443_V00")]
     partial class V00
     {
         /// <inheritdoc />
@@ -112,19 +112,17 @@ namespace Accommodation_Room_Project_Offical.Migrations
 
             modelBuilder.Entity("App.Models.Asset", b =>
                 {
-                    b.Property<int>("AssetID")
+                    b.Property<string>("AssetID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("AssetID"));
+                        .HasColumnType("text");
 
                     b.Property<string>("AssetName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<int>("CategoryAssetID")
-                        .HasColumnType("integer");
+                    b.Property<string>("CategoryAssetID")
+                        .HasColumnType("text");
 
                     b.Property<string>("Condition")
                         .IsRequired()
@@ -135,7 +133,6 @@ namespace Accommodation_Room_Project_Offical.Migrations
                         .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("ImagePath")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
@@ -159,11 +156,9 @@ namespace Accommodation_Room_Project_Offical.Migrations
 
             modelBuilder.Entity("App.Models.CategoryAsset", b =>
                 {
-                    b.Property<int>("CategoryAssetID")
+                    b.Property<string>("CategoryAssetID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("CategoryAssetID"));
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -177,11 +172,9 @@ namespace Accommodation_Room_Project_Offical.Migrations
 
             modelBuilder.Entity("App.Models.CategoryNotification", b =>
                 {
-                    b.Property<int>("CategoryNoID")
+                    b.Property<string>("CategoryNoID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("CategoryNoID"));
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -195,14 +188,15 @@ namespace Accommodation_Room_Project_Offical.Migrations
 
             modelBuilder.Entity("App.Models.Invoice", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("text");
 
                     b.Property<decimal>("AdditionalServiceFee")
                         .HasColumnType("numeric");
+
+                    b.Property<double>("ElectricityForBefore")
+                        .HasColumnType("double precision");
 
                     b.Property<double>("ElectricityUsage")
                         .HasColumnType("double precision");
@@ -217,14 +211,24 @@ namespace Accommodation_Room_Project_Offical.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("RoomId")
-                        .HasColumnType("integer");
+                    b.Property<string>("RoomId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("ServiceDetails")
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<decimal>("ServiceFee")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("TotalMoney")
+                        .HasColumnType("numeric");
+
                     b.Property<double>("WaterUsage")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("WaterUsageForBefore")
                         .HasColumnType("double precision");
 
                     b.HasKey("Id");
@@ -239,14 +243,13 @@ namespace Accommodation_Room_Project_Offical.Migrations
 
             modelBuilder.Entity("App.Models.Notification", b =>
                 {
-                    b.Property<int>("NotificationId")
+                    b.Property<string>("NotificationId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("text");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("NotificationId"));
-
-                    b.Property<int>("CategoryNoID")
-                        .HasColumnType("integer");
+                    b.Property<string>("CategoryNoID")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("CreatorUserId")
                         .IsRequired()
@@ -270,14 +273,15 @@ namespace Accommodation_Room_Project_Offical.Migrations
 
             modelBuilder.Entity("App.Models.OwnAsset", b =>
                 {
-                    b.Property<int>("OwnAssetID")
-                        .HasColumnType("integer");
+                    b.Property<string>("OwnAssetID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text");
 
-                    b.Property<int>("AssetID")
-                        .HasColumnType("integer");
+                    b.Property<string>("AssetID")
+                        .HasColumnType("text");
 
-                    b.Property<int>("RoomID")
-                        .HasColumnType("integer");
+                    b.Property<string>("RoomID")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -293,9 +297,9 @@ namespace Accommodation_Room_Project_Offical.Migrations
 
             modelBuilder.Entity("App.Models.OwnNotification", b =>
                 {
-                    b.Property<int>("NotificationId")
-                        .HasColumnType("integer")
-                        .HasColumnOrder(0);
+                    b.Property<string>("NotificationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text");
 
                     b.Property<string>("UserId")
                         .HasColumnType("text")
@@ -310,17 +314,24 @@ namespace Accommodation_Room_Project_Offical.Migrations
 
             modelBuilder.Entity("App.Models.RentalContract", b =>
                 {
-                    b.Property<int>("ContractID")
-                        .HasColumnType("integer");
+                    b.Property<string>("ContractID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text");
 
-                    b.Property<int>("RoomID")
-                        .HasColumnType("integer");
+                    b.Property<string>("RoomID")
+                        .HasColumnType("text");
 
                     b.Property<string>("UserID")
                         .HasColumnType("text");
 
+                    b.Property<decimal>("Deposit")
+                        .HasColumnType("numeric");
+
                     b.Property<DateTime>("EndupDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("boolean");
 
                     b.Property<decimal>("PElectricityPerKw")
                         .HasColumnType("numeric");
@@ -334,8 +345,10 @@ namespace Accommodation_Room_Project_Offical.Migrations
                     b.Property<decimal>("PWaterPerK")
                         .HasColumnType("numeric");
 
+                    b.Property<string>("PersonalSignContract")
+                        .HasColumnType("text");
+
                     b.Property<string>("Rules")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("StartedDate")
@@ -352,11 +365,9 @@ namespace Accommodation_Room_Project_Offical.Migrations
 
             modelBuilder.Entity("App.Models.RentalProperty", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("text");
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -375,6 +386,9 @@ namespace Accommodation_Room_Project_Offical.Migrations
 
                     b.Property<int>("NumberOfRooms")
                         .HasColumnType("integer");
+
+                    b.Property<decimal>("OtherService")
+                        .HasColumnType("numeric");
 
                     b.Property<string>("OwnerName")
                         .IsRequired()
@@ -414,11 +428,9 @@ namespace Accommodation_Room_Project_Offical.Migrations
 
             modelBuilder.Entity("App.Models.Room", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("text");
 
                     b.Property<double>("Area")
                         .HasColumnType("double precision");
@@ -436,8 +448,9 @@ namespace Accommodation_Room_Project_Offical.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
-                    b.Property<int>("RentalPropertyId")
-                        .HasColumnType("integer");
+                    b.Property<string>("RentalPropertyId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("RoomName")
                         .IsRequired()
@@ -460,8 +473,9 @@ namespace Accommodation_Room_Project_Offical.Migrations
                         .HasColumnType("text")
                         .HasColumnOrder(1);
 
-                    b.Property<int>("RentalPropertyId")
-                        .HasColumnType("integer")
+                    b.Property<string>("RentalPropertyId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
                         .HasColumnOrder(2);
 
                     b.HasKey("AppUserId", "RentalPropertyId");
@@ -608,8 +622,7 @@ namespace Accommodation_Room_Project_Offical.Migrations
                     b.HasOne("App.Models.CategoryAsset", "CategoryAsset")
                         .WithMany("Assets")
                         .HasForeignKey("CategoryAssetID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("CategoryAsset");
                 });

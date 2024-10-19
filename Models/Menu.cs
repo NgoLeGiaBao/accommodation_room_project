@@ -8,7 +8,8 @@ namespace App.Models
     public class Menu
     {
         [Key]
-        public int Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public string Id { get; set; }
         [Column(TypeName = "nvarchar")]
         [StringLength(50)]
         [Required(ErrorMessage = "Required {0}")]

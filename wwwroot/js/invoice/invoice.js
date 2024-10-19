@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     tabList.append(tabItem);
                 });
 
-                loadUsers(activeTabId || data.rentalProperties[0].rentalPropertyId);
+                getListInvoice(activeTabId || data.rentalProperties[0].rentalPropertyId);
 
                 // Add click event for tab links
                 $('.nav-link').on('click', function (event) {
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     $('.nav-link').removeClass('active');
                     $(this).addClass('active');
                     localStorage.setItem('activeTab', $(this).data('id'));
-                    loadUsers($(this).data('id'));
+                    getListInvoice($(this).data('id'));
                 });
             }
         },
@@ -36,31 +36,29 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    function loadUsers(homeId) {
-        var userList = $('#user-list tbody');
+    function getListInvoice(homeId) {
+        var invoiceList = $('#invoice-list tbody');
         var btnAction = $('#btn-action');
         var statusInfo = $('#status-info');
 
         btnAction.empty();
         statusInfo.empty();
-        userList.empty();
+        invoiceList.empty();
 
-
-        statusInfo.append(`<span>Available 4</span> | <span>About to expire 2</span> | <span>Rented 7</span>`);
 
         var createContractUrl = `/create-contract/${homeId}`;
         var exportContractUrl = `/edit-home/${homeId}`;
+        // <a href="${createContractUrl}" class="btn btn-primary me-2">
+        //             <i class="fas fa-plus"></i> Create tenant
+        //         </a>
         btnAction.append(`
-                                <div class="action-buttons mb-2">
-                                    <a href = ${createContractUrl}
-                                        class="btn btn-primary me-2 ">
-                                        <i class="fas fa-plus"></i> Create new contract
-                                    </a>
-                                    <a href = ${exportContractUrl}
-                                        class="btn btn-info me-2 ">
-                                        <i class="fas fa-edit"></i> Export file
-                                    </a>
-                                </div>`);
+            <div class="action-buttons mb-2">
+                
+                <a href="${exportContractUrl}" class="btn btn-info me-2">
+                    <i class="fas fa-edit"></i> Export file
+                </a>
+            </div>`);
+
         $.ajax({
             url: `/get-list-invoice/${homeId}`,
             method: 'GET',
@@ -71,42 +69,23 @@ document.addEventListener('DOMContentLoaded', function () {
                     $('#invoice-list').DataTable().destroy();
                 }
 
-                var invoiceList = $('#invoice-list tbody');
-                var btnAction = $('#btn-action');
-                var statusInfo = $('#status-info');
-
-                btnAction.empty();
                 statusInfo.empty();
                 invoiceList.empty();
+                statusInfo.append(`<span>All ${response.totalInvoices}</span> | <span>Pending ${response.pending}</span> | <span>Unpaid  ${response.unpaid}</span> | <span>Paid  ${response.paid}</span> | <span>Overdue  ${response.overdue}</span>`);
 
-
-                statusInfo.append(`<span>Available 4</span> | <span>About to expire 2</span> | <span>Rented 7</span>`);
-
-                var createContractUrl = `/create-contract/${homeId}`;
-                var exportContractUrl = `/edit-home/${homeId}`;
-                btnAction.append(`
-                                <div class="action-buttons mb-2">
-                                    <a href = ${createContractUrl}
-                                        class="btn btn-primary me-2 ">
-                                        <i class="fas fa-plus"></i> Create tenant
-                                    </a>
-                                    <a href = ${exportContractUrl}
-                                        class="btn btn-info me-2 ">
-                                        <i class="fas fa-edit"></i> Export file
-                                    </a>
-                                </div>`);
                 if (response && response.length === 0) {
-                    invoiceList.append('<tr><td colspan="9" class="text-center">No users found</td></tr>');
+                    invoiceList.append('<tr><td colspan="9" class="text-center">No invoices found</td></tr>');
                     return;
                 }
 
-                $.each(response, function (index, invoice) {
+
+                $.each(response.invoices, function (index, invoice) {
                     var invoiceRow = `<tr>
                         <td>${index + 1}</td>
                         <td>${invoice.roomName}</td>
                         <td>${formatDate(invoice.invoiceDate)}</td>
-                        <td>1000</td>
-                        <td>${formatDate(invoice.paymentDate)}</td>
+                        <td>${invoice.statusInvocie === "Pending" ? "_" : invoice.totalMoney}</td>
+                        <td>${invoice.statusInvocie}</td>
                         <td>
                             <span>
                                 <a href="/edit-invoice/${invoice.id}" data-toggle="tooltip" data-placement="top" title="Edit">
@@ -128,12 +107,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 $('[data-toggle="tooltip"]').tooltip();
             },
             error: function (xhr, status, error) {
-                console.error("Error loading users:", status, error);
+                console.error("Error loading invoices:", status, error);
             }
         });
     }
 
-    // Formate date
+    // Format date
     function formatDate(dateString) {
         const date = new Date(dateString);
         return date.toLocaleDateString('vi-VN', {

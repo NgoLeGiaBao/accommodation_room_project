@@ -32,7 +32,6 @@ public class LoginController : Controller
     public async Task<IActionResult> Index(string returnUrl = null)
     {
         returnUrl = returnUrl ?? Url.Content("~/");
-
         if (ModelState.IsValid)
         {
             var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
@@ -44,10 +43,15 @@ public class LoginController : Controller
                     return LocalRedirect(returnUrl);
                 }
                 return RedirectToAction("Index", "Dashboard", new { area = "Dashboard" });
-
             }
         }
         ViewBag.LoginFailed = true;
         return View(this);
+    }
+
+    public IActionResult Logout()
+    {
+        _signInManager.SignOutAsync();
+        return RedirectToAction("Index", "Login");
     }
 }

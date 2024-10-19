@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     $('#user-list').DataTable().destroy();
                 }
 
+                console.log(response)
                 var userList = $('#user-list tbody');
                 var btnAction = $('#btn-action');
                 var statusInfo = $('#status-info');
@@ -55,8 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 userList.empty();
 
 
-                statusInfo.append(`<span>Available 4</span> | <span>About to expire 2</span> | <span>Rented 7</span>`);
-
+                statusInfo.append(`<span>All tenants ${response.totalUsers}</span> | <span>Current tenants ${response.totalUsers}</span> | <span>Previous tenants ${response.totalUsers}</span>`);
                 var createTenantUrl = `/create-tenant/${homeId}`;
                 var exportTenantUrl = `/edit-home/${homeId}`;
                 btnAction.append(`
@@ -71,24 +71,23 @@ document.addEventListener('DOMContentLoaded', function () {
                                     </a>
                                 </div>`);
                 if (response.users && response.users.length === 0) {
-                    userList.append('<tr><td colspan="9" class="text-center">No users found</td></tr>');
+                    userList.append('<tr><td colspan="9" class="text-center">No tenants found</td></tr>');
                     return;
                 }
-
                 $.each(response.users, function (index, user) {
                     var userRow = `<tr>
                         <td>${index + 1}</td>
-                        <td>${user.fullName}</td>
-                        <td>${user.sex ? 'Male' : 'Female'}</td>
-                        <td>${formatDate(user.birthday)}</td>
-                        <td>${user.identityCard}</td>
-                        <td>${user.address}</td>
+                        <td>${user.user.fullName}</td>
+                        <td>${user.user.sex ? 'Male' : 'Female'}</td>
+                        <td>${formatDate(user.user.birthday)}</td>
+                        <td>${user.user.identityCard}</td>
+                        <td>${user.user.address}</td>
                         <td>
                             <span>
-                                <a href="/edit-user/${user.id}" data-toggle="tooltip" data-placement="top" title="Edit">
+                                <a href="/edit-user/${user.user.id}" data-toggle="tooltip" data-placement="top" title="Edit">
                                     <i class="fa fa-pencil color-muted m-r-5"></i>
                                 </a>
-                                <a href="/view-user/${user.id}" data-toggle="tooltip" data-placement="top" title="View">
+                                <a href="/view-user/${user.user.id}" data-toggle="tooltip" data-placement="top" title="View">
                                     <i class="fa fa-eye color-info"></i>
                                 </a>
                             </span>

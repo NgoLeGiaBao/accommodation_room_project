@@ -50,32 +50,31 @@
             dataType: 'json',
             success: function (response) {
                 // Get elements by Id
-                var btnAction = $('#btn-action');
                 var roomList = $('#room-list');
-
-                // Clear data
-                btnAction.empty();
                 roomList.empty();
+                // Get btnAction
+                var btnAction = $('#btn-action');
+                btnAction.empty();
 
                 // Load btn action
                 var createRoomUrl = `/create-room/${homeId}`;
                 var editRoomUrl = `/edit-home/${homeId}`;
                 btnAction.append(`
-                            <div class="status-info mb-2">
-                                <span>Available 4</span> | <span>About to expire 2</span> | <span>Rented 7</span>
-                            </div>
-                            <div class="action-buttons mb-2">
-                                <a href = ${createRoomUrl}
-                                    class="btn btn-primary me-2 ">
-                                    <i class="fas fa-plus"></i> Add room
-                                </a>
-                                <a href = ${editRoomUrl}
-                                    class="btn btn-info me-2 ">
-                                    <i class="fas fa-edit"></i> Update home
-                                </a>
-                            </div>
+                    <div class="status-info mb-2">
+                        <span>Available ${response.availableCount} </span> | <span>About to expire ${response.aboutToExpireCount}</span> | <span>Rented ${response.rentedCount}</span>
+                    </div>
+                    <div class="action-buttons mb-2">
+                        <a href = ${createRoomUrl}
+                            class="btn btn-primary me-2 ">
+                            <i class="fas fa-plus"></i> Add room
+                        </a>
+                        <a href = ${editRoomUrl}
+                            class="btn btn-info me-2 ">
+                            <i class="fas fa-edit"></i> Update home
+                        </a>
+                     </div>
                     `);
-                // Loop through data and add rooms to the list
+                // Load rooms
                 $.each(response.rooms, function (index, room) {
                     var editUrl = `/edit-room?rentalPropertyId=${homeId}&roomId=${room.id}`;
                     var viewUrl = `/view-room?rentalPropertyId=${homeId}&roomId=${room.id}`;
@@ -109,10 +108,14 @@
     }
 
     function updatePagination(totalCount, homeId, currentPage) {
-        var pageSize = 8; // Number of rooms per page
+        var pageSize = 8;
         var totalPages = Math.ceil(totalCount / pageSize);
         var paginationList = $('#pagination-list');
-        paginationList.empty(); // Clear current pagination
+        paginationList.empty();
+
+        if (totalPages <= 1) {
+            return;
+        }
 
         // Add Previous button
         var previousClass = (currentPage === 1 || totalPages <= 1) ? 'disabled' : '';

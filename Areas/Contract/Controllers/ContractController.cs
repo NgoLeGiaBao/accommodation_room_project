@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using App.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
-
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 namespace App.Areas.Contract
 {
+    [Authorize]
     [Area("Contract")]
     public class ContractController : Controller
     {
@@ -18,14 +19,23 @@ namespace App.Areas.Contract
             _userManager = userManager;
         }
         [Route("/contract")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            // Get rental properties by user
+            var user = await _userManager.GetUserAsync(User);
+            var rentalProperties = _appDbContext.UserRentalProperties
+                                .Where(r => r.AppUserId == user.Id)
+                                .ToList();
+
+            ViewBag.HasRentalProperties = false;
+            if (rentalProperties != null && rentalProperties.Any())
+                ViewBag.HasRentalProperties = true;
             return View();
         }
 
         // Get information and equipment room
-        [Route("/get-room-information/{roomId:int}")]
-        public IActionResult GetRoomInformation(int roomId)
+        [Route("/get-room-information/{roomId}")]
+        public IActionResult GetRoomInformation(string roomId)
         {
             // Fetch the room details
             var room = _appDbContext.Rooms
@@ -71,20 +81,20 @@ namespace App.Areas.Contract
             });
         }
 
-        [Route("/create-contract/{homeId:int?}")]
+        [Route("/create-contract/{homeId}")]
         [HttpGet]
-        public IActionResult CreateContract(int homeId)
+        public IActionResult CreateContract(string homeId)
         {
             // Get LandloardInformation 
             var landloardInformation = _appDbContext.RentalProperties.Find(homeId);
             if (landloardInformation == null)
             {
-                return NotFound("Không tìm thấy thông tin về bất động sản này.");
+                return NotFound();
             }
 
             // Get All Room from rental property
             var rooms = _appDbContext.Rooms
-                .Where(r => r.RentalPropertyId == homeId)
+                .Where(r => r.RentalPropertyId == homeId && r.IsActive == true)
                 .Select(r => new SelectListItem
                 {
                     Value = r.Id.ToString(),
@@ -98,9 +108,9 @@ namespace App.Areas.Contract
             return View();
         }
 
-        [Route("/create-contract/{homeId:int?}")]
+        [Route("/create-contract/{homeId}")]
         [HttpPost]
-        public async Task<IActionResult> CreateContract(InputModel inputModel, int homeId)
+        public async Task<IActionResult> CreateContract(InputModel inputModel, string homeId)
         {
             // Check RentalProperty exist
             var landloardInformation = _appDbContext.RentalProperties.Find(homeId);
@@ -112,6 +122,8 @@ namespace App.Areas.Contract
             if (roomExists == null || rentalPropertyExists == null)
             {
                 // Process here
+                // TempData["FailureMessage"] = "Create contract failure, please try again.";
+                // return View(inputModel);
                 return NotFound();
             }
 
@@ -119,8 +131,10 @@ namespace App.Areas.Contract
             {
                 // Check tenant exist based on IdentityCard
                 var existingUser = _appDbContext.Users.FirstOrDefault(u => u.IdentityCard == inputModel.appUser.IdentityCard);
+                bool wasOwned = true;
                 if (existingUser == null)
                 {
+                    wasOwned = false;
                     existingUser = new AppUser
                     {
                         UserName = inputModel.appUser.IdentityCard,
@@ -137,8 +151,10 @@ namespace App.Areas.Contract
                     if (!result.Succeeded)
                     {
                         // Create a user failure, process here
-                        var errors = result.Errors.Select(e => e.Description).ToList();
-                        return Content("Errors: " + string.Join(", ", errors));
+                        // var errors = result.Errors.Select(e => e.Description).ToList();
+                        // return Content("Errors: " + string.Join(", ", errors));
+                        TempData["FailureMessage"] = "Create contract failure, please try again.";
+                        return View(inputModel);
                     }
                 }
                 else
@@ -152,8 +168,10 @@ namespace App.Areas.Contract
                     if (!updateResult.Succeeded)
                     {
                         // Process here to return view
-                        var errors = updateResult.Errors.Select(e => e.Description).ToList();
-                        return Content("Errors: " + string.Join(", ", errors));
+                        // var errors = updateResult.Errors.Select(e => e.Description).ToList();
+                        // return Content("Errors: " + string.Join(", ", errors));
+                        TempData["FailureMessage"] = "Create contract failure, please try again.";
+                        return View(inputModel);
                     }
                 }
 
@@ -173,17 +191,80 @@ namespace App.Areas.Contract
                 };
 
                 _appDbContext.RentalContracts.Add(rentalContract);
-                await _appDbContext.SaveChangesAsync();
 
-                // Chuyển hướng sau khi thành công
-                return Content("Create contract successfully");
+                // Create new user rental property
+                if (!wasOwned)
+                {
+                    var userRentalProperties = new UserRentalProperty
+                    {
+                        AppUserId = existingUser.Id,
+                        RentalPropertyId = homeId
+                    };
+                    _appDbContext.UserRentalProperties.Add(userRentalProperties);
+                }
+                await _appDbContext.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Contracrt created successfully.";
+                return RedirectToAction("CreateContract");
+            }
+            TempData["FailureMessage"] = "Create contract failure, please try again.";
+            return View(inputModel);
+        }
+
+        // Get list contract
+        [Route("/get-list-contracts/{homeId}")]
+        [HttpGet]
+        public IActionResult GetListContracts(string homeId)
+        {
+            var currentDate = DateTime.Now;
+
+            // Retrieve contracts based on the homeId
+            var contracts = _appDbContext.RentalContracts
+                .Include(c => c.Room)   // Ensure Room is included
+                .Include(c => c.AppUser) // Include AppUser for tenant name retrieval
+                .Where(c => c.Room.RentalPropertyId == homeId) // Adjust this to match the correct foreign key relationship
+                .ToList();
+
+            // Initialize counters
+            int allContracts = contracts.Count;
+            int pendingContracts = 0;
+            int activeContracts = 0;
+            int completedContracts = 0;
+
+            // Categorize contracts based on the date
+            foreach (var contract in contracts)
+            {
+                if (contract.StartedDate > currentDate)
+                {
+                    pendingContracts++;
+                }
+                else if (contract.StartedDate <= currentDate && contract.EndupDate >= currentDate)
+                {
+                    activeContracts++;
+                }
+                else if (contract.EndupDate < currentDate)
+                {
+                    completedContracts++;
+                }
             }
 
-            // Nếu ModelState không hợp lệ, hiển thị các lỗi
-            var modelErrors = ModelState.Values.SelectMany(v => v.Errors)
-                                               .Select(e => e.ErrorMessage)
-                                               .ToList();
-            return Content("ModelState Errors: " + string.Join(", ", modelErrors));
+            // Prepare the response
+            var result = new
+            {
+                allContracts,
+                pendingContracts,
+                activeContracts,
+                completedContracts,
+                contracts = contracts.Select(c => new
+                {
+                    c.ContractID,
+                    RoomName = c.Room.RoomName,
+                    TenantName = _appDbContext.AppUsers.FirstOrDefault(u => u.Id == c.PersonalSignContract)?.FullName,
+                    StartingDate = c.StartedDate.ToString("yyyy-MM-dd"),
+                    ExpirationDate = c.EndupDate.ToString("yyyy-MM-dd")
+                })
+            };
+
+            return Json(result);
         }
     }
 }

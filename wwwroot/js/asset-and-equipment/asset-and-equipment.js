@@ -65,13 +65,13 @@ document.addEventListener('DOMContentLoaded', function () {
                                         <i class="fas fa-edit"></i> Export file
                                     </a>
                                 </div>`);
-                statusInfo.append(`<span>Available 4</span> | <span>About to expire 2</span> | <span>Rented 7</span>`);
+                statusInfo.append(`<span>All ${response.totalAssets}</span> | <span>Using ${response.assetsInUse}</span> | <span>Maintenance ${response.assetsInMaintenance}</span> | <span>Broken ${response.assetsBroken}</span>`);
 
 
                 assetList.empty();
 
                 if (response.assets && response.assets.length === 0) {
-                    assetList.append('<tr><td colspan="9" class="text-center">No assets found</td></tr>');
+                    assetList.append('<tr><td colspan="9" class="text-center">No assets and equipment found</td></tr>');
                     return;
                 }
 
@@ -81,7 +81,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         <td>${asset.assetName}</td>
                         <td>${asset.category}</td>
                         <td>${formatDate(asset.purchaseDate)}</td>
-                        <td>${asset.cost}</td>
                         <td>${asset.condition}</td>
                         <td>${asset.roomName}</td>
                         <td>${formatDate(asset.nextMaintenanceDueDate)}</td>
