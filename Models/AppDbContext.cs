@@ -18,15 +18,6 @@ namespace App.Models
                     entity.SetTableName(tableName.Substring(6));
                 }
             }
-            // Rename all tables that start with "AspNet"
-            foreach (var entity in modelBuilder.Model.GetEntityTypes())
-            {
-                var tableName = entity.GetTableName();
-                if (tableName.StartsWith("AspNet"))
-                {
-                    entity.SetTableName(tableName.Substring(6));
-                }
-            }
 
             // Define Unique IdentityCard
             modelBuilder.Entity<AppUser>()
@@ -144,6 +135,13 @@ namespace App.Models
                 .WithMany(rp => rp.UserRentalProperties)
                 .HasForeignKey(ur => ur.RentalPropertyId);
 
+            // Configure the one-to-many relationship between Asset and MaintenanceAndIncident
+            modelBuilder.Entity<MaintenanceAndIncident>()
+                .HasOne(m => m.Asset)
+                .WithMany(a => a.MaintenanceAndIncidents)
+                .HasForeignKey(m => m.AssetID);
+
+            // Base on the default model configuration
             base.OnModelCreating(modelBuilder);
         }
 
@@ -160,5 +158,6 @@ namespace App.Models
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<UserRentalProperty> UserRentalProperties { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
+        public DbSet<MaintenanceAndIncident> MaintenanceAndIncidents { get; set; }
     }
 }

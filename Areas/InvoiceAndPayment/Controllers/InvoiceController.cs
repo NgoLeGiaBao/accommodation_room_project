@@ -239,7 +239,7 @@ namespace App.Areas.Payment
             invoice.ElectricityUsage = electricityUsage;
             invoice.WaterUsage = waterUsage;
             invoice.TotalMoney = totalAmount;
-            invoice.StatusInvocie = "Upaid";
+            invoice.StatusInvocie = "Unpaid";
             invoice.PaymentDate = null;
             invoice.QRCodeImage = Guid.NewGuid().ToString();
 

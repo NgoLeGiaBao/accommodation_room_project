@@ -3,6 +3,7 @@ using System;
 using App.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Accommodation_Room_Project_Offical.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241020083533_V04")]
+    partial class V04
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -261,12 +264,11 @@ namespace Accommodation_Room_Project_Offical.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Notes")
-                        .HasColumnType("text");
-
-                    b.Property<string>("RentalPropertyId")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("ReportedBy")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
@@ -277,6 +279,7 @@ namespace Accommodation_Room_Project_Offical.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Status")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 

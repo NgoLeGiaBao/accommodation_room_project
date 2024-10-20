@@ -46,5 +46,6 @@ namespace App.Models
         public string? ImagePath { get; set; }
 
         public virtual ICollection<OwnAsset>? OwnAssets { get; set; }
+        public virtual ICollection<MaintenanceAndIncident>? MaintenanceAndIncidents { get; set; }
     }
 }

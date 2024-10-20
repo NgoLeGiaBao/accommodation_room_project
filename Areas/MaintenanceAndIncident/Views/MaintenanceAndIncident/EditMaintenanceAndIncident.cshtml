@@ -1,0 +1,176 @@
+@model App.Models.MaintenanceAndIncident
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="text-center lh-base mb-4">Report Maintenance or Incident</h2>
+                    <partial name="_SuccessMessage" />
+                    <partial name="_FailureMessage" />
+                    <div class="basic-form">
+                        <form asp-action="CreateMaintenanceIncident" method="POST">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            <div class="form-row">
+                                <!-- Incident Description -->
+                                <div class="form-group col-md-12">
+                                    @Html.LabelFor(m => m.Description, new { @class = "control-label" })
+                                    @Html.TextAreaFor(m => m.Description, new
+                                        {
+                                            @class = "form-control",
+                                            placeholder = "Describe the incident or maintenance issue",
+                                            rows = 4
+                                        })
+                                    @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <!-- Reported By -->
+                                <div class="form-group col-md-6">
+                                    @Html.LabelFor(m => m.ReportedBy, new { @class = "control-label" })
+                                    @Html.EditorFor(m => m.ReportedBy, new
+                                        {
+                                            htmlAttributes = new
+                                            {
+                                                @class = "form-control",
+                                                placeholder = "Enter your name"
+                                            }
+                                        })
+                                    @Html.ValidationMessageFor(m => m.ReportedBy, "", new { @class = "text-danger" })
+                                </div>
+
+                                <!-- Reported Date -->
+                                <div class="form-group col-md-6">
+                                    @Html.LabelFor(m => m.ReportedDate, new { @class = "control-label" })
+                                    @Html.EditorFor(m => m.ReportedDate, new
+                                        {
+                                            htmlAttributes = new
+                                            {
+                                                @class = "form-control",
+                                                type = "date"
+                                            }
+                                        })
+                                    @Html.ValidationMessageFor(m => m.ReportedDate, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <!-- Status -->
+                                <div class="form-group col-md-6">
+                                    @Html.LabelFor(m => m.Status, new { @class = "control-label" })
+                                    @Html.EditorFor(m => m.Status, new
+                                        {
+                                            htmlAttributes = new
+                                            {
+                                                @class = "form-control",
+                                                placeholder = "Enter status (e.g., Reported, In Progress, Resolved)"
+                                            }
+                                        })
+                                    @Html.ValidationMessageFor(m => m.Status, "", new { @class = "text-danger" })
+                                </div>
+
+                                <!-- Resolved or Maintenance Completed Date -->
+                                <div class="form-group col-md-6">
+                                    @Html.LabelFor(m => m.ResolvedOrMaintenanceCompletedDate, new
+                                        {
+                                            @class =
+                                             "control-label"
+                                        })
+                                    @Html.EditorFor(m => m.ResolvedOrMaintenanceCompletedDate, new
+                                        {
+                                            htmlAttributes = new
+                                            {
+                                                @class = "form-control",
+                                                type = "date"
+                                            }
+                                        })
+                                    @Html.ValidationMessageFor(m => m.ResolvedOrMaintenanceCompletedDate, "", new
+                                        {
+                                            @class = "text-danger"
+                                        })
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <!-- Notes -->
+                                <div class="form-group col-md-12">
+                                    @Html.LabelFor(m => m.Notes, new { @class = "control-label" })
+                                    @Html.TextAreaFor(m => m.Notes, new
+                                        {
+                                            @class = "form-control",
+                                            placeholder = "Additional notes",
+                                            rows = 4
+                                        })
+                                    @Html.ValidationMessageFor(m => m.Notes, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <!-- Cost -->
+                                <div class="form-group col-md-6">
+                                    @Html.LabelFor(m => m.Cost, new { @class = "control-label" })
+                                    @Html.EditorFor(m => m.Cost, new
+                                        {
+                                            htmlAttributes = new
+                                            {
+                                                @class = "form-control",
+                                                type = "number",
+                                                step = "0.01",
+                                                placeholder = "Enter cost"
+                                            }
+                                        })
+                                    @Html.ValidationMessageFor(m => m.Cost, "", new { @class = "text-danger" })
+                                </div>
+
+                                <!-- Asset ID (Dropdown) -->
+                                <div class="form-group col-md-6">
+                                    @Html.LabelFor(m => m.AssetID, new { @class = "control-label" })
+                                    @Html.DropDownListFor(m => m.AssetID,
+                                             (IEnumerable<SelectListItem>)ViewData["Assets"], "Choose an asset", new
+                                             {
+                                                 @class = "form-control"
+                                             })
+                                    @Html.ValidationMessageFor(m => m.AssetID, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="container mt-6">
+                                <div class="text-center">
+                                    <div class="row">
+                                        <!-- Back to Home Button -->
+                                        <div class="col-12 col-md-6 mb-3">
+                                            <a asp-action="Index" class="btn btn-light btn-lg w-100">Back to Home</a>
+                                        </div>
+                                        <!-- Submit Button -->
+                                        <div class="col-12 col-md-6 mb-3">
+                                            <button type="submit" class="btn btn-dark btn-lg w-100">Submit
+                                                Report</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section AdditionalLinkCSS {
+    <style>
+        .text-danger {
+            display: inline-block;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+    </style>
+}
+
+@section AdditionalLinkJavascript {
+    <script>
+        // Any additional JavaScript for this page can go here
+    </script>
+}
