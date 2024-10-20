@@ -190,8 +190,8 @@ namespace App.Areas.Payment
         {
             // Retrieve the invoice along with its associated room
             var invoice = await _appDbContext.Invoices
-                .Include(i => i.Room) // Include Room data
-                .ThenInclude(r => r.RentalContracts) // Include RentalContracts for the Room
+                .Include(i => i.Room)
+                .ThenInclude(r => r.RentalContracts)
                 .FirstOrDefaultAsync(i => i.Id == id);
 
             // Check if the invoice exists
@@ -199,6 +199,7 @@ namespace App.Areas.Payment
             {
                 return NotFound();
             }
+
 
             // Use DateTime.UtcNow for current date and time in UTC
             var currentDateTime = DateTime.UtcNow;
@@ -216,10 +217,38 @@ namespace App.Areas.Payment
 
         [Route("/edit-invoice/{id}")]
         [HttpPost]
-        public async Task<IActionResult> EditInvoice([FromForm] string otherServices, string id)
+        public async Task<IActionResult> EditInvoice([FromForm] string otherServices, int electricityUsage, int waterUsage, int totalAmount, string id)
         {
-            // return Content(invoice.WaterUsage.ToString() + invoice.ElectricityUsage.ToString());
-            return Content("success");
+            // Get the current invocie
+            var invoice = await _appDbContext.Invoices
+                .Include(i => i.Room)
+                .ThenInclude(r => r.RentalContracts)
+                .FirstOrDefaultAsync(i => i.Id == id);
+
+            // Check invoice
+            if (invoice == null)
+                return NotFound();
+
+            // Update room with ElectricityUsage and WaterUsage
+            var room = invoice.Room;
+            room.ElectricityPriceInit = electricityUsage > invoice.ElectricityForBefore ? electricityUsage : room.ElectricityPriceInit;
+            room.WaterPriceInit = waterUsage > invoice.WaterUsageForBefore ? waterUsage : room.WaterPriceInit;
+
+            // Update invoice
+            invoice.ServiceDetails = otherServices;
+            invoice.ElectricityUsage = electricityUsage;
+            invoice.WaterUsage = waterUsage;
+            invoice.TotalMoney = totalAmount;
+            invoice.StatusInvocie = "Upaid";
+            invoice.PaymentDate = null;
+            invoice.QRCodeImage = Guid.NewGuid().ToString();
+
+            _appDbContext.Invoices.Update(invoice);
+            _appDbContext.Rooms.Update(room);
+            await _appDbContext.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Invocie updated successfully.";
+            return RedirectToAction("EditInvoice");
         }
     }
 
