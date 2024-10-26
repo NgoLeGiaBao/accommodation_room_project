@@ -1,10 +1,9 @@
 using App.Models.NewsModel;
 using App.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.IO;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
-using System.Text;
+using App.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace App.Areas.Blog
 {
@@ -12,10 +11,14 @@ namespace App.Areas.Blog
     public class NewsController : Controller
     {
         private readonly SupabaseSettings _supabaseSettings;
+        private readonly AppDbContext _appDbContext;
+        private readonly UserManager<AppUser> _userManager;
 
-        public NewsController(IOptions<SupabaseSettings> supabaseSettings)
+        public NewsController(IOptions<SupabaseSettings> supabaseSettings, AppDbContext appDbContext, UserManager<AppUser> userManager)
         {
             _supabaseSettings = supabaseSettings.Value;
+            _appDbContext = appDbContext;
+            _userManager = userManager;
         }
 
         [Route("/news-blog")]
@@ -35,36 +38,51 @@ namespace App.Areas.Blog
         [HttpPost]
         public async Task<IActionResult> CreateNews(ContentNews contentNews, IFormFile? ImageId)
         {
-            var options = new Supabase.SupabaseOptions { AutoConnectRealtime = true };
-            var supabase = new Supabase.Client(_supabaseSettings.SupabaseUrl, _supabaseSettings.SupabaseAnonKey, options);
-            await supabase.InitializeAsync();
-
-            if (ImageId != null && ImageId.Length > 0)
+            if (ModelState.IsValid)
             {
-                var uniqueFileName = Guid.NewGuid().ToString() + "_" + ImageId.FileName;
+                var user = await _userManager.GetUserAsync(User);
 
-                // Read the file into a MemoryStream
-                using var memoryStream = new MemoryStream();
-                await ImageId.CopyToAsync(memoryStream);
-                var fileData = memoryStream.ToArray();
+                contentNews.DateCreated = DateTime.Now.ToUniversalTime();
+                contentNews.DateUpdated = DateTime.Now.ToUniversalTime();
+                contentNews.AuthorId = user.Id;
 
-                // Upload to Supabase
-                var result = await supabase.Storage
-                    .From("news_img")
-                    .Upload(fileData, uniqueFileName, new Supabase.Storage.FileOptions
-                    {
-                        CacheControl = "3600",
-                        Upsert = true
-                    });
+                // Process the uploaded image if it exists
+                // Initialize Supabase
+                var options = new Supabase.SupabaseOptions { AutoConnectRealtime = true };
+                var supabase = new Supabase.Client(_supabaseSettings.SupabaseUrl, _supabaseSettings.SupabaseAnonKey, options);
+                await supabase.InitializeAsync();
 
-                // Get the public URL of the uploaded file
-                var publicUrl = supabase.Storage.From("news_img").GetPublicUrl(uniqueFileName);
-                contentNews.ImageId = publicUrl; // Assuming ContentNews has an ImageId property
+                if (ImageId != null && ImageId.Length > 0)
+                {
+                    var uniqueFileName = Guid.NewGuid().ToString() + "_" + ImageId.FileName;
+                    // Read the file into a MemoryStream
+                    using var memoryStream = new MemoryStream();
+                    await ImageId.CopyToAsync(memoryStream);
+                    var fileData = memoryStream.ToArray();
+                    // Upload to Supabase
+                    var result = await supabase.Storage
+                        .From("news_img")
+                        .Upload(fileData, uniqueFileName, new Supabase.Storage.FileOptions
+                        {
+                            CacheControl = "3600",
+                            Upsert = true
+                        });
+
+                    // Get the public URL of the uploaded file
+                    var publicUrl = supabase.Storage.From("news_img").GetPublicUrl(uniqueFileName);
+                    contentNews.ImageId = uniqueFileName;
+
+                    _appDbContext.ContentNewses.Add(contentNews);
+                    await _appDbContext.SaveChangesAsync();
+                    return Redirect("/news-blog");
+                }
+
             }
+            var modelErrors = ModelState.Values.SelectMany(v => v.Errors)
+                                                   .Select(e => e.ErrorMessage)
+                                                   .ToList();
+            return Content("ModelState Errors: " + string.Join(", ", modelErrors));
 
-            // Optionally save contentNews to your database here
-
-            return Content("Success");
         }
     }
 }
