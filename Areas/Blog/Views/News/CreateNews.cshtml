@@ -1,0 +1,191 @@
+@model App.Models.NewsModel.ContentNews
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="default-tab">
+                        <form asp-action="CreateNews" method="post" enctype="multipart/form-data">
+                            @Html.AntiForgeryToken() <!-- CSRF protection -->
+                            <ul class="nav nav-tabs mb-3" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#general">General Information</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#profile">English</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="general" role="tabpanel">
+                                    <div class="p-t-15">
+                                        <div class="basic-form">
+                                            <div class="form-group row">
+                                                @* @Html.LabelFor(m => m.ImageId, new { @class = "control-label" }) *@
+                                                <label class="col-sm-2 col-form-label">Upload File</label>
+                                                <div class="col-sm-10">
+                                                    <div class="input-group mb-3">
+                                                        <div class="custom-file">
+                                                            @Html.TextBoxFor(m => m.ImageId, new
+                                                                {
+                                                                    type = "file",
+                                                                    @class = "custom-file-input",
+                                                                    id = "ImageId",
+                                                                    onchange = "updateFileName()",
+                                                                    aria_label = "Upload Image"
+                                                                })
+                                                            <label class="custom-file-label" for="ImageId"
+                                                                id="fileLabel">Choose file</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label">General Title</label>
+                                                <div class="col-sm-10">
+                                                    @Html.TextBoxFor(m => m.GeneralTitle, new
+                                                        {
+                                                            @class = "form-control",
+                                                            placeholder = "Enter General Title"
+                                                        })
+                                                    @Html.ValidationMessageFor(m => m.GeneralTitle, "", new
+                                                        {
+                                                            @class = "text-danger"
+                                                        })
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label">Keywords</label>
+                                                <div class="col-sm-10">
+                                                    @Html.TextBoxFor(m => m.KeyWord, new
+                                                        {
+                                                            @class = "form-control",
+                                                            placeholder = "Enter Keywords"
+                                                        })
+                                                    @Html.ValidationMessageFor(m => m.KeyWord, "", new
+                                                        {
+                                                            @class = "text-danger"
+                                                        })
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label">General Description</label>
+                                                <div class="col-sm-10">
+                                                    @Html.TextAreaFor(m => m.GeneralDescription, new
+                                                        {
+                                                            @class = "form-control",
+                                                            rows = 4,
+                                                            placeholder = "Enter General Description"
+                                                        })
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label"></label>
+                                                <div class="col-sm-10">
+                                                    <button type="submit" class="btn btn-dark">Finish</button>
+                                                    <a href="@Url.Action("Index", "YourController")"
+                                                        class="btn btn-light">Exit</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="profile">
+                                    <div class="basic-form">
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">Detail Title</label>
+                                            <div class="col-sm-10">
+                                                @Html.TextBoxFor(m => m.DetailTitle, new
+                                                    {
+                                                        @class = "form-control",
+                                                        placeholder = "Enter Detail Title"
+                                                    })
+                                                @Html.ValidationMessageFor(m => m.DetailTitle, "", new
+                                                    {
+                                                        @class = "text-danger"
+                                                    })
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">Detail Description</label>
+                                            <div class="col-sm-10">
+                                                @Html.TextAreaFor(m => m.DetailDescription, new
+                                                    {
+                                                        @class = "form-control",
+                                                        rows = 4,
+                                                        placeholder = "Enter Detail Description"
+                                                    })
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">Main Content</label>
+                                        </div>
+                                        <div class="summernote" style="border-color: #ced4da;"></div>
+                                        <input type="hidden" name="Content" id="Content" value="@Model.Content" />
+                                        <hr />
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label"></label>
+                                            <div class="col-sm-10">
+                                                <button type="submit" class="btn btn-dark">Finish</button>
+                                                <a href="@Url.Action("Index", "YourController")"
+                                                    class="btn btn-light">Exit</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section AdditionalLinkCSS {
+    <link href="./plugins/summernote/dist/summernote.css" rel="stylesheet">
+    <style>
+        .note-frame {
+            border-color: #ced4da !important;
+        }
+
+        .modal-title {
+            display: none;
+        }
+    </style>
+}
+
+@section AdditionalLinkJavascript {
+    <script src="./plugins/summernote/dist/summernote.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Initialize Summernote
+            $('.summernote').summernote({
+                height: 200, // Set the height of the Summernote
+                callbacks: {
+                    onChange: function (contents, $editable) {
+                        // Update the hidden input with the Summernote content
+                        $('#Content').val(contents);
+                    }
+                }
+            });
+
+            // Initialize Summernote with existing content if editing
+            if ($('#Content').val()) {
+                $('.summernote').summernote('code', $('#Content').val());
+            }
+        });
+
+        // Function updateFileName
+        function updateFileName() {
+            var fileInput = document.getElementById("ImageId");
+            var fileLabel = document.getElementById("fileLabel");
+            if (fileInput.files.length > 0) {
+                fileLabel.textContent = fileInput.files[0].name;
+            } else {
+                fileLabel.textContent = "Choose file"; // Reset to default if no file selected
+            }
+        }
+    </script>
+}

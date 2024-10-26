@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using App.Models.NewsModel;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace App.Models
@@ -141,10 +142,41 @@ namespace App.Models
                 .WithMany(a => a.MaintenanceAndIncidents)
                 .HasForeignKey(m => m.AssetID);
 
+
+            // Configure the one-to-many relationship between AppUser and ContentNews
+            modelBuilder.Entity<ContentNews>()
+                .HasOne(cn => cn.Author)
+                .WithMany(a => a.ContentNews)
+                .HasForeignKey(cn => cn.AuthorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Configure the many-to-many relationship between ContentNews and CategoryNews
+            modelBuilder.Entity<ContentAndCategoryNews>()
+                .HasKey(cc => new { cc.categoryNewsID, cc.contentNewsID });
+
+            modelBuilder.Entity<ContentAndCategoryNews>()
+                .HasOne(cc => cc.categoryNews)
+                .WithMany(cn => cn.PostCategories)
+                .HasForeignKey(cc => cc.categoryNewsID);
+
+            modelBuilder.Entity<ContentAndCategoryNews>()
+                .HasOne(cc => cc.contentNews)
+                .WithMany(cn => cn.PostCategories)
+                .HasForeignKey(cc => cc.contentNewsID);
+
+            // Enforce uniqueness on Slug for ContentNews
+            modelBuilder.Entity<ContentNews>()
+                .HasIndex(cn => cn.Slug)
+                .IsUnique();
+
+            // Enforce uniqueness on Slug for CategoryNews
+            modelBuilder.Entity<CategoryNews>()
+                .HasIndex(cn => cn.Slug)
+                .IsUnique();
+
             // Base on the default model configuration
             base.OnModelCreating(modelBuilder);
         }
-
 
         // Các DbSet cho các thực thể
         public DbSet<RentalProperty> RentalProperties { get; set; }
@@ -159,5 +191,8 @@ namespace App.Models
         public DbSet<UserRentalProperty> UserRentalProperties { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<MaintenanceAndIncident> MaintenanceAndIncidents { get; set; }
+        public DbSet<CategoryNews> CategoryNewses { get; set; }
+        public DbSet<ContentNews> ContentNewses { get; set; }
+        public DbSet<ContentAndCategoryNews> ContentAndCategoryNewses { get; set; }
     }
 }

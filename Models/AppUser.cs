@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using App.Models.NewsModel;
 
 namespace App.Models
 {
@@ -32,5 +33,7 @@ namespace App.Models
         public virtual ICollection<RentalContract> RentalContracts { get; set; } = new List<RentalContract>();
         public virtual ICollection<Notification> CreatedNotifications { get; set; } = new List<Notification>();
         public virtual ICollection<OwnNotification> OwnNotifications { get; set; } = new List<OwnNotification>();
+        public virtual ICollection<ContentNews> ContentNews { get; set; } = new List<ContentNews>();
+
     }
 }

@@ -239,19 +239,26 @@
                 <ul class="metismenu" id="menu">
                     @* <li class="nav-label">Dashboard</li> *@
                     <li>
+                        <a asp-area="DashBoard" asp-action="Index" asp-controller="DashBoard">
+                            <i class="icon-speedometer menu-icon"></i><span class="nav-text">Dashboard</span> </a>
+                    </li>
+                    <li>
                         <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                            <i class="icon-speedometer menu-icon"></i><span class="nav-text">Dashboard</span>
+                            <i class="fab fa-blogger"></i><span class="nav-text">Blog</span>
                         </a>
                         <ul aria-expanded="false">
                             <li>
-                                <a asp-area="DashBoard" asp-action="Index" asp-controller="DashBoard">
-                                    Home 1
+                                <a asp-area="Blog" asp-action="Index" asp-controller="News">
+                                    News Blog
                                 </a>
                             </li>
-                            @* <li><a asp-area="Room" asp-action="Index" asp-controller="Room">Home 2</a></li> *@
+                            <li>
+                                <a asp-area="Blog" asp-action="Index" asp-controller="ServicesBlog">
+                                    Services Blog
+                                </a>
+                            </li>
                         </ul>
                     </li>
-
                     <li>
                         <a asp-area="Room" asp-action="Index" asp-controller="Room">
                             <i class="icon-home menu-icon"></i><span class="nav-text">Room</span>

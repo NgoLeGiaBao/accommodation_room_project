@@ -5,7 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json;
-
+using App.Services;
+using Microsoft.Extensions.Options;
 
 
 namespace App
@@ -31,6 +32,18 @@ namespace App
 				options.UseNpgsql(connectionString);
 				// options.UseSqlServer(connectionString);
 			});
+
+			// Bind the Supabase settings
+			builder.Services.Configure<SupabaseSettings>(builder.Configuration.GetSection("SupabaseSettings"));
+
+			// Register the Supabase Client
+			builder.Services.AddScoped<Supabase.Client>(provider =>
+			{
+				var settings = provider.GetRequiredService<IOptions<SupabaseSettings>>().Value;
+				return new Supabase.Client(settings.SupabaseUrl, settings.SupabaseAnonKey);
+			});
+
+
 
 			builder.Services.AddSingleton<IFileProvider>(
 				new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));

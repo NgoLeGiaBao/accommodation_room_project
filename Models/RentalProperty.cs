@@ -80,5 +80,6 @@ namespace App.Models
 
         [Display(Name = "Room List")]
         public ICollection<Room> Rooms { get; set; } = new List<Room>();
+
     }
 }

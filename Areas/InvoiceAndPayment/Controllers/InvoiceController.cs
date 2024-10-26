@@ -183,7 +183,7 @@ namespace App.Areas.Payment
             return Json(result);
         }
 
-        // Edit invoice
+        // Edit invoice 
         [Route("/edit-invoice/{id}")]
         [HttpGet]
         public async Task<IActionResult> EditInvoice(string id)
