@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using App.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace App.Areas.Blog
 {
@@ -83,6 +85,44 @@ namespace App.Areas.Blog
                                                    .ToList();
             return Content("ModelState Errors: " + string.Join(", ", modelErrors));
 
+        }
+
+        [Route("/get-all-news")]
+        [HttpGet]
+        public async Task<IActionResult> GetUserNews()
+        {
+            // Initialize Supabase client
+            var options = new Supabase.SupabaseOptions { AutoConnectRealtime = true };
+            var supabase = new Supabase.Client(_supabaseSettings.SupabaseUrl, _supabaseSettings.SupabaseAnonKey, options);
+            await supabase.InitializeAsync();
+
+            // Retrieve the current user
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+                return NotFound("User not found");
+
+            // Fetch all news articles for the current user
+            var news = await _appDbContext.ContentNewses
+                .Where(c => c.AuthorId == user.Id)
+                .ToListAsync(); // Get the list first
+
+            // Check if news is empty
+            if (news == null || !news.Any())
+                return NotFound("No news found.");
+
+
+            var result = news.Select(c => new
+            {
+                c.Id,
+                c.GeneralTitle,
+                c.Content,
+                c.Published,
+                ImageUrl = string.IsNullOrEmpty(c.ImageId)
+                    ? null
+                    : supabase.Storage.From("news_img").GetPublicUrl(c.ImageId)
+            }).ToList();
+
+            return Ok(result);
         }
     }
 }
