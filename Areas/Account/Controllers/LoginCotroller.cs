@@ -20,14 +20,14 @@ public class LoginController : Controller
     [BindProperty]
     public InputModel Input { get; set; }
 
-    [Route("/")]
+    [Route("/login")]
     [HttpGet]
     public IActionResult Index()
     {
         return View();
     }
 
-    [Route("/")]
+    [Route("/login")]
     [HttpPost]
     public async Task<IActionResult> Index(string returnUrl = null)
     {

@@ -55,7 +55,7 @@ namespace App
 			// Configure authorize
 			builder.Services.ConfigureApplicationCookie(options =>
 			{
-				options.LoginPath = "/";
+				options.LoginPath = "/login";
 				// options.LogoutPath = "/Identity/Account/Logout";
 				// options.AccessDeniedPath = "/Identity/Account/AccessDenied";
 			});
@@ -79,7 +79,7 @@ namespace App
 
 			app.MapControllerRoute(
 				name: "default",
-				pattern: "{area=Account}/{controller=Login}/{action=Index}"
+				pattern: "{area=Introduction}/{controller=HomePage}/{action=Home}"
 			);
 			app.Run();
 		}
