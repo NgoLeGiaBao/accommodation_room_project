@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     $('#user-list').DataTable().destroy();
                 }
 
+
                 console.log(response)
                 var userList = $('#user-list tbody');
                 var btnAction = $('#btn-action');
@@ -65,8 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                         class="btn btn-primary me-2 ">
                                         <i class="fas fa-plus"></i> Add tenant
                                     </a>
-                                    <a href = ${exportTenantUrl}
-                                        class="btn btn-info me-2 ">
+                                    <a href="javascript:void(0);" data-home-id="${homeId}" onclick="exportExcel(this)" class="btn btn-info me-2">
                                         <i class="fas fa-edit"></i> Export file
                                     </a>
                                 </div>`);
@@ -126,3 +126,11 @@ document.addEventListener('DOMContentLoaded', function () {
         $('.nav-link').first().trigger('click');
     }
 });
+
+function exportExcel(element) {
+    var homeId = element.getAttribute("data-home-id");
+    var url = `/export-list-user/${homeId}`;
+
+    // Điều hướng tới URL để tải xuống file Excel
+    window.location.href = url;
+}

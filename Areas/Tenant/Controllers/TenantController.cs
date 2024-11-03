@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
+using System.Drawing;
 
 namespace App.Areas.Tenant
 {
@@ -67,7 +70,7 @@ namespace App.Areas.Tenant
                         var userRentalProperty = new UserRentalProperty
                         {
                             AppUserId = existingUser.Id,
-                            RentalPropertyId = rentalPropertyId // Ensure rentalPropertyId has a value
+                            RentalPropertyId = rentalPropertyId
                         };
 
                         // Check if the relationship already exists
@@ -110,12 +113,6 @@ namespace App.Areas.Tenant
                     }
                 }
             }
-
-            // If we get to this postring, something went wrong, return to the view with the current appUser
-            // var errors = ModelState.Values.SelectMany(v => v.Errors)
-            //           .Select(e => e.ErrorMessage)
-            //           .ToList();
-            // return Content(string.Join(",", errors));
             return View(appUser);
         }
 
@@ -142,7 +139,6 @@ namespace App.Areas.Tenant
 
             return Json(new { exists = false });
         }
-
 
         [Route("/get-list-user/{homeId}")]
         [HttpPost]
@@ -201,6 +197,96 @@ namespace App.Areas.Tenant
             return Content(id.ToString());
         }
 
+        // Export list user in home
+        [Route("/export-list-user/{homeId}")]
+        public async Task<IActionResult> ExportListUser(string homeId)
+        {
+            var home = await _appDbContext.RentalProperties.FindAsync(homeId);
+            if (home == null)
+                return NotFound();
 
+            // Check if the current user is authenticated
+            var currentUser = await _signInManager.UserManager.GetUserAsync(User);
+            if (currentUser == null)
+                return Unauthorized(new { message = "User is not authenticated." });
+
+            // Fetch users associated with the specified RentalPropertyId (homeId), excluding the current user
+            var users = await _appDbContext.UserRentalProperties
+                .Where(rpu => rpu.RentalPropertyId == homeId && rpu.AppUserId != currentUser.Id)
+                .Select(rpu => rpu.AppUser)
+                .ToListAsync();
+
+            // Create Excel file with the list of users
+            var package = new ExcelPackage(); // Do not use 'using' here
+
+            var worksheet = package.Workbook.Worksheets.Add("Tenants");
+
+            if (users == null || users.Count == 0)
+            {
+                worksheet.Cells["A1"].Value = "No tenants are found.";
+                worksheet.Cells["A1:F1"].Merge = true; // Merge cells for the title
+                worksheet.Cells["A1"].Style.Font.Bold = true;
+                worksheet.Cells["A1"].Style.Font.Size = 16;
+                worksheet.Cells["A1"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            }
+            else
+            {
+                // Add title
+                worksheet.Cells["A1"].Value = "Tenant List";
+                worksheet.Cells["A1:F1"].Merge = true; // Merge cells for the title
+                worksheet.Cells["A1"].Style.Font.Bold = true;
+                worksheet.Cells["A1"].Style.Font.Size = 16;
+                worksheet.Cells["A1"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+
+                // Add header row
+                worksheet.Cells["A2"].Value = "No";
+                worksheet.Cells["B2"].Value = "Full Name";
+                worksheet.Cells["C2"].Value = "Gender";
+                worksheet.Cells["D2"].Value = "Date of Birth";
+                worksheet.Cells["E2"].Value = "ID Card";
+                worksheet.Cells["F2"].Value = "Address";
+
+                worksheet.Cells["A2:F2"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                worksheet.Cells["A2:F2"].Style.Font.Bold = true; // Make header bold
+                worksheet.Cells["A2:F2"].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid; // Fill color for header
+                worksheet.Cells["A2:F2"].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray); // Set background color
+
+                // Set column widths for better visibility
+                worksheet.Column(1).Width = 5;
+                worksheet.Column(2).Width = 30;
+                worksheet.Column(3).Width = 10;
+                worksheet.Column(4).Width = 15;
+                worksheet.Column(5).Width = 20;
+                worksheet.Column(6).Width = 70;
+
+                int row = 3; // Start adding user data from the third row
+                foreach (var user in users)
+                {
+                    worksheet.Cells[row, 1].Value = (row - 2).ToString();
+                    worksheet.Cells[row, 2].Value = user.FullName;
+                    worksheet.Cells[row, 3].Value = user.Sex ? "Male" : "Female";
+                    worksheet.Cells[row, 4].Value = user.Birthday.HasValue
+                        ? user.Birthday.Value.ToString("dd/MM/yyyy")
+                        : string.Empty;
+                    worksheet.Cells[row, 5].Value = user.IdentityCard;
+                    worksheet.Cells[row, 6].Value = user.Address;
+
+                    for (int col = 1; col <= 6; col++)
+                    {
+                        worksheet.Cells[row, col].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    }
+
+                    row++;
+                }
+            }
+            // Prepare Excel file for download
+            var fileName = $"TenantList_{home.PropertyName}.xlsx";
+            var memoryStream = new MemoryStream();
+            package.SaveAs(memoryStream);
+            memoryStream.Position = 0;
+
+            // Return the file while keeping the MemoryStream alive
+            return File(memoryStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+        }
     }
 }

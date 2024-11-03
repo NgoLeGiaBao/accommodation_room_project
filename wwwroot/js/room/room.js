@@ -74,6 +74,7 @@
                         </a>
                      </div>
                     `);
+
                 // Load rooms
                 $.each(response.rooms, function (index, room) {
                     var editUrl = `/edit-room?rentalPropertyId=${homeId}&roomId=${room.id}`;
@@ -84,12 +85,13 @@
                             <div class="card-body">
                                 <h5 class="card-title">${room.roomName}</h5>
                                 <p class="card-text">
-                                    Room Price: ${room.price}
+                                    Price: ${room.price}$
                                     <br>
-                                    Room Status: <span class="badge badge-primary px-2">${room.status}</span>
+                                    
+                                    Status: <span class="badge badge-primary px-2">${room.status}</span>
                                 </p>
                                 <div class="d-flex justify-content-center">
-                                    <a href="${editUrl}" class="btn btn-primary">Edit</a>
+                                    <a href="${editUrl}" class="btn btn-primary">Update</a>
                                     <a href="${viewUrl}" class="btn btn-secondary margin-room-update">View</a>
                                 </div>
                             </div>
@@ -113,9 +115,9 @@
         var paginationList = $('#pagination-list');
         paginationList.empty();
 
-        if (totalPages <= 1) {
-            return;
-        }
+        // if (totalPages <= 1) {
+        //     return;
+        // }
 
         // Add Previous button
         var previousClass = (currentPage === 1 || totalPages <= 1) ? 'disabled' : '';

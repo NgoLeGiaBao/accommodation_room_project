@@ -252,7 +252,8 @@ namespace App.Areas.Room
                 var userRentalRoomsQuery = _appDbContext.UserRentalProperties
                     .Where(ur => ur.AppUserId == currentUserId && ur.RentalPropertyId == homeId)
                     .SelectMany(ur => ur.RentalProperty.Rooms)
-                    .Where(r => r.IsActive == true);
+                    .Where(r => r.IsActive == true)
+                    .OrderBy(r => r.RoomName);
 
                 // Count total rooms belonging to the user's rental property
                 var totalCount = await userRentalRoomsQuery.CountAsync();
@@ -277,6 +278,7 @@ namespace App.Areas.Room
                 .Where(ur => ur.AppUserId == currentUserId && ur.RentalPropertyId == homeId)
                 .SelectMany(ur => ur.RentalProperty.Rooms)
                 .Where(r => r.IsActive == true)
+                .OrderBy(r => r.RoomName)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .Select(r => new
