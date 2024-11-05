@@ -5,12 +5,13 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <h2 class="text-center lh-base mb-4">Add New Tenant</h2>
+                    <h2 class="text-center lh-base mb-4">Edit Tenant</h2>
                     <partial name="_SuccessMessage" />
                     <partial name="_FailureMessage" />
                     <div class="form-validation">
-                        <form asp-action="CreateTenant" method="post">
+                        <form asp-action="EditTenant" method="post">
                             <!-- Identity Card -->
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                             <div class="form-group row">
                                 @Html.LabelFor(m => m.IdentityCard, new { @class = "col-lg-4 col-form-label" })
                                 <div class="col-lg-6">
@@ -90,38 +91,35 @@
                             <!-- Sex -->
                             <div class="form-group row">
                                 @Html.LabelFor(m => m.Sex, new { @class = "col-lg-4 col-form-label" })
-                                <div class="col-lg-6 d-flex">
-                                    <div class="form-check">
-                                        <input type="radio" id="male" name="Sex" value="true" 
-                                               class="form-check-input" 
-                                               @(Model.Sex == true ? "checked" : "") />
-                                        <label class="form-check-label" for="male">Male</label>
-                                    </div>
-                                    <div class="form-check ml-3">
-                                        <input type="radio" id="female" name="Sex" value="false" 
-                                               class="form-check-input" 
-                                               @(Model.Sex == false ? "checked" : "") />
-                                        <label class="form-check-label" for="female">Female</label>
-                                    </div>
-                                    @Html.ValidationMessageFor(m => m.Sex, "", new { @class = "text-danger" })
+                                <div class="form-check ml-3">
+                                    <input type="radio" id="male" name="Sex" value="false" 
+                                           class="form-check-input" 
+                                           @(Model.Sex == null || Model.Sex == false ? "checked" : "") />
+                                    <label class="form-check-label" for="male">Male</label>
                                 </div>
+                                <div class="form-check ml-3">
+                                    <input type="radio" id="female" name="Sex" value="true" 
+                                           class="form-check-input" 
+                                           @(Model.Sex == true ? "checked" : "") />
+                                    <label class="form-check-label" for="female">Female</label>
+                                </div>
+                                @Html.ValidationMessageFor(m => m.Sex, "", new { @class = "text-danger" })
                             </div>
 
                             <!-- Submit Button -->
                             <div class="form-group row ">
                                 <div class="col-4"></div>
                                 <div class="col-8 row">
-                                        <div class="col-12 col-md-4 mb-3">
-                                            <a asp-action="Index" class="btn btn-light btn-lg w-100">
-                                                Back to Home
-                                            </a>
-                                        </div>
-                                        <!-- Nút Update Rental Property -->
-                                        <div class="col-12 col-md-4 mb-3">
-                                            <button type="submit" class="btn btn-dark btn-lg w-100">
-                                                Create New Tenant
-                                            </button>
-                                        </div>
+                                    <div class="col-12 col-md-4 mb-3">
+                                        <a asp-action="Index" class="btn btn-light btn-lg w-100">
+                                            Back to Home
+                                        </a>
+                                    </div>
+                                    <div class="col-12 col-md-4 mb-3">
+                                        <button type="submit" class="btn btn-dark btn-lg w-100">
+                                            Update Tenant
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </form>
@@ -133,11 +131,11 @@
 </div>
 
 @section AdditionalLinkJavascript {
-   <script>
+    <script>
         var previousIdentityCard = ''; 
         function checkIdentityCard(input) {
-        var identityCard = $(input).val().trim();
-        
+            var identityCard = $(input).val().trim();
+            
             if (identityCard !== previousIdentityCard) {
                 previousIdentityCard = identityCard; 
                 clearFormFields();
@@ -157,10 +155,9 @@
                                 $('#Address').val(data.address);
     
                                 // Set radio buttons based on sex
-                                $('#male').prop('checked', data.sex); 
-                                $('#female').prop('checked', !data.sex); 
+                                $('#male').prop('checked', !data.sex); 
+                                $('#female').prop('checked', data.sex); 
                             } else {
-                            
                                 clearFormFields();
                             }
                         },
@@ -173,7 +170,6 @@
         }
     
         function clearFormFields() {
-            // Xóa tất cả các trường thông tin
             $('#FullName').val('');
             $('#Email').val('');
             $('#PhoneNumber').val('');

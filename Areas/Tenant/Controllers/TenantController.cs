@@ -84,7 +84,7 @@ namespace App.Areas.Tenant
                         }
 
                         TempData["SuccessMessage"] = "User updated and rental property relationship added successfully.";
-                        return RedirectToAction("Index");
+                        return RedirectToAction("CreateTenant");
                     }
                 }
                 else
@@ -109,10 +109,11 @@ namespace App.Areas.Tenant
                         await _appDbContext.SaveChangesAsync();
 
                         TempData["SuccessMessage"] = "User created and rental property relationship added successfully.";
-                        return RedirectToAction("Index"); // Redirect after successful creation
+                        return RedirectToAction("CreateTenant"); // Redirect after successful creation
                     }
                 }
             }
+            TempData["FailureMessage"] = "User created failurely, please try again.";
             return View(appUser);
         }
 
@@ -146,19 +147,13 @@ namespace App.Areas.Tenant
         {
             // Get the currently logged-in user
             var currentUser = await _signInManager.UserManager.GetUserAsync(User);
-
             if (currentUser == null)
                 return Unauthorized(new { message = "User is not authenticated." });
 
             // Get the current date
             var currentDate = DateTime.UtcNow;
 
-            // Count total users associated with the specified rental property, excluding the current user
-            var totalUsers = await _appDbContext.UserRentalProperties
-                .Where(rpu => rpu.RentalPropertyId == homeId && rpu.AppUserId != currentUser.Id) // Exclude current user
-                .CountAsync();
-
-            // Now retrieve user details if needed
+            // Fetch users associated with the specified rental property, excluding the current user
             var users = await _appDbContext.UserRentalProperties
                 .Where(rpu => rpu.RentalPropertyId == homeId && rpu.AppUserId != currentUser.Id) // Exclude current user
                 .Include(rpu => rpu.AppUser)
@@ -179,17 +174,75 @@ namespace App.Areas.Tenant
                 })
                 .ToListAsync();
 
-            return Ok(new { totalUsers, users });
+            // Calculate totals
+            var totalCurrentTenants = users.Count(u => u.CurrentContractsCount > 0);
+            var totalPastTenants = users.Count(u => u.PastContractsCount > 0 && u.CurrentContractsCount == 0);
+            var totalNeverRented = users.Count(u => u.CurrentContractsCount == 0 && u.PastContractsCount == 0);
+
+            return Ok(new
+            {
+                totalUsers = users.Count, // Total users excluding the current user
+                totalCurrentTenants,
+                totalPastTenants,
+                totalNeverRented,
+                UsersWithCategories = users.Select(u => new
+                {
+                    User = u.User,
+                    IsCurrentTenant = u.CurrentContractsCount > 0,
+                    IsPastTenant = u.PastContractsCount > 0 && u.CurrentContractsCount == 0,
+                    IsNeverRented = u.CurrentContractsCount == 0 && u.PastContractsCount == 0
+                }).ToList()
+            });
         }
 
 
-        [Route("edit-tenant/{id}")]
+        [Route("/edit-tenant/{id}")]
         [HttpGet]
-        public IActionResult EditTenant(string? id)
+        public IActionResult EditTenant(string id)
         {
-            // Kiểm tra id nếu cần
-            return View();
+            // Assuming you have a DbContext named ApplicationDbContext
+            var tenant = _appDbContext.AppUsers.FirstOrDefault(u => u.Id == id);
+
+            if (tenant == null)
+                return NotFound();
+
+            // Return the view with the tenant's data
+            return View(tenant);
         }
+
+        [Route("/edit-tenant/{id}")]
+        [HttpPost]
+        public async Task<IActionResult> EditTenant(AppUser appUser, string id)
+        {
+            if (ModelState.IsValid)
+            {
+                var existingUser = await _userManager.Users
+                    .FirstOrDefaultAsync(u => u.IdentityCard == appUser.IdentityCard);
+
+                if (existingUser != null)
+                {
+                    // Update existing user information
+                    existingUser.FullName = appUser.FullName;
+                    existingUser.Email = appUser.Email;
+                    existingUser.PhoneNumber = appUser.PhoneNumber;
+                    existingUser.Birthday = appUser.Birthday?.ToUniversalTime();
+                    existingUser.Address = appUser.Address;
+                    existingUser.Sex = appUser.Sex;
+
+                    // Save changes to the database
+                    await _userManager.UpdateAsync(existingUser);
+
+                    TempData["SuccessMessage"] = "Update user successfully.";
+                    return RedirectToAction("EditTenant", new { id = id });
+
+                }
+            }
+            TempData["FailureMessage"] = "Update user failurely, please try again.";
+            return Content("Update user failurely, please try again.");
+            return View(appUser);
+
+        }
+
         [Route("/tenant-delete/{id?}")]
         [HttpGet]
         public IActionResult Delete(string id)
@@ -288,5 +341,6 @@ namespace App.Areas.Tenant
             // Return the file while keeping the MemoryStream alive
             return File(memoryStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
         }
+
     }
 }

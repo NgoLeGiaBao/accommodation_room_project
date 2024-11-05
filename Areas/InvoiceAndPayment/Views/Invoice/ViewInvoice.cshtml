@@ -1,0 +1,133 @@
+@model App.Models.Invoice
+@{
+    var inforContract = ViewBag.InforContract as RentalContract;
+
+    // Parse the JSON string to a list of objects
+    var otherServices = Newtonsoft.Json.JsonConvert.DeserializeObject<List<OtherService>>(Model.ServiceDetails);
+}
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-primary invoice-header">
+            <h3 class="mb-0">Invoice for Room @Model.Room.RoomName - October 2024</h3>
+        </div>
+        <div class="card-body">
+            <partial name="_SuccessMessage" />
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Customer:</h5>
+                    <p><strong>Room: </strong> @Model.Room.RoomName</p>
+                    <p><strong>Status: </strong><span class="badge badge-primary">@Model.StatusInvocie</span></p>
+                </div>
+                <div class="col-md-6 text-md-right">
+                    <h5>Invoice Details:</h5>
+                    <p><strong>Invoice Date: </strong>@Model.InvoiceDate.ToString("dd/MM/yyyy")</p>
+                    <p><strong>Payment Due Date: </strong>@Model.InvoiceDate.AddDays(5).ToString("dd/MM/yyyy")</p>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <h5>Rental Fee</h5>
+                    <p>@inforContract.PRentalRoomPerM VND</p>
+                </div>
+                <div class="col-md-6">
+                    <h5>Service Fee</h5>
+                    <p>@inforContract.PServicePerK VND</p>
+                </div>
+            </div>
+            <hr />
+
+            <!-- Service Fees Table -->
+            <h5>Service Fees</h5>
+            <table class="table table-bordered text-center" id="serviceTable">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Description</th>
+                        <th>Previous Usage</th>
+                        <th>Current Usage</th>
+                        <th>Difference</th>
+                        <th>Unit Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Electricity</td>
+                        <td>@Model.ElectricityForBefore</td>
+                        <td>@Model.ElectricityUsage</td>
+                        <td>@(Model.ElectricityUsage - Model.ElectricityForBefore)</td>
+                        <td>@inforContract.PElectricityPerKw VND</td>
+                        <td>@(((double)(Model.ElectricityUsage - Model.ElectricityForBefore)) *
+                                (double)inforContract.PElectricityPerKw) VND</td>
+                    </tr>
+                    <tr>
+                        <td>Water</td>
+                        <td>@Model.WaterUsageForBefore</td>
+                        <td>@Model.WaterUsage</td>
+                        <td>@(Model.WaterUsage - Model.WaterUsageForBefore)</td>
+                        <td>@inforContract.PWaterPerK VND</td>
+                        <td>@(((double)(Model.WaterUsage - Model.WaterUsageForBefore)) *
+                                (double)inforContract.PWaterPerK) VND</td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr />
+
+            <!-- Other Services Table -->
+            <h5>Other Fees</h5>
+            <table class="table table-bordered text-center" id="otherServicesTable">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var service in otherServices)
+                    {
+                        var total = int.Parse(service.Quantity) * int.Parse(service.UnitPrice);
+                        <tr>
+                            <td>@service.Description</td>
+                            <td>@service.Quantity</td>
+                            <td>@(int.Parse(service.UnitPrice).ToString("N0")) VND</td>
+                            <td>@(total.ToString("N0")) VND</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <!-- Total Amount -->
+            <div class="row mt-4">
+                <div class="col-md-12 text-right">
+                    <h4><strong>Total Amount: </strong><span id="totalInvoiceAmount">@Model.TotalMoney VND</span></h4>
+                </div>
+            </div>
+
+            <!-- Payment Method -->
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <p><strong>Payment Method:</strong></p>
+                    <img src="https://img.icons8.com/color/48/000000/visa.png" alt="Visa" />
+                    <img src="https://img.icons8.com/color/48/000000/mastercard.png" alt="Mastercard" />
+                    <img src="https://img.icons8.com/color/48/000000/paypal.png" alt="PayPal" />
+                </div>
+                <div class="col-md-6 text-md-right">
+                    <p><strong>Payment QR Code:</strong></p>
+                    <img src="https://via.placeholder.com/100x100.png?text=QR+Code" alt="QR Code" class="img-fluid" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    public class OtherService
+    {
+        public string Description { get; set; }
+        public string Quantity { get; set; }
+        public string UnitPrice { get; set; }
+    }
+}

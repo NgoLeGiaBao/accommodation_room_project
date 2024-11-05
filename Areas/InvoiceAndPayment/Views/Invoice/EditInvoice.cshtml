@@ -9,7 +9,6 @@
         </div>
         <div class="card-body">
             <partial name="_SuccessMessage" />
-
             <form asp-action="EditInvoice" method="post">
                 <!-- Invoice Header -->
                 <div class="row">
@@ -60,7 +59,8 @@
                                 <td>@Model.ElectricityForBefore</td>
                                 <td><input type="number" class="form-control input-narrow"
                                         min="@Model.ElectricityForBefore" placeholder="Nhập số điện"
-                                        name="electricityUsage" oninput="calculateElectricityTotal(this)" /></td>
+                                        value=@Model.ElectricityUsage name="electricityUsage"
+                                        oninput="calculateElectricityTotal(this)" /></td>
                                 <td class="usage-difference">-</td>
                                 <td><input type="number" readonly class="form-control input-narrow"
                                         value="@inforContract.PElectricityPerKw" placeholder="Đơn giá" /></td>
@@ -69,7 +69,7 @@
                             <tr>
                                 <td>Water</td>
                                 <td>@Model.WaterUsageForBefore</td>
-                                <td><input type="number" min="@Model.WaterUsageForBefore"
+                                <td><input type="number" min="@Model.WaterUsageForBefore" value="@Model.WaterUsage"
                                         class="form-control input-narrow" placeholder="Nhập số nước" name="waterUsage"
                                         oninput="calculateWaterTotal(this)" /></td>
                                 <td class="usage-difference">-</td>
@@ -225,12 +225,12 @@
         document.getElementById('addOtherServiceButton').addEventListener('click', function () {
             const newRow = document.createElement('tr');
             newRow.innerHTML = `
-                                                                                    <td><input type="text" class="form-control" placeholder="Description" /></td>
-                                                                                    <td><input type="number" class="form-control" placeholder="Quantity" min="1"  oninput="calculateOtherServiceTotal(this)" /></td>
-                                                                                    <td><input type="number" class="form-control" placeholder="Unit Price" min="1000" oninput="calculateOtherServiceTotal(this)" /></td>
-                                                                                    <td>0 VND</td>
-                                                                                    <td><button type="button" class="btn btn-danger remove-service">Remove</button></td>
-                                                                                `;
+                                                                                                            <td><input type="text" class="form-control" placeholder="Description" /></td>
+                                                                                                            <td><input type="number" class="form-control" placeholder="Quantity" min="1"  oninput="calculateOtherServiceTotal(this)" /></td>
+                                                                                                            <td><input type="number" class="form-control" placeholder="Unit Price" min="1000" oninput="calculateOtherServiceTotal(this)" /></td>
+                                                                                                            <td>0 VND</td>
+                                                                                                            <td><button type="button" class="btn btn-danger remove-service">Remove</button></td>
+                                                                                                        `;
             document.querySelector('#otherServicesTable tbody').appendChild(newRow);
 
             // Update gathered services when a new row is added

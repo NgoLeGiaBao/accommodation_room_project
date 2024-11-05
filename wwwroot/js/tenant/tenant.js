@@ -46,8 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     $('#user-list').DataTable().destroy();
                 }
 
-
-                console.log(response)
+                console.log(response);
                 var userList = $('#user-list tbody');
                 var btnAction = $('#btn-action');
                 var statusInfo = $('#status-info');
@@ -56,38 +55,47 @@ document.addEventListener('DOMContentLoaded', function () {
                 statusInfo.empty();
                 userList.empty();
 
+                // Update the status info with the correct counts
+                statusInfo.append(`
+                    <span>All tenants: ${response.totalUsers}</span> | 
+                    <span>Current tenants: ${response.totalCurrentTenants}</span> | 
+                    <span>Previous tenants: ${response.totalPastTenants}</span> | 
+                    <span>Never rented: ${response.totalNeverRented}</span>
+                `);
 
-                statusInfo.append(`<span>All tenants ${response.totalUsers}</span> | <span>Current tenants ${response.totalUsers}</span> | <span>Previous tenants ${response.totalUsers}</span>`);
                 var createTenantUrl = `/create-tenant/${homeId}`;
-                var exportTenantUrl = `/edit-home/${homeId}`;
                 btnAction.append(`
-                                <div class="action-buttons mb-2">
-                                    <a href = ${createTenantUrl}
-                                        class="btn btn-primary me-2 ">
-                                        <i class="fas fa-plus"></i> Add tenant
-                                    </a>
-                                    <a href="javascript:void(0);" data-home-id="${homeId}" onclick="exportExcel(this)" class="btn btn-info me-2">
-                                        <i class="fas fa-edit"></i> Export file
-                                    </a>
-                                </div>`);
-                if (response.users && response.users.length === 0) {
-                    userList.append('<tr><td colspan="9" class="text-center">No tenants found</td></tr>');
+                    <div class="action-buttons mb-2">
+                        <a href="${createTenantUrl}" class="btn btn-primary me-2">
+                            <i class="fas fa-plus"></i> Add tenant
+                        </a>
+                        <a href="javascript:void(0);" data-home-id="${homeId}" onclick="exportExcel(this)" class="btn btn-info me-2">
+                            <i class="fas fa-edit"></i> Export file
+                        </a>
+                    </div>
+                `);
+
+                console.log(response.usersWithCategories);
+                if (response.usersWithCategories && response.usersWithCategories.length === 0) {
+                    userList.append('<tr><td colspan="7" class="text-center">No tenants are found</td></tr>');
                     return;
                 }
-                $.each(response.users, function (index, user) {
+
+                $.each(response.usersWithCategories, function (index, user) {
+                    console.log(user.user)
                     var userRow = `<tr>
                         <td>${index + 1}</td>
                         <td>${user.user.fullName}</td>
-                        <td>${user.user.sex ? 'Male' : 'Female'}</td>
+                        <td>${user.user.sex ? 'Female' : 'Male'}</td>
                         <td>${formatDate(user.user.birthday)}</td>
                         <td>${user.user.identityCard}</td>
                         <td>${user.user.address}</td>
                         <td>
                             <span>
-                                <a href="/edit-user/${user.user.id}" data-toggle="tooltip" data-placement="top" title="Edit">
+                                <a href="/edit-tenant/${user.user.id}" data-toggle="tooltip" data-placement="top" title="Edit">
                                     <i class="fa fa-pencil color-muted m-r-5"></i>
                                 </a>
-                                <a href="/view-user/${user.user.id}" data-toggle="tooltip" data-placement="top" title="View">
+                                <a href="/view-tenant/${user.user.id}" data-toggle="tooltip" data-placement="top" title="View">
                                     <i class="fa fa-eye color-info"></i>
                                 </a>
                             </span>
@@ -108,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Formate date
+    // Format date
     function formatDate(dateString) {
         const date = new Date(dateString);
         return date.toLocaleDateString('vi-VN', {
@@ -131,6 +139,6 @@ function exportExcel(element) {
     var homeId = element.getAttribute("data-home-id");
     var url = `/export-list-user/${homeId}`;
 
-    // Điều hướng tới URL để tải xuống file Excel
+    // Navigate to URL to download the Excel file
     window.location.href = url;
 }

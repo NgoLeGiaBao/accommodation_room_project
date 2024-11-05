@@ -94,6 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 $.each(response.contracts, function (index, contract) {
+                    console.log(contract);
                     var contractRow = `<tr>
                                                 <td>${index + 1}</td>
                                                 <td>${contract.tenantName}</td>
@@ -102,10 +103,10 @@ document.addEventListener('DOMContentLoaded', function () {
                                                 <td>${formatDate(contract.expirationDate)}</td>
                                                 <td>
                                                     <span>
-                                                        <a href="/edit-contract/${contract.id}" data-toggle="tooltip" data-placement="top" title="Edit">
+                                                        <a href="/edit-contract/${contract.contractID}" data-toggle="tooltip" data-placement="top" title="Edit">
                                                             <i class="fa fa-pencil color-muted m-r-5"></i>
                                                         </a>
-                                                        <a href="/view-contract/${contract.id}" data-toggle="tooltip" data-placement="top" title="View">
+                                                        <a href="/view-contract/${contract.contractID}" data-toggle="tooltip" data-placement="top" title="View">
                                                             <i class="fa fa-eye color-info"></i>
                                                         </a>
                                                     </span>

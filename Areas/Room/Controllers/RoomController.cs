@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace App.Areas.Room
 {
     [Authorize]
@@ -311,22 +310,39 @@ namespace App.Areas.Room
         [Route("/view-room")]
         public async Task<IActionResult> ViewRoom(string rentalPropertyId, string roomId)
         {
-            if (rentalPropertyId == null || roomId == null)
+            if (string.IsNullOrEmpty(rentalPropertyId) || string.IsNullOrEmpty(roomId))
                 return NotFound();
+
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
                 return NotFound();
 
-
+            // Fetch the room with rental contracts and include AppUser
             var room = await _appDbContext.Rooms
                 .Include(r => r.RentalProperty)
-                .ThenInclude(rp => rp.UserRentalProperties)
+                    .ThenInclude(rp => rp.UserRentalProperties)
+                .Include(r => r.RentalContracts)
+                    .ThenInclude(rc => rc.AppUser)
+                .Include(r => r.OwnAssets)
+                    .ThenInclude(oa => oa.Asset)
                 .FirstOrDefaultAsync(r => r.Id == roomId &&
-                                           r.RentalPropertyId == rentalPropertyId &&
-                                           r.RentalProperty.UserRentalProperties.Any(urp => urp.AppUserId == user.Id));
+                               r.RentalPropertyId == rentalPropertyId &&
+                               r.RentalProperty.UserRentalProperties.Any(urp => urp.AppUserId == user.Id));
 
             if (room == null)
                 return NotFound();
+
+            // Get the active tenants
+            var activeTenants = (room.RentalContracts ?? Enumerable.Empty<RentalContract>())
+                .Select(rc => rc.AppUser)
+                .Distinct()
+                .Where(tenant => tenant != null)
+                .ToList();
+
+
+            var assets = room.OwnAssets.Select(oa => oa.Asset).ToList() ?? new List<Asset>();
+            ViewBag.ActiveTenants = activeTenants;
+            ViewBag.Assets = assets;
             return View(room);
         }
     }

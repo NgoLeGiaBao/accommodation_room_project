@@ -1,9 +1,10 @@
-using System.Composition.Hosting;
 using App.Models;
-using Humanizer;
+using App.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using QRCoder;
 
 namespace App.Areas.Payment
 {
@@ -12,9 +13,12 @@ namespace App.Areas.Payment
     {
         private readonly AppDbContext _appDbContext;
         private readonly UserManager<AppUser> _userManager;
+        private readonly SupabaseSettings _supabaseSettings;
 
-        public InvoiceController(AppDbContext appDbContext, UserManager<AppUser> userManager)
+
+        public InvoiceController(IOptions<SupabaseSettings> supabaseSettings, AppDbContext appDbContext, UserManager<AppUser> userManager)
         {
+            _supabaseSettings = supabaseSettings.Value;
             _appDbContext = appDbContext;
             _userManager = userManager;
         }
@@ -200,7 +204,6 @@ namespace App.Areas.Payment
                 return NotFound();
             }
 
-
             // Use DateTime.UtcNow for current date and time in UTC
             var currentDateTime = DateTime.UtcNow;
 
@@ -241,7 +244,10 @@ namespace App.Areas.Payment
             invoice.TotalMoney = totalAmount;
             invoice.StatusInvocie = "Unpaid";
             invoice.PaymentDate = null;
-            invoice.QRCodeImage = Guid.NewGuid().ToString();
+
+            //  QR code invoice
+            // Generate and upload QR code
+            invoice.QRCodeImage = await GenerateAndUploadQRCode("https://stdportal.tdtu.edu.vn/Login/Index?ReturnUrl=https%3A%2F%2Fstdportal.tdtu.edu.vn%2F", invoice.Id + ".png");
 
             _appDbContext.Invoices.Update(invoice);
             _appDbContext.Rooms.Update(room);
@@ -249,6 +255,71 @@ namespace App.Areas.Payment
 
             TempData["SuccessMessage"] = "Invocie updated successfully.";
             return RedirectToAction("EditInvoice");
+        }
+
+        // View Invoice
+        [Route("/view-invoice/{id}")]
+        [HttpGet]
+        public async Task<IActionResult> ViewInvoice(string id)
+        {
+            // Retrieve the invoice along with its associated room
+            var invoice = await _appDbContext.Invoices
+                .Include(i => i.Room)
+                .ThenInclude(r => r.RentalContracts)
+                .FirstOrDefaultAsync(i => i.Id == id);
+
+            // Check if the invoice exists
+            if (invoice == null)
+            {
+                return NotFound();
+            }
+
+            // Use DateTime.UtcNow for current date and time in UTC
+            var currentDateTime = DateTime.UtcNow;
+
+            // Get the active contract for the room
+            var inforContract = _appDbContext.RentalContracts.FirstOrDefault(c => c.ContractID == invoice.RentalContractId);
+            if (inforContract == null)
+                return NotFound();
+            // Optionally, you can pass the active contract to the view
+            ViewBag.InforContract = inforContract;
+
+
+            // Return the invoice view with the invoice data
+            return View(invoice);
+        }
+
+        public async Task<string> GenerateAndUploadQRCode(string qrText, string fileName)
+        {
+            using (var qrGenerator = new QRCodeGenerator())
+            {
+                // Create the QR code data
+                var qrCodeData = qrGenerator.CreateQrCode(qrText, QRCodeGenerator.ECCLevel.Q);
+                var qrCodePng = new PngByteQRCode(qrCodeData);
+                byte[] qrCodeBytes = qrCodePng.GetGraphic(20);
+                return await UploadToSupabaseStorage(qrCodeBytes, "qr_invoices_img", fileName);
+            }
+        }
+
+        private async Task<string> UploadToSupabaseStorage(byte[] fileBytes, string bucketName, string fileName)
+        {
+            var options = new Supabase.SupabaseOptions { AutoConnectRealtime = true };
+            var supabase = new Supabase.Client(_supabaseSettings.SupabaseUrl, _supabaseSettings.SupabaseAnonKey, options);
+            await supabase.InitializeAsync();
+
+            using var memoryStream = new MemoryStream();
+            await memoryStream.WriteAsync(fileBytes, 0, fileBytes.Length);
+
+            var fileData = memoryStream.ToArray();
+            var result = await supabase.Storage
+                .From(bucketName)
+                .Upload(fileData, fileName, new Supabase.Storage.FileOptions
+                {
+                    CacheControl = "3600",
+                    Upsert = true
+                });
+
+            return supabase.Storage.From("news_img").GetPublicUrl(fileName);
         }
     }
 

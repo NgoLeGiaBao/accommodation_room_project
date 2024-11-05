@@ -24,8 +24,6 @@
                                         })
                                     @Html.ValidationMessageFor(m => m.PropertyName, "", new { @class = "text-danger" })
                                 </div>
-
-                                <!-- Owner Name -->
                                 <div class="form-group col-md-6">
                                     @Html.LabelFor(m => m.OwnerName, new { @class = "control-label" })
                                     @Html.EditorFor(m => m.OwnerName, new
@@ -40,7 +38,6 @@
                                 </div>
                             </div>
 
-                            <!-- Address -->
                             <div class="form-group">
                                 @Html.LabelFor(m => m.Address, new { @class = "control-label" })
                                 @Html.EditorFor(m => m.Address, new
@@ -51,7 +48,6 @@
                             </div>
 
                             <div class="form-row">
-                                <!-- Number of Rooms -->
                                 <div class="form-group col-md-6">
                                     @Html.LabelFor(m => m.NumberOfRooms, new { @class = "control-label" })
                                     @Html.EditorFor(m => m.NumberOfRooms, new
@@ -65,8 +61,6 @@
                                         })
                                     @Html.ValidationMessageFor(m => m.NumberOfRooms, "", new { @class = "text-danger" })
                                 </div>
-
-                                <!-- Owner Phone Number -->
                                 <div class="form-group col-md-6">
                                     @Html.LabelFor(m => m.OwnerPhoneNumber, new { @class = "control-label" })
                                     @Html.EditorFor(m => m.OwnerPhoneNumber, new
@@ -86,7 +80,6 @@
                             </div>
 
                             <div class="form-row">
-                                <!-- Total Area -->
                                 <div class="form-group col-md-6">
                                     @Html.LabelFor(m => m.TotalArea, new { @class = "control-label" })
                                     @Html.EditorFor(m => m.TotalArea, new
@@ -100,8 +93,6 @@
                                         })
                                     @Html.ValidationMessageFor(m => m.TotalArea, "", new { @class = "text-danger" })
                                 </div>
-
-                                <!-- Property Type -->
                                 <div class="form-group col-md-6">
                                     @Html.LabelFor(m => m.PropertyType, new { @class = "control-label" })
                                     @Html.DropDownListFor(m => m.PropertyType,
@@ -110,14 +101,12 @@
                                     new SelectListItem { Value = "Low-cost", Text = "Giá rẻ" },
                                     new SelectListItem { Value = "High-end", Text = "Cao cấp" },
                                     new SelectListItem { Value = "Student rooms", Text = "Phòng sinh viên" }
-                                    }, "Value", "Text"),
-                                             "Chọn loại...",
+                                    }, "Value", "Text"), "Chọn loại...",
                                              new { @class = "form-control" })
                                     @Html.ValidationMessageFor(m => m.PropertyType, "", new { @class = "text-danger" })
                                 </div>
                             </div>
 
-                            <!-- Facilities -->
                             <div class="form-group">
                                 @Html.LabelFor(m => m.Facilities, new { @class = "control-label" })
                                 @Html.TextAreaFor(m => m.Facilities, new
@@ -130,7 +119,6 @@
                             </div>
 
                             <div class="form-row">
-                                <!-- Electricity Price -->
                                 <div class="form-group col-md-6">
                                     @Html.LabelFor(m => m.ElectricityPrice, new { @class = "control-label" })
                                     @Html.EditorFor(m => m.ElectricityPrice, new
@@ -147,8 +135,6 @@
                                             @class = "text-danger"
                                         })
                                 </div>
-
-                                <!-- Water Price -->
                                 <div class="form-group col-md-6">
                                     @Html.LabelFor(m => m.WaterPrice, new { @class = "control-label" })
                                     @Html.EditorFor(m => m.WaterPrice, new
@@ -164,7 +150,6 @@
                                 </div>
                             </div>
 
-                            <!-- Start Date -->
                             <div class="form-group">
                                 @Html.LabelFor(m => m.StartDate, new { @class = "control-label" })
                                 @Html.EditorFor(m => m.StartDate, new
@@ -178,19 +163,12 @@
                                 @Html.ValidationMessageFor(m => m.StartDate, "", new { @class = "text-danger" })
                             </div>
 
-                            <!-- Property Image -->
                             <div class="form-group">
                                 @Html.LabelFor(m => m.PropertyImage, new { @class = "control-label" })
                                 <div class="custom-file">
-                                    @Html.TextBoxFor(m => m.PropertyImage, new
-                                        {
-                                            type = "file",
-                                            @class =
-                                             "custom-file-input",
-                                            id = "propertyImage",
-                                            multiple = "multiple"
-                                        })
-                                    <label class="custom-file-label" for="propertyImage">Choose files</label>
+                                    <input type="file" class="custom-file-input" id="propertyImage"
+                                        name="PropertyImage" />
+                                    <label class="custom-file-label" for="propertyImage">Choose file</label>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.PropertyImage, "", new { @class = "text-danger" })
                             </div>
@@ -198,17 +176,12 @@
                             <div class="container mt-6">
                                 <div class="text-center">
                                     <div class="row">
-                                        <!-- Nút Back to Home -->
                                         <div class="col-12 col-md-6 mb-3">
-                                            <a asp-action="Index" class="btn btn-light btn-lg w-100">
-                                                Back to Home
-                                            </a>
+                                            <a asp-action="Index" class="btn btn-light btn-lg w-100">Back to Home</a>
                                         </div>
-                                        <!-- Nút Update Rental Property -->
                                         <div class="col-12 col-md-6 mb-3">
-                                            <button type="submit" class="btn btn-dark btn-lg w-100">
-                                                Update Rental Property
-                                            </button>
+                                            <button type="submit" class="btn btn-dark btn-lg w-100">Update Rental
+                                                Property</button>
                                         </div>
                                     </div>
                                 </div>
@@ -241,7 +214,7 @@
             const input = event.target;
             const label = input.nextElementSibling;
             const fileNames = Array.from(input.files).map(file => file.name).join(", ");
-            label.textContent = fileNames || "Choose files";
+            label.textContent = fileNames || "Choose file";
         });
     </script>
     <partial name="_ValidationScriptsPartial" />
