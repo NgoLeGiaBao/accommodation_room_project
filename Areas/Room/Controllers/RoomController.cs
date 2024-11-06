@@ -241,13 +241,12 @@ namespace App.Areas.Room
 
         [Route("/get-list-room/{homeId}")]
         // [HttpPost]
-        public async Task<IActionResult> GetListRoom(string homeId, int pageNumber = 1, int pageSize = 8)
+        public async Task<IActionResult> GetListRoom(string homeId, int pageNumber = 1, int pageSize = 8, string selectedStatus = null)
         {
             try
             {
                 // Get the currently logged-in user
                 var currentUserId = _userManager.GetUserId(User);
-
                 var userRentalRoomsQuery = _appDbContext.UserRentalProperties
                     .Where(ur => ur.AppUserId == currentUserId && ur.RentalPropertyId == homeId)
                     .SelectMany(ur => ur.RentalProperty.Rooms)
@@ -273,22 +272,46 @@ namespace App.Areas.Room
                 var rentedCount = roomStatusCounts.FirstOrDefault(c => c.Status == "Rented")?.Count ?? 0;
 
                 // Fetch the correct page of rooms
-                var rooms = await _appDbContext.UserRentalProperties
-                .Where(ur => ur.AppUserId == currentUserId && ur.RentalPropertyId == homeId)
-                .SelectMany(ur => ur.RentalProperty.Rooms)
-                .Where(r => r.IsActive == true)
-                .OrderBy(r => r.RoomName)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .Select(r => new
+                if (selectedStatus == null || selectedStatus == "All")
                 {
-                    r.Id,
-                    r.RoomName,
-                    r.Price,
-                    r.Status
-                })
-                .ToListAsync();
-                return Json(new { totalCount, rooms, availableCount, aboutToExpireCount, rentedCount });
+                    var rooms = await _appDbContext.UserRentalProperties
+                                    .Where(ur => ur.AppUserId == currentUserId && ur.RentalPropertyId == homeId)
+                                    .SelectMany(ur => ur.RentalProperty.Rooms)
+                                    .Where(r => r.IsActive == true)
+                                    .OrderBy(r => r.RoomName)
+                                    .Skip((pageNumber - 1) * pageSize)
+                                    .Take(pageSize)
+                                    .Select(r => new
+                                    {
+                                        r.Id,
+                                        r.RoomName,
+                                        r.Price,
+                                        r.Status
+                                    })
+                                    .ToListAsync();
+                    return Json(new { totalCount, rooms, availableCount, aboutToExpireCount, rentedCount });
+                }
+                else
+                {
+                    var rooms = await _appDbContext.UserRentalProperties
+                                    .Where(ur => ur.AppUserId == currentUserId && ur.RentalPropertyId == homeId)
+                                    .SelectMany(ur => ur.RentalProperty.Rooms)
+                                    .Where(r => r.IsActive == true && r.Status == selectedStatus)
+                                    .OrderBy(r => r.RoomName)
+                                    .Skip((pageNumber - 1) * pageSize)
+                                    .Take(pageSize)
+                                    .Select(r => new
+                                    {
+                                        r.Id,
+                                        r.RoomName,
+                                        r.Price,
+                                        r.Status
+                                    })
+                                    .ToListAsync();
+                    totalCount = rooms.Count;
+
+                    return Json(new { totalCount, rooms, availableCount, aboutToExpireCount, rentedCount });
+                }
             }
             catch (Exception ex)
             {

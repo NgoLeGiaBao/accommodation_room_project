@@ -75,14 +75,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     </div>
                 `);
 
-                console.log(response.usersWithCategories);
                 if (response.usersWithCategories && response.usersWithCategories.length === 0) {
                     userList.append('<tr><td colspan="7" class="text-center">No tenants are found</td></tr>');
                     return;
                 }
 
                 $.each(response.usersWithCategories, function (index, user) {
-                    console.log(user.user)
                     var userRow = `<tr>
                         <td>${index + 1}</td>
                         <td>${user.user.fullName}</td>
@@ -95,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <a href="/edit-tenant/${user.user.id}" data-toggle="tooltip" data-placement="top" title="Edit">
                                     <i class="fa fa-pencil color-muted m-r-5"></i>
                                 </a>
-                                <a href="/view-tenant/${user.user.id}" data-toggle="tooltip" data-placement="top" title="View">
+                                <a href="javascript:void(0)" onclick="viewTenant('${user.user.id}')" data-toggle="tooltip" data-placement="top" title="View">
                                     <i class="fa fa-eye color-info"></i>
                                 </a>
                             </span>
@@ -138,7 +136,80 @@ document.addEventListener('DOMContentLoaded', function () {
 function exportExcel(element) {
     var homeId = element.getAttribute("data-home-id");
     var url = `/export-list-user/${homeId}`;
-
     // Navigate to URL to download the Excel file
     window.location.href = url;
+}
+
+function viewTenant(idUser) {
+    // Make AJAX call to get tenant data
+    $.ajax({
+        url: '/get-tenant/' + idUser, // Ensure the correct route is being used
+        type: 'post',
+        success: function (data) {
+            // If data is returned, populate the modal
+            if (data) {
+                var targetElement = document.getElementById('view-profile');
+                targetElement.innerHTML = `
+                    <div class="modal fade" id="viewProfileModalpopover" tabindex="-1" role="dialog" aria-labelledby="viewProfileModalpopoverLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="viewProfileModalpopoverLabel">View Profile</h5>
+                                    <button onclick="closeModal()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <!-- Avatar and Name -->
+                                            <div class="media align-items-center mb-4">
+                                                <img class="mr-3" src="images/avatar/11.png" width="80" height="80" alt="Avatar">
+                                                <div class="media-body">
+                                                    <h3 class="mb-0">${data.fullName}</h3>
+                                                    <p class="text-muted mb-0">${data.address}</p>
+                                                </div>
+                                            </div>
+
+                                            <!-- About Me Section -->
+                                            <h4>About Me</h4>
+                                            <p class="text-muted">Hi, I'm ${data.fullName}, and I've been the industry standard dummy text ever since the 1500s.</p>
+
+                                            <!-- Contact Information -->
+                                            <ul class="card-profile__info">
+                                                <li class="mb-1"><strong class="text-dark mr-4">Mobile</strong>
+                                                    <span>${data.phoneNumber}</span>
+                                                </li>
+                                                <li><strong class="text-dark mr-4">Identity Card</strong>
+                                                    <span>${data.identityCard}</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal()">Close</button>
+                                    <button type="button" class="btn btn-primary" onclick="directToUpdate('${data.id}')">Update</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Initialize the modal and show it
+                $('#viewProfileModalpopover').modal('show');
+            }
+        },
+        error: function () {
+            alert("An error occurred while fetching tenant data.");
+        }
+    });
+}
+
+function closeModal() {
+    $('#viewProfileModalpopover').modal('hide');
+    window.location.href = "/"
+}
+function directToUpdate(idUser) {
+    window.location.href = "/edit-tenant/" + idUser;
 }

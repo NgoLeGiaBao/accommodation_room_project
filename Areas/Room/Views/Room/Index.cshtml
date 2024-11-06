@@ -11,18 +11,18 @@
                         <div class="card-body card-modifed">
                             <div class="d-flex justify-content-between align-items-center flex-wrap">
                                 <div class="status-info mb-2">
-                                    <select id="room-status" class="form-select input-height"
+                                    <select id="room-status" class="form-select input-height room-status-text"
                                         aria-label="Chọn trạng thái phòng">
-                                        <option value="all">All Room</option>
-                                        <option value="available">Available </option>
-                                        <option value="abouttoexpire">About to expire</option>
-                                        <option value="rented">Rented</option>
+                                        <option value="All">All Room</option>
+                                        <option value="Available">Available </option>
+                                        <option value="About to expire">About to expire</option>
+                                        <option value="Rented">Rented</option>
                                     </select>
                                     <!-- Room Number Field -->
                                     <input class="input-height input-room" type="text" id="room-number"
                                         placeholder="Enter number room" aria-label="Nhập số phòng">
                                     <!-- Search Button -->
-                                    <a href="#" class="btn btn-primary btn-custom me-2">
+                                    <a href="javascript:void(0)" class="btn btn-primary btn-custom me-2" id="btnSearch">
                                         <i class="fas fa-search"></i>
                                         Search
                                     </a>
@@ -112,6 +112,11 @@
 @* Link CSS*@
 @section AdditionalLinkCSS {
     <link href="css/site.css" rel="stylesheet">
+    <style>
+        .room-status-text {
+            text-align: center;
+        }
+    </style>
 }
 
 @* Link Javascript*@

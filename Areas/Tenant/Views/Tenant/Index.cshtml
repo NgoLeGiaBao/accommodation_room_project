@@ -11,11 +11,10 @@
                         <div class="card-body card-modifed">
                             <div class="d-flex justify-content-between align-items-center flex-wrap">
                                 <div class="status-info mb-2">
-                                    <select id="room-status" class="form-select input-height"
+                                    <select id="room-status" class="form-select input-height room-status-text"
                                         aria-label="Choose status tenant">
                                         <option value="all">All tenant</option>
                                         <option value="currenttenant">Current tenant</option>
-                                        <option value="previoustenant">Previous tenant</option>
                                     </select>
                                     <!-- Room Number Field -->
                                     <input class="input-height input-room" type="text" id="room-number"
@@ -129,6 +128,16 @@ else
     </div>
 }
 
+
+<div class="col-lg-12">
+    <div class="card">
+        <div class="card-body">
+            <div class="bootstrap-modal" id="view-profile">
+                @* Generate here *@
+            </div>
+        </div>
+    </div>
+</div>
 @* Link CSS*@
 @section AdditionalLinkCSS {
 
@@ -142,6 +151,10 @@ else
         /* Show the first row if it exists */
         div.table-responsive>div.dataTables_wrapper>div.row:first-child {
             display: none !important;
+        }
+
+        .room-status-text {
+            text-align: center;
         }
     </style>
 }

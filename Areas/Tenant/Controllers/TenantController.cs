@@ -342,5 +342,25 @@ namespace App.Areas.Tenant
             return File(memoryStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
         }
 
+        // View tenant
+        [Route("/get-tenant/{id}")]
+        [HttpPost]
+        public IActionResult ViewTenant(string id)
+        {
+            var tenant = _appDbContext.AppUsers.FirstOrDefault(u => u.Id == id);
+
+            if (tenant == null)
+                return NotFound();
+
+            // Return the tenant data as JSON
+            return Json(new
+            {
+                tenant.FullName,
+                tenant.Id,
+                tenant.PhoneNumber,
+                tenant.Address,
+                tenant.IdentityCard
+            });
+        }
     }
 }

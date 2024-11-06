@@ -1,4 +1,19 @@
 ﻿document.addEventListener('DOMContentLoaded', function () {
+
+    $('#room-status').on('change', function () {
+        let selectedStatus = $(this).val(); // Lấy trạng thái đã chọn
+        let activeTabId = localStorage.getItem('activeTab'); // Lấy tab hiện tại
+
+        // Gọi hàm loadRooms với trạng thái đã chọn
+        loadRooms(activeTabId, 1, selectedStatus);
+    });
+
+
+    $('#btnSearch').on('click', function () {
+        // Process here
+    });
+
+
     // Load rental properties
     $.ajax({
         url: '/get-list-rental-property',
@@ -35,6 +50,9 @@
 
                 // Load rooms for the selected rental property
                 loadRooms($(this).data('id'));
+
+                // Reload to all rooms
+                $('#room-status').val('All');
             });
         },
         error: function (xhr, status, error) {
@@ -42,11 +60,11 @@
         }
     });
 
-    function loadRooms(homeId, pageNumber = 1) {
+    function loadRooms(homeId, pageNumber = 1, selectedStatus = null) {
         $.ajax({
             url: `/get-list-room/${homeId}`,
             method: 'POST',
-            data: { pageNumber: pageNumber, pageSize: 8 }, // Send pagination info
+            data: { pageNumber: pageNumber, pageSize: 8, selectedStatus: selectedStatus }, // Send pagination info
             dataType: 'json',
             success: function (response) {
                 // Get elements by Id
@@ -99,6 +117,9 @@
                     </div>`;
                     roomList.append(roomItem);
                 });
+
+                // Trả về bị sai ở đây
+                console.log(response.totalCount);
 
                 // Update pagination
                 updatePagination(response.totalCount, homeId, pageNumber);
