@@ -222,10 +222,16 @@ namespace App.Areas.Payment
         [HttpPost]
         public async Task<IActionResult> EditInvoice([FromForm] string otherServices, int electricityUsage, int waterUsage, int totalAmount, string id)
         {
+            // Get current user
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+                return NotFound();
+
             // Get the current invocie
             var invoice = await _appDbContext.Invoices
                 .Include(i => i.Room)
-                .ThenInclude(r => r.RentalContracts)
+                    .ThenInclude(r => r.RentalContracts)
+                        .ThenInclude(rc => rc.AppUser)
                 .FirstOrDefaultAsync(i => i.Id == id);
 
             // Check invoice
@@ -244,6 +250,47 @@ namespace App.Areas.Payment
             invoice.TotalMoney = totalAmount;
             invoice.StatusInvocie = "Unpaid";
             invoice.PaymentDate = null;
+
+
+            // Get the active tenants
+            var currentDate = DateTime.Now;
+            var activeTenants = (room.RentalContracts ?? Enumerable.Empty<RentalContract>())
+                .Where(rc => rc.StartedDate <= currentDate && rc.EndupDate >= currentDate)
+                .Select(rc => rc.AppUser)
+                .Distinct()
+                .Where(tenant => tenant != null)
+                .ToList();
+
+            // Create notification
+            if (activeTenants.Count > 0)
+            {
+                var createdUser = user.Id;
+
+                var notification = new Notification
+                {
+                    CreatorUserId = createdUser,
+                    UpdatedDate = DateTime.Now.ToUniversalTime(),
+                    NotificationTitle = "Invoice Updated",
+                    NotificationContent = $"The invoice for room {room.RoomName} has been updated. Please check the latest details."
+                };
+                _appDbContext.Notifications.Add(notification);
+                await _appDbContext.SaveChangesAsync();
+
+                foreach (var tenant in activeTenants)
+                {
+                    // Create the OwnNotification entry linking the notification to the tenant
+                    var ownNotification = new OwnNotification
+                    {
+                        NotificationId = notification.NotificationId,
+                        UserId = tenant.Id
+                    };
+
+                    _appDbContext.OwnNotifications.Add(ownNotification);
+                }
+                // Save all OwnNotification entries at once
+                await _appDbContext.SaveChangesAsync();
+            }
+
 
             //  QR code invoice
             // Generate and upload QR code

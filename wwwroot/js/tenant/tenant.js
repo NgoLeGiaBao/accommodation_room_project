@@ -208,7 +208,6 @@ function viewTenant(idUser) {
 
 function closeModal() {
     $('#viewProfileModalpopover').modal('hide');
-    window.location.href = "/"
 }
 function directToUpdate(idUser) {
     window.location.href = "/edit-tenant/" + idUser;

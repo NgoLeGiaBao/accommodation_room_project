@@ -10,11 +10,13 @@ namespace App.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string NotificationId { get; set; }
-        public string CategoryNoID { get; set; }
-        public string StatusNotification { get; set; }
+        public string? CategoryNoID { get; set; }
+        public string? StatusNotification { get; set; }
         public DateTime UpdatedDate { get; set; }
         public string CreatorUserId { get; set; }
 
+        public string NotificationTitle { get; set; }
+        public string NotificationContent { get; set; }
         public AppUser Creator { get; set; }
         public ICollection<OwnNotification> OwnNotifications { get; set; }
         public CategoryNotification CategoryNotification { get; set; }

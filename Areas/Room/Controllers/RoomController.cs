@@ -356,12 +356,19 @@ namespace App.Areas.Room
                 return NotFound();
 
             // Get the active tenants
+            var currentDate = DateTime.Now;
             var activeTenants = (room.RentalContracts ?? Enumerable.Empty<RentalContract>())
+                .Where(rc => rc.StartedDate <= currentDate && rc.EndupDate >= currentDate)
                 .Select(rc => rc.AppUser)
                 .Distinct()
                 .Where(tenant => tenant != null)
                 .ToList();
+            // Time contract active
+            var activeContract = room.RentalContracts?
+                            .FirstOrDefault(rc => rc.StartedDate <= currentDate && rc.EndupDate >= currentDate);
 
+            ViewBag.ContractStartDate = activeContract?.StartedDate.ToString("dd/MM/yyyy");
+            ViewBag.ContractEndDate = activeContract?.EndupDate.ToString("dd/MM/yyyy");
 
             var assets = room.OwnAssets.Select(oa => oa.Asset).ToList() ?? new List<Asset>();
             ViewBag.ActiveTenants = activeTenants;

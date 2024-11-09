@@ -3,6 +3,7 @@ using System;
 using App.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Accommodation_Room_Project_Offical.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241109192814_V07")]
+    partial class V07
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -416,17 +419,10 @@ namespace Accommodation_Room_Project_Offical.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("CategoryNoID")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("CreatorUserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("NotificationContent")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("NotificationTitle")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -878,7 +874,9 @@ namespace Accommodation_Room_Project_Offical.Migrations
                 {
                     b.HasOne("App.Models.CategoryNotification", "CategoryNotification")
                         .WithMany("Notifications")
-                        .HasForeignKey("CategoryNoID");
+                        .HasForeignKey("CategoryNoID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("App.Models.AppUser", "Creator")
                         .WithMany("CreatedNotifications")

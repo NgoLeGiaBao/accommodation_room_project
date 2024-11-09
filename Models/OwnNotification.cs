@@ -13,6 +13,8 @@ namespace App.Models
         public Notification Notification { get; set; }
         [ForeignKey("UserId")]
         public AppUser AppUsers { get; set; }
+
+        public bool IsRead { get; set; } = false;
     }
 
 }

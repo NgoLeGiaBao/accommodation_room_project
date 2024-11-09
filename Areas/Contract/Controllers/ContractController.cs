@@ -143,6 +143,7 @@ namespace App.Areas.Contract
                         FullName = inputModel.appUser.FullName,
                         Address = inputModel.appUser.Address,
                         Sex = inputModel.appUser.Sex,
+                        Birthday = inputModel.appUser.Birthday
                     };
 
                     // Create new user with default password
