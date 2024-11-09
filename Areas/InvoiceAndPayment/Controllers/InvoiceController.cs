@@ -238,6 +238,13 @@ namespace App.Areas.Payment
             if (invoice == null)
                 return NotFound();
 
+            // Status invoice
+            bool isUpdated = false;
+            if (invoice.StatusInvocie == "Unpaid")
+            {
+                isUpdated = true;
+            }
+
             // Update room with ElectricityUsage and WaterUsage
             var room = invoice.Room;
             room.ElectricityPriceInit = electricityUsage > invoice.ElectricityForBefore ? electricityUsage : room.ElectricityPriceInit;
@@ -250,7 +257,6 @@ namespace App.Areas.Payment
             invoice.TotalMoney = totalAmount;
             invoice.StatusInvocie = "Unpaid";
             invoice.PaymentDate = null;
-
 
             // Get the active tenants
             var currentDate = DateTime.Now;
@@ -294,7 +300,7 @@ namespace App.Areas.Payment
 
             //  QR code invoice
             // Generate and upload QR code
-            invoice.QRCodeImage = await GenerateAndUploadQRCode("https://stdportal.tdtu.edu.vn/Login/Index?ReturnUrl=https%3A%2F%2Fstdportal.tdtu.edu.vn%2F", invoice.Id + ".png");
+            invoice.QRCodeImage = await GenerateAndUploadQRCode("http://localhost:5210/view-invoice/" + invoice.Id, invoice.Id + ".png", isUpdated);
 
             _appDbContext.Invoices.Update(invoice);
             _appDbContext.Rooms.Update(room);
@@ -336,7 +342,7 @@ namespace App.Areas.Payment
             return View(invoice);
         }
 
-        public async Task<string> GenerateAndUploadQRCode(string qrText, string fileName)
+        public async Task<string> GenerateAndUploadQRCode(string qrText, string fileName, bool isUpdated)
         {
             using (var qrGenerator = new QRCodeGenerator())
             {
@@ -344,11 +350,11 @@ namespace App.Areas.Payment
                 var qrCodeData = qrGenerator.CreateQrCode(qrText, QRCodeGenerator.ECCLevel.Q);
                 var qrCodePng = new PngByteQRCode(qrCodeData);
                 byte[] qrCodeBytes = qrCodePng.GetGraphic(20);
-                return await UploadToSupabaseStorage(qrCodeBytes, "qr_invoices_img", fileName);
+                return await UploadToSupabaseStorage(qrCodeBytes, "qr_invoices_img", fileName, isUpdated);
             }
         }
 
-        private async Task<string> UploadToSupabaseStorage(byte[] fileBytes, string bucketName, string fileName)
+        private async Task<string> UploadToSupabaseStorage(byte[] fileBytes, string bucketName, string fileName, bool isUpdated)
         {
             var options = new Supabase.SupabaseOptions { AutoConnectRealtime = true };
             var supabase = new Supabase.Client(_supabaseSettings.SupabaseUrl, _supabaseSettings.SupabaseAnonKey, options);
@@ -358,15 +364,29 @@ namespace App.Areas.Payment
             await memoryStream.WriteAsync(fileBytes, 0, fileBytes.Length);
 
             var fileData = memoryStream.ToArray();
-            var result = await supabase.Storage
-                .From(bucketName)
-                .Upload(fileData, fileName, new Supabase.Storage.FileOptions
-                {
-                    CacheControl = "3600",
-                    Upsert = true
-                });
 
-            return supabase.Storage.From("news_img").GetPublicUrl(fileName);
+            // Check if the image exists and update if necessary
+
+            // If the file is being updated, use the Update method
+            if (isUpdated)
+            {
+                // Update an existing file in the "qr_invoices_img" bucket
+                await supabase.Storage.From("qr_invoices_img").Remove(new List<string> { "public/" + fileName });
+            }
+            // If the image doesn't exist, upload the file
+            else
+            {
+                // Upload a new file to the bucket
+                await supabase.Storage
+                    .From("qr_invoices_img")
+                    .Upload(fileData, fileName, new Supabase.Storage.FileOptions
+                    {
+                        CacheControl = "3600",
+                        Upsert = true
+                    });
+            }
+            // Return the public URL for the uploaded or updated file
+            return supabase.Storage.From("qr_invoices_img").GetPublicUrl(fileName);
         }
     }
 

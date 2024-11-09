@@ -1,0 +1,60 @@
+<div class="nk-sidebar">
+    <div class="nk-nav-scroll">
+        <ul class="metismenu" id="menu">
+            @* <li class="nav-label">Dashboard</li> *@
+            <li>
+                <a asp-area="DashBoard" asp-action="Index" asp-controller="DashBoard">
+                    <i class="icon-speedometer menu-icon"></i><span class="nav-text">Dashboard</span> </a>
+            </li>
+            <li>
+                <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                    <i class="fab fa-blogger"></i><span class="nav-text">Blog</span>
+                </a>
+                <ul aria-expanded="false">
+                    <li>
+                        <a asp-area="Blog" asp-action="Index" asp-controller="News">
+                            News Blog
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-area="Blog" asp-action="Index" asp-controller="ServicesBlog">
+                            Services Blog
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a asp-area="Room" asp-action="Index" asp-controller="Room">
+                    <i class="icon-home menu-icon"></i><span class="nav-text">Room</span>
+                </a>
+            </li>
+            <li>
+                <a asp-area="Tenant" asp-action="Index" asp-controller="Tenant">
+                    <i class="icon-user menu-icon"></i><span class="nav-text">Tenant</span>
+                </a>
+            </li>
+            <li>
+                <a asp-area="Contract" asp-action="Index" asp-controller="Contract">
+                    <i class="fa fa-file menu-icon white-icon" aria-hidden="true"></i><span
+                        class="nav-text">Contract</span>
+                </a>
+            </li>
+            <li>
+                <a asp-area="InvoiceAndPayment" asp-action="Index" asp-controller="Invoice">
+                    <i class="icon-credit-card menu-icon"></i><span class="nav-text">Payment</span>
+                </a>
+            </li>
+            <li>
+                <a asp-area="MaintenanceAndIncident" asp-action="Index" asp-controller="MaintenanceAndIncident">
+                    <i class="icon-wrench menu-icon"></i><span class="nav-text">Maintenance And Incident</span>
+                </a>
+            </li>
+            <li>
+                <a asp-area="AssetAndEquipment" asp-action="Index" asp-controller="AssetAndEquipment">
+                    <i class="fas fa-tools menu-icon"></i><span class="nav-text">Asset And Equipment</span>
+                </a>
+            </li>
+        </ul>
+
+    </div>
+</div>
