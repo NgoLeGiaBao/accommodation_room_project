@@ -36,6 +36,17 @@ namespace App.Areas.Introduction
             return View();
         }
 
+        [Route("/room-service")]
+        public IActionResult RoomService()
+        {
+            return View();
+        }
+
+        [Route("/detail-room-service/{id?}")]
+        public IActionResult DetailRoomService(string id)
+        {
+            return View();
+        }
         [Route("/news-detail/{id}")]
         public async Task<ActionResult> Single(string id)
         {
