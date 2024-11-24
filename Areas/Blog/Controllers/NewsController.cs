@@ -5,11 +5,13 @@ using Microsoft.Extensions.Options;
 using App.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace App.Areas.Blog
 {
     [Area("Blog")]
+    [Authorize]
     public class NewsController : Controller
     {
         private readonly SupabaseSettings _supabaseSettings;
@@ -47,6 +49,7 @@ namespace App.Areas.Blog
                 contentNews.DateCreated = DateTime.Now.ToUniversalTime();
                 contentNews.DateUpdated = DateTime.Now.ToUniversalTime();
                 contentNews.AuthorId = user.Id;
+                contentNews.Published = true;
 
                 // Process the uploaded image if it exists
                 // Initialize Supabase
@@ -124,5 +127,8 @@ namespace App.Areas.Blog
 
             return Ok(result);
         }
+
+
+
     }
 }

@@ -7,8 +7,9 @@
                         <ul>
                             <li><a asp-action="Home" asp-controller="HomePage">Trang chủ</a></li>
                             <li><a href="./property.html">Nhà trọ, phòng trọ</a></li>
-                            <li><a asp-action="VideoReview" asp-controller="HomePage">Video Review </a></li>
-                            <li class="active"><a asp-action="Blog" asp-controller="HomePage">News</a></li>
+                            <li class="active"><a asp-action="VideoReview" asp-controller="HomePage">Video Review </a>
+                            </li>
+                            <li><a asp-action="Blog" asp-controller="HomePage">News</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -79,20 +80,69 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="breadcrumb-text">
-                    <h2>Danh Sách Tin Tức</h2>
+                    <h2>Danh Sách Video Review</h2>
                     <div class="breadcrumb-option">
                         <a asp-action="Home" asp-controller="HomePage"><i class="fa fa-home"></i> Trang chủ</a>
-                        <span>Tin tức</span>
+                        <span>Video Review</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
 <section class="blog-section blog-page spad">
     <div class="container">
         <div class="row" id="news-list">
-            @* Render blog here *@
+            @* Render video here *@
+            <div class="col-lg-4 col-md-6">
+                <div class="video-section set-bg" data-setbg="client_part/img/video-bg.jpg">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="video-text">
+                                    <a href="https://www.youtube.com/watch?v=y-mWaAA11nc"
+                                        class="play-btn video-popup"><i class="fa fa-play"></i></a>
+                                    <h4>Find The Perfect</h4>
+                                    <h2>Real Estate Agent Near You</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="video-section set-bg" data-setbg="client_part/img/video-bg.jpg">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="video-text">
+                                    <a href="https://www.youtube.com/watch?v=EzKkl64rRbM"
+                                        class="play-btn video-popup"><i class="fa fa-play"></i></a>
+                                    <h4>Find The Perfect</h4>
+                                    <h2>Real Estate Agent Near You</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="video-section set-bg" data-setbg="client_part/img/video-bg.jpg">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="video-text">
+                                    <a href="https://www.tiktok.com/%40tromoi.hcm/video/7433652851664063760"
+                                        class="play-btn video-popup"><i class="fa fa-play"></i></a>
+                                    <h4>Find The Perfect</h4>
+                                    <h2>Real Estate Agent Near You</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <nav aria-label="Pagination">
             <ul id="pagination-list" class="pagination custom-pagination justify-content-center"></ul>
@@ -145,5 +195,5 @@
 }
 @* Link Javascript*@
 @section AdditionalLinkJavascript {
-    <script src="~/js/introduction/blog.js"></script>
+    @* <script src="~/js/introduction/blog.js"></script> *@
 }

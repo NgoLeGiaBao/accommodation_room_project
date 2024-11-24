@@ -30,10 +30,17 @@ namespace App.Areas.Introduction
             return View();
         }
 
-        [Route("/single/{id}")]
+        [Route("/video-review")]
+        public IActionResult VideoReview()
+        {
+            return View();
+        }
+
+        [Route("/news-detail/{id}")]
         public async Task<ActionResult> Single(string id)
         {
             var news = await _appDbContext.ContentNewses
+                .Include(c => c.Author)
                 .Where(c => c.Published == true && c.Id == id)
                 .FirstOrDefaultAsync();
 
@@ -44,50 +51,46 @@ namespace App.Areas.Introduction
             return View(news);
         }
 
-        [Route("/get-all-news-intro")]
+        [Route("/get-news-pagination")]
         [HttpGet]
-        public async Task<IActionResult> GetUserNews()
+        public async Task<IActionResult> GetAllNews(int pageNumber = 1, int pageSize = 10)
         {
-            // Initialize Supabase client
+            if (pageNumber < 1 || pageSize < 1)
+                return BadRequest("Invalid pageNumber or pageSize");
+
             var options = new Supabase.SupabaseOptions { AutoConnectRealtime = true };
             var supabase = new Supabase.Client(_supabaseSettings.SupabaseUrl, _supabaseSettings.SupabaseAnonKey, options);
             await supabase.InitializeAsync();
 
-            // Fetch all news articles for the public
-            var news = await _appDbContext.ContentNewses
-                .Where(c => c.Published == true)
-                .Select(c => new
-                {
-                    c.AuthorId,
-                    c.Id,
-                    c.DateUpdated,
-                    c.GeneralTitle,
-                    c.GeneralDescription,
-                    ImageId = c.ImageId
-                })
-                .ToListAsync();
+            var totalCount = await _appDbContext.ContentNewses.CountAsync();
 
-            if (news == null || !news.Any())
+            if (totalCount == 0)
                 return NotFound("No news found.");
 
-            // Fetch authors based on unique AuthorIds in news
-            var authorIds = news.Select(n => n.AuthorId).Distinct();
-            var authors = await _appDbContext.AppUsers
-                .Where(a => authorIds.Contains(a.Id))
-                .ToDictionaryAsync(a => a.Id, a => a.FullName); // Adjust property names based on your Author model
+            var news = await _appDbContext.ContentNewses
+                .Include(c => c.Author) // Include tác giả
+                .OrderByDescending(c => c.Published)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
 
-            // Generate final result
-            var result = news.Select(c => new
+            var result = new
             {
-                AuthorName = authors.ContainsKey(c.AuthorId) ? authors[c.AuthorId] : "Unknown",
-                c.Id,
-                c.DateUpdated,
-                c.GeneralTitle,
-                c.GeneralDescription,
-                ImageUrl = string.IsNullOrEmpty(c.ImageId)
-                    ? null
-                    : supabase.Storage.From("news_img").GetPublicUrl(c.ImageId)
-            }).ToList();
+                TotalCount = totalCount,
+                PageSize = pageSize,
+                PageNumber = pageNumber,
+                Items = news.Select(c => new
+                {
+                    c.Id,
+                    c.GeneralTitle,
+                    c.Content,
+                    DateUpdated = c.DateUpdated.ToString("dd/MM/yyyy"),
+                    AuthorName = c.Author != null ? c.Author.FullName : "Unknown Author", // Lấy tên tác giả
+                    ImageUrl = string.IsNullOrEmpty(c.ImageId)
+                        ? null
+                        : supabase.Storage.From("news_img").GetPublicUrl(c.ImageId)
+                }).ToList()
+            };
 
             return Ok(result);
         }
