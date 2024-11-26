@@ -92,6 +92,7 @@ namespace App.Areas.Tenant
                     // Create a new user
                     appUser.UserName = appUser.IdentityCard;
                     appUser.Birthday = appUser.Birthday?.ToUniversalTime();
+                    appUser.PasswordHash = _userManager.PasswordHasher.HashPassword(appUser, appUser.IdentityCard);
                     var result = await _userManager.CreateAsync(appUser);
                     if (result.Succeeded)
                     {

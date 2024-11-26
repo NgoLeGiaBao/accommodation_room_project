@@ -1,6 +1,8 @@
 ﻿@{
+
     var hasRentalProperty = ViewBag.HasRentalProperties;
 }
+@ViewData["Title"] = "Tenant";
 @if (hasRentalProperty)
 {
     <div class="container-fluid">
@@ -13,6 +15,7 @@
                                 <div class="status-info mb-2">
                                     <select id="room-status" class="form-select input-height room-status-text"
                                         aria-label="Choose status tenant">
+                                        using Microsoft.EntityFrameworkCore.Metadata.Internal;
                                         <option value="all">All tenant</option>
                                         <option value="currenttenant">Current tenant</option>
                                     </select>
