@@ -70,6 +70,7 @@
                 // Get elements by Id
                 var roomList = $('#room-list');
                 roomList.empty();
+
                 // Get btnAction
                 var btnAction = $('#btn-action');
                 btnAction.empty();
@@ -118,9 +119,6 @@
                     roomList.append(roomItem);
                 });
 
-                // Trả về bị sai ở đây
-                console.log(response.totalCount);
-
                 // Update pagination
                 updatePagination(response.totalCount, homeId, pageNumber);
             },
@@ -135,10 +133,6 @@
         var totalPages = Math.ceil(totalCount / pageSize);
         var paginationList = $('#pagination-list');
         paginationList.empty();
-
-        // if (totalPages <= 1) {
-        //     return;
-        // }
 
         // Add Previous button
         var previousClass = (currentPage === 1 || totalPages <= 1) ? 'disabled' : '';
@@ -183,7 +177,7 @@
     let activeTabId = localStorage.getItem('activeTab');
     if (activeTabId) {
         // Find and activate the corresponding tab
-        $(`.nav-link[data-id="${activeTabId}"]`).trigger('click'); // Simulate click on the saved tab
+        $(`.nav-link[data-id="${activeTabId}"]`).trigger('click');
     } else {
         // If no saved tab, select the first tab
         $('.nav-link').first().trigger('click');

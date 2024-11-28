@@ -6,11 +6,11 @@
                     <div class="card-body card-modifed">
                         <div class="d-flex justify-content-between align-items-center flex-wrap">
                             <div class="status-info mb-2">
-                                <select id="room-status" class="form-select input-height"
-                                    aria-label="Choose status tenant">
-                                    <option value="all">All news</option>
-                                    @* <option value="currenttenant"></option>
-                                    <option value="previoustenant">Previous tenant</option> *@
+                                <select id="news-status" class="form-select input-height" style="text-align: center;"
+                                    aria-label="Choose status news">
+                                    <option value="all">All News</option>
+                                    <option value="public">Public</option>
+                                    <option value="private">Private</option>
                                 </select>
                                 <!-- Room Number Field -->
                                 <input class="input-height input-room" type="text" id="room-number"
@@ -83,7 +83,31 @@
         </div>
     </div>
 </div>
-
+@* <div class="bootstrap-modal">
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">Launch demo
+        modal</button>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in,
+                        egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> *@
 @* Link CSS*@
 @section AdditionalLinkCSS {
 
@@ -97,6 +121,16 @@
         /* Show the first row if it exists */
         div.table-responsive>div.dataTables_wrapper>div.row:first-child {
             display: none !important;
+        }
+
+        .btn-delete {
+            cursor: pointer;
+        }
+
+        .modal .close {
+            border: none !important;
+            outline: none !important;
+            background: transparent !important;
         }
     </style>
 }
