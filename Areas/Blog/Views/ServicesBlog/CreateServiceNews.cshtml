@@ -1,10 +1,12 @@
+@model App.Models.ServicesModel.ServicesBlog
 @{
     ViewData["Title"] = "Create Services News";
 }
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <form action="#" id="step-form-horizontal" class="step-form-horizontal">
+            @* <form asp-action="CreateServiceNews" id="step-form-horizontal" class="step-form-horizontal"> *@
+            <form asp-action="CreateServiceNews" method="POST" enctype="multipart/form-data" id="step-form-horizontal" class="step-form-horizontal">
                 <div>
                     <h4>General Information</h4>
                     <section>
@@ -13,31 +15,33 @@
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label for="control-label">Title</label>
-                                    <input type="text" name="title" class="form-control"
-                                        placeholder="For example: Hostel at 83-85, District 7">
+                                    @Html.EditorFor(m => m.Title, new
+                                    {
+                                        htmlAttributes = new { @class = "form-control", @placeholder = "For example: Hostel at 83-85, District 7" }
+                                    })
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="control-label">Self-managed accommodation</label>
-                                    <select name="self-managed" class="form-control">
-                                        <option value="" disabled selected>Choose object</option>
-                                        <option value="yes">Yes</option>
-                                        <option value="no">No</option>
-                                    </select>
+                                        @Html.DropDownListFor(
+                                            m => m.SelfManagedAccommodation, 
+                                            new SelectList(new[] { "Yes", "No" }, "Choose object"), 
+                                            "Choose object", 
+                                            new { @class = "form-control" }
+                                        )
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="control-label">Area</label>
-                                    <input type="number" name="area" class="form-control" placeholder="Area">
+                                        @Html.TextBoxFor(m => m.Area, new { @class = "form-control", @placeholder = "Area" })
                                 </div>
                             </div>
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label for="control-label">Rental price</label>
-                                    <input type="number" name="rental-price" class="form-control"
-                                        placeholder="Rental price">
+                                    @Html.TextBoxFor(m => m.RentalPrice, new { @class = "form-control", @placeholder = "Rental price" })
                                 </div>
                             </div>
                             <div class="col-lg-12">
@@ -46,38 +50,44 @@
                                     <div class="summernote">
                                         @* Summer note *@
                                     </div>
+                                    <input type="hidden" name="Content" id="Content" value="@Model.ContentDescription" />
                                 </div>
                             </div>
                             @* Đối tượng *@
                             <div class="col-lg-12">
                                 <div class="form-group">
+                                    <hr />
                                     <h3>Object</h3>
-                                    <div class="row justify-content-start">
+                                    <div class="row justify-content-start" >
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value="">Student
+                                                    @Html.CheckBoxFor(m => m.IsStudent, new { @class = "form-check-input" })
+                                                    Student
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value="">Worker
+                                                    @Html.CheckBoxFor(m => m.IsWorker, new { @class = "form-check-input" })
+                                                    Worker
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value="">Family
+                                                    @Html.CheckBoxFor(m => m.IsFamily, new { @class = "form-check-input" })
+                                                    Family
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value="">Couple
+                                                    @Html.CheckBoxFor(m => m.IsCouple, new { @class = "form-check-input" })
+                                                    Couple
                                                 </label>
                                             </div>
                                         </div>
@@ -87,80 +97,85 @@
                             @* Tiện nghi *@
                             <div class="col-lg-12">
                                 <div class="form-group">
+                                    <hr />
                                     <h3>Utilities</h3>
                                     <div class="row justify-content-start">
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value=""> Loft
+                                                    @Html.CheckBoxFor(m => m.HasLoft, new { @class = "form-check-input" })
+                                                    Loft
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value=""> Wi-Fi
+                                                    @Html.CheckBoxFor(m => m.HasWiFi, new { @class = "form-check-input" })
+                                                        Wi-Fi
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value=""> Indoor
-                                                    cleaning
+                                                    @Html.CheckBoxFor(m => m.HasIndoorCleaning, new { @class = "form-check-input" })
+                                                    Indoor cleaning
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value=""> Bathroom
+                                                    @Html.CheckBoxFor(m => m.HasBathroom, new { @class = "form-check-input" })
+                                                    Bathroom
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value=""> Water
-                                                    heater
+                                                    @Html.CheckBoxFor(m => m.HasWaterHeater, new { @class = "form-check-input" })
+                                                    Water heater
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value=""> Kitchen
-                                                    shelf
+                                                    @Html.CheckBoxFor(m => m.HasKitchenShelf, new { @class = "form-check-input" })
+                                                        Kitchen shelf
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value=""> Washing
-                                                    machine
+                                                    @Html.CheckBoxFor(m => m.HasWashingMachine, new { @class = "form-check-input" })
+                                                        Washing machine
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value=""> TV
+                                                    @Html.CheckBoxFor(m => m.HasTV, new { @class = "form-check-input" })
+                                                        TV
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value=""> Air
-                                                    conditioner
+                                                    @Html.CheckBoxFor(m => m.HasAirConditioner, new { @class = "form-check-input" })
+                                                        Air conditioner
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value="">
+                                                    @Html.CheckBoxFor(m => m.HasRefrigerator, new { @class = "form-check-input" })
                                                     Refrigerator
                                                 </label>
                                             </div>
@@ -168,60 +183,65 @@
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value=""> Bed and
-                                                    mattress
+                                                    @Html.CheckBoxFor(m => m.HasBedAndMattress, new { @class = "form-check-input" })
+                                                    Bed and Mattress
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value=""> Wardrobe
+                                                    @Html.CheckBoxFor(m => m.HasWardrobe, new { @class = "form-check-input" })
+                                                        Wardrobe
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value=""> Balcony
+                                                    @Html.CheckBoxFor(m => m.HasBalcony, new { @class = "form-check-input" })
+                                                    Balcony
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value=""> Elevator
+                                                    @Html.CheckBoxFor(m => m.HasElevator, new { @class = "form-check-input" })
+                                                    Elevator
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value=""> Private
-                                                    parking lot
+                                                    @Html.CheckBoxFor(m => m.HasPrivateParkingLot, new { @class = "form-check-input" })
+                                                    Private parking lot
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value=""> Security
-                                                    camera
+                                                    @Html.CheckBoxFor(m => m.HasSecurityCamera, new { @class = "form-check-input" })
+                                                    Security camera
+
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value=""> Swimming
-                                                    pool
+                                                    @Html.CheckBoxFor(m => m.HasSwimmingPool, new { @class = "form-check-input" })
+                                                    Swimming pool
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value=""> Garden
+                                                    @Html.CheckBoxFor(m => m.HasGarden, new { @class = "form-check-input" })
+                                                    Garden
                                                 </label>
                                             </div>
                                         </div>
@@ -231,12 +251,13 @@
                             @* Môi trường xung quanh *@
                             <div class="col-lg-12">
                                 <div class="form-group">
+                                    <hr />
                                     <h3>Surrounding environment</h3>
                                     <div class="row justify-content-start">
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value=""> Market
+                                                    @Html.CheckBoxFor(m => m.NearMarket, new { @class = "form-check-input" }) Market
                                                 </label>
                                             </div>
                                         </div>
@@ -244,7 +265,7 @@
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value="">
+                                                    @Html.CheckBoxFor(m => m.NearSupermarket, new { @class = "form-check-input" })
                                                     Supermarket
                                                 </label>
                                             </div>
@@ -253,7 +274,8 @@
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value=""> Hospital
+                                                    @Html.CheckBoxFor(m => m.NearHospital, new { @class = "form-check-input" })
+                                                    Hospital
                                                 </label>
                                             </div>
                                         </div>
@@ -261,7 +283,8 @@
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value=""> School
+                                                    @Html.CheckBoxFor(m => m.NearSchool, new { @class = "form-check-input" })
+                                                    School
                                                 </label>
                                             </div>
                                         </div>
@@ -269,7 +292,8 @@
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value=""> Park
+                                                    @Html.CheckBoxFor(m => m.NearPark, new { @class = "form-check-input" })
+                                                    Park
                                                 </label>
                                             </div>
                                         </div>
@@ -277,15 +301,16 @@
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value=""> Bus
-                                                    station
+                                                    @Html.CheckBoxFor(m => m.NearBusStation, new { @class = "form-check-input" })
+                                                    Bus station
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value="">Gym
+                                                    @Html.CheckBoxFor(m => m.NearGym, new { @class = "form-check-input" })
+                                                    Gym
                                                 </label>
                                             </div>
                                         </div>
@@ -294,12 +319,13 @@
                             </div>
                             @* Địa điểm *@
                             <div class="col-lg-12">
+                                <hr />
                                 <h3>Location</h3>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="control-label">Province</label>
-                                    <select class="form-control" id="tinh" name="tinh" title="Chọn Tỉnh Thành">
+                                    <select class="form-control" id="tinh" name="Province" title="Chọn Tỉnh Thành">
                                         <option value="0">Tỉnh Thành</option>
                                     </select>
                                 </div>
@@ -307,7 +333,7 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="control-label">District</label>
-                                    <select class="form-control" id="quan" name="quan" title="Chọn Quận Huyện">
+                                    <select class="form-control" id="quan" name="District" title="Chọn Quận Huyện">
                                         <option value="0">Quận Huyện</option>
                                     </select>
                                 </div>
@@ -315,7 +341,7 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="control-label">Town</label>
-                                    <select class="form-control" id="phuong" name="phuong" title="Chọn Phường Xã">
+                                    <select class="form-control" id="phuong" name="Town" title="Chọn Phường Xã">
                                         <option value="0">Phường Xã</option>
                                     </select>
                                 </div>
@@ -323,17 +349,20 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="control-label">Address</label>
-                                    <input type="text" name="Address" class="form-control"
-                                        placeholder="Enter your full address">
+                                    @Html.EditorFor(m => m.Address, new
+                                    {
+                                        htmlAttributes = new { @class = "form-control", @placeholder = "Enter your full address" }
+                                    })
                                 </div>
                             </div>
                             @* Image *@
                             <div class="col-lg-12">
+                                <hr/>
                                 <h3>Overview Image</h3>
                                 <div class="upload-container">
                                     <div class="upload-box" id="dropArea">
                                         <p class="upload-text">DRAG AND DROP IMAGES<br>(Or click to select images)</p>
-                                        <input type="file" class="input-hidden" id="fileInput" accept="image/*" multiple />
+                                        <input type="file" class="input-hidden" id="fileInput" name="files" accept="image/*" multiple />
                                         <div class="preview-area" id="previewArea"></div>
                                     </div>
                                     <div class="upload-instructions">
@@ -343,50 +372,36 @@
                                     </div>
                                 </div>
                             </div>
-                            @* Contract information *@
+                            @* Contract information *@                            
                             <div class="col-lg-12">
-                                <div class="form-group">
-                                    @* <label for="control-label">Contact Information</label> *@
-                                    <h3 style="margin-top: 16px;">Contact Information</h3>
-                                    @* </br> *@
-                                    <div class="row justify-content-start"style="height: 28px;">
-                                        <div class="col-3 mb-5">
-                                            <div class="form-check form-check-inline">
-                                                <input type="radio" name="optradio">
-                                                <label class="radio-inline mr-3 distance">Default Information</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-3 mb-5">
-                                            <div class="form-check form-check-inline">
-                                                <input type="radio" name="optradio">
-                                                <label class="radio-inline mr-3 distance">Other Information</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="col-lg-12">
+                                <hr/>
+                                <h3 style="margin: 16px 0;">Contact Information</h3>
                                 <div class="row justify-content-start">
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label for="control-label">Full Name</label>
-                                            <input type="text" name="fullname" class="form-control"
-                                                placeholder="Full Name">
+                                            @Html.EditorFor(m => m.FullName, new
+                                            {
+                                                htmlAttributes = new { @class = "form-control", @placeholder = "Full Name" }
+                                            })
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label for="control-label">Phone Number</label>
-                                            <input type="text" name="phonenumber" class="form-control"
-                                                placeholder="+8412345678">
+                                            @Html.EditorFor(m => m.PhoneNumber, new
+                                            {
+                                                htmlAttributes = new { @class = "form-control", @placeholder = "+8412345678" }
+                                            })
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label for="control-label">Zalo Number</label>
-                                            <input type="text" name="zalonumber" class="form-control"
-                                                placeholder="+8412345678">
+                                            @Html.EditorFor(m => m.ZaloNumber, new
+                                            {
+                                                htmlAttributes = new { @class = "form-control", @placeholder = "+8412345678" }
+                                            })
                                         </div>
                                     </div>
                                 </div>
@@ -400,33 +415,46 @@
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label for="control-label">Room Name</label>
-                                    <input type="text" name="roomname" class="form-control"
-                                        placeholder="For example: Room with mezzanine">
+                                    @Html.EditorFor(m => m.Rooms[0].Name, new
+                                    {
+                                        htmlAttributes = new { @class = "form-control", @placeholder = "For example: Room with mezzanine" }
+                                    })
                                 </div>
                             </div>
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label for="control-label">Area</label>
-                                    <input type="number" name="area_detail" class="form-control" placeholder="Area">
+                                    @Html.EditorFor(m => m.Rooms[0].Area, new
+                                    {
+                                        htmlAttributes = new { @class = "form-control", @placeholder = "Area" }
+                                    })
                                 </div>
                             </div>
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label for="control-label">Rental price</label>
-                                    <input type="number" name="rental-price_detail" class="form-control"
-                                        placeholder="Rental price">
+                                    @Html.EditorFor(m => m.Rooms[0].RentalPrice, new
+                                    {
+                                        htmlAttributes = new { @class = "form-control", @placeholder = "Rental price" }
+                                    })
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="control-label">Number of rooms</label>
-                                    <input type="number" name="number-of-rooms" class="form-control" placeholder="Number of Room">
+                                    @Html.EditorFor(m => m.Rooms[0].NumberOfRooms, new
+                                    {
+                                        htmlAttributes = new { @class = "form-control", @placeholder = "Number of Room" }
+                                    })
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="control-label">Maxium Person</label>
-                                    <input type="number" name="number-of-rooms" class="form-control" placeholder="Maximum Person">
+                                    @Html.EditorFor(m => m.Rooms[0].MaximumPerson, new
+                                    {
+                                        htmlAttributes = new { @class = "form-control", @placeholder = "Maxium Person" }
+                                    })                                
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -459,126 +487,126 @@
                             @* Tiện nghi *@
                             <div class="col-lg-12">
                                 <div class="form-group">
+                                    <hr />
                                     <h3>Utilities</h3>
                                     <div class="row justify-content-start">
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value="Bed"> Bed
+                                                    @Html.CheckBoxFor(m => m.Rooms[0].Bed, new { @class = "form-check-input" }) Bed
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value="Wardrobe"> Wardrobe
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-3 mb-3">
-                                            <div class="form-check form-check-inline">
-        <label class="form-check-label">
-            <input type="checkbox" class="form-check-input" value="Desk"> Desk
-        </label>
-    </div>
-                                        </div>
-                                        <div class="col-3 mb-3">
-                                            <div class="form-check form-check-inline">
-                                                <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value="Chair"> Chair
+                                                     @Html.CheckBoxFor(m => m.Rooms[0].Wardrobe, new { @class = "form-check-input" }) Wardrobe
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-            <input type="checkbox" class="form-check-input" value="Air Conditioner"> Air Conditioner
-        </label>
-    </div>
-</div>
-                                        <div class="col-3 mb-3">
-                                            <div class="form-check form-check-inline">
-                                                <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value="Fan"> Fan
+                                                     @Html.CheckBoxFor(m => m.Rooms[0].Desk, new { @class = "form-check-input" }) Desk
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value="Lighting"> Lighting
-        </label>
-    </div>
-</div>
-<div class="col-3 mb-3">
-    <div class="form-check form-check-inline">
-        <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value="Curtains"> Curtains
+                                                     @Html.CheckBoxFor(m => m.Rooms[0].Chair, new { @class = "form-check-input" }) Chair
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value="TV"> TV
-                                                </label>
-                                            </div>
-</div>
-<div class="col-3 mb-3">
-    <div class="form-check form-check-inline">
-        <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value="Refrigerator"> Refrigerator
+                                                 @Html.CheckBoxFor(m => m.Rooms[0].AirConditioner, new { @class = "form-check-input" }) Air Conditioner
+                                            </label>
+                                        </div>
+                                        </div>
+                                        <div class="col-3 mb-3">
+                                            <div class="form-check form-check-inline">
+                                                <label class="form-check-label">
+                                                     @Html.CheckBoxFor(m => m.Rooms[0].Fan, new { @class = "form-check-input" }) Fan
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value="Wi-Fi"> Wi-Fi
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-3 mb-3">
-                                            <div class="form-check form-check-inline">
-        <label class="form-check-label">
-            <input type="checkbox" class="form-check-input" value="Mirror"> Mirror
+                                                     @Html.CheckBoxFor(m => m.Rooms[0].Lighting, new { @class = "form-check-input" }) Lighting
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value="Socket"> Socket
+                                                     @Html.CheckBoxFor(m => m.Rooms[0].Curtains, new { @class = "form-check-input" }) Curtains
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value="Water Heater"> Water Heater
+                                                     @Html.CheckBoxFor(m => m.Rooms[0].TV, new { @class = "form-check-input" }) TV
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-3 mb-3">
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" value="Window"> Window
+                                                     @Html.CheckBoxFor(m => m.Rooms[0].Refrigerator, new { @class = "form-check-input" }) Refrigerator
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-3 mb-3">
+                                            <div class="form-check form-check-inline">
+                                                <label class="form-check-label">
+                                                     @Html.CheckBoxFor(m => m.Rooms[0].Wifi, new { @class = "form-check-input" }) Wi-Fi
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-3 mb-3">
+                                            <div class="form-check form-check-inline">
+                                                <label class="form-check-label">
+                                                     @Html.CheckBoxFor(m => m.Rooms[0].Mirror, new { @class = "form-check-input" }) Mirror
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-3 mb-3">
+                                            <div class="form-check form-check-inline">
+                                                <label class="form-check-label">
+                                                     @Html.CheckBoxFor(m => m.Rooms[0].Socket, new { @class = "form-check-input" }) Socket
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-3 mb-3">
+                                            <div class="form-check form-check-inline">
+                                                <label class="form-check-label">
+                                                     @Html.CheckBoxFor(m => m.Rooms[0].WaterHeater, new { @class = "form-check-input" }) Water Heater
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-3 mb-3">
+                                            <div class="form-check form-check-inline">
+                                                <label class="form-check-label">
+                                                     @Html.CheckBoxFor(m => m.Rooms[0].Window, new { @class = "form-check-input" }) Window
                                                 </label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            
-                            
+                            </div>  
                             @* Image *@
                             <div class="col-lg-12">
-                                <h3>Overview Image</h3>
+                                <hr/>
+                                <h3>Overview Image (Room)</h3>
                                 <div class="upload-container">
-                                    <div class="upload-box" id="dropArea">
+                                    <div class="upload-box" id="dropArea_room">
                                         <p class="upload-text">DRAG AND DROP IMAGES<br>(Or click to select images)</p>
-                                        <input type="file" class="input-hidden" id="fileInput" accept="image/*" multiple />
-                                        <div class="preview-area" id="previewArea"></div>
+                                        <input type="file" class="input-hidden" id="fileInput_room" accept="image/*" multiple />
+                                        <div class="preview-area" id="previewArea_room"></div>
                                     </div>
                                     <div class="upload-instructions">
                                         <p>- Upload up to <b>15 images</b>.</p>
@@ -591,27 +619,10 @@
                     </section>
                     <h4>Finshed</h4>
                     <section>
-                        @* <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <input class="form-control" type="text" name="creditCard"
-                                        placeholder="Credit Card Number">
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <input class="form-control" type="text" name="date" placeholder="Expiration Date">
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <input class="form-control" type="text" name="owner"
-                                        placeholder="Credit Card Owner">
-                                </div>
-                            </div>
-                        </div> *@
+                        @* Here implement code *@
                     </section>
                 </div>
+                <button>Ok</button>
             </form>
         </div>
     </div>
@@ -621,21 +632,20 @@
 @section AdditionalLinkCSS {
     <link href="./plugins/jquery-steps/css/jquery.steps.css" rel="stylesheet">
     <link href="./plugins/summernote/dist/summernote.css" rel="stylesheet">
-
     <style>
         .wizard .content {
-            min-height: 132rem !important;
+            min-height: 142rem !important;
         }
-
+        #steps-uid-0-p-1 .wizard .content {
+            min-height: 10rem !important;
+        }
         .note-resizebar {
             display: none !important;
         }
-
         .distance {
-            margin-top: 6px;
+            margin-top: 8px;
             margin-left: 4px;
         }
-
         @* New code *@
         .upload-container {
             width: 100%;
@@ -646,29 +656,24 @@
             background-color: #ffffff;
             text-align: center;
         }
-
         .upload-box {
             position: relative;
             padding: 20px;
             cursor: pointer;
         }
-
         .upload-box:hover {
             background-color: #e6f7ff;
             border-color: #7571f9;
         }
-
         .upload-box input[type="file"] {
             display: none; /* Hide input field */
         }
-
         .upload-text {
             font-size: 16px;
             font-weight: bold;
             color: #333;
             margin-bottom: 10px;
         }
-
         .preview-area {
             display: flex;
             flex-wrap: wrap;
@@ -676,7 +681,6 @@
             margin-top: 10px;
             justify-content: center;
         }
-
         .preview-item {
             position: relative;
             width: 100px;
@@ -685,13 +689,11 @@
             overflow: hidden;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
         }
-
         .preview-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
         .preview-item .check-icon {
             position: absolute;
             top: 5px;
@@ -706,7 +708,6 @@
             justify-content: center;
             align-items: center;
         }
-
         .preview-item .delete-btn {
             position: absolute;
             bottom: 5px;
@@ -731,7 +732,8 @@
             margin-top: 15px;
             text-align: left;
         }
-    </style>}
+    </style>
+}
 
 @* Link Javascript *@
 @section AdditionalLinkJavascript {
@@ -799,45 +801,56 @@
             });
         });
     </script>
-        <script>
-        // JavaScript for handling the drag-and-drop and preview functionality
+    @* Link Javascript For Room and Area 1 *@
+    <script>
+        // Handle drag-and-drop and file input functionality for both Room and Area 1
+        const dropArea_room = document.getElementById("dropArea_room");
+        const fileInput_room = document.getElementById("fileInput_room");
+        const previewArea_room = document.getElementById("previewArea_room");
+
         const dropArea = document.getElementById("dropArea");
         const fileInput = document.getElementById("fileInput");
         const previewArea = document.getElementById("previewArea");
 
-        dropArea.addEventListener("click", () => {
-            fileInput.click(); // Open file dialog on click
-        });
+        // Event listeners for Room
+        setupDropArea(dropArea_room, fileInput_room, previewArea_room, 15);
+        // Event listeners for Area 1
+        setupDropArea(dropArea, fileInput, previewArea, 15);
 
-        dropArea.addEventListener("dragover", (e) => {
-            e.preventDefault();
-            dropArea.style.borderColor = "#007acc";
-            dropArea.style.backgroundColor = "#e6f7ff";
-        });
+        // Function to setup drag-and-drop and file input for each area
+        function setupDropArea(dropAreaElement, fileInputElement, previewAreaElement, maxFiles) {
+            dropAreaElement.addEventListener("click", () => {
+                fileInputElement.click(); // Open file dialog on click
+            });
 
-        dropArea.addEventListener("dragleave", () => {
-            dropArea.style.borderColor = "#0099ff";
-            dropArea.style.backgroundColor = "#ffffff";
-        });
+            dropAreaElement.addEventListener("dragover", (e) => {
+                e.preventDefault();
+                dropAreaElement.style.borderColor = "#007acc";
+                dropAreaElement.style.backgroundColor = "#e6f7ff";
+            });
 
-        dropArea.addEventListener("drop", (e) => {
-            e.preventDefault();
-            dropArea.style.borderColor = "#0099ff";
-            dropArea.style.backgroundColor = "#ffffff";
+            dropAreaElement.addEventListener("dragleave", () => {
+                dropAreaElement.style.borderColor = "#0099ff";
+                dropAreaElement.style.backgroundColor = "#ffffff";
+            });
 
-            const files = e.dataTransfer.files;
-            handleFiles(files);
-        });
+            dropAreaElement.addEventListener("drop", (e) => {
+                e.preventDefault();
+                dropAreaElement.style.borderColor = "#0099ff";
+                dropAreaElement.style.backgroundColor = "#ffffff";
+                const files = e.dataTransfer.files;
+                handleFiles(files, previewAreaElement, maxFiles);
+            });
 
-        fileInput.addEventListener("change", (e) => {
-            const files = e.target.files;
-            handleFiles(files);
-        });
+            fileInputElement.addEventListener("change", (e) => {
+                const files = e.target.files;
+                handleFiles(files, previewAreaElement, maxFiles);
+            });
+        }
 
-        function handleFiles(files) {
-            const maxFiles = 15;
-            const currentItems = previewArea.querySelectorAll('.preview-item').length;
-
+        // Function to handle file preview and validation
+        function handleFiles(files, previewAreaElement, maxFiles) {
+            const currentItems = previewAreaElement.querySelectorAll('.preview-item').length;
             if (files.length + currentItems > maxFiles) {
                 alert(`Bạn chỉ có thể tải lên tối đa ${maxFiles} ảnh.`);
                 return;
@@ -868,7 +881,8 @@
                     previewItem.appendChild(img);
                     previewItem.appendChild(checkIcon);
                     previewItem.appendChild(deleteBtn);
-                    previewArea.appendChild(previewItem);
+
+                    previewAreaElement.appendChild(previewItem);
                 };
                 reader.readAsDataURL(file);
             });

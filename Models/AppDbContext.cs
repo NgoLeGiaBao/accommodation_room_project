@@ -1,4 +1,5 @@
 ﻿using App.Models.NewsModel;
+using App.Models.ServicesModel;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -174,6 +175,12 @@ namespace App.Models
                 .HasIndex(cn => cn.Slug)
                 .IsUnique();
 
+            // One-to-Many: ServicesBlog -> RooomInServiceBlog
+            modelBuilder.Entity<RooomInServiceBlog>()
+                .HasOne(r => r.ServicesBlog)
+                .WithMany(s => s.Rooms)
+                .HasForeignKey(r => r.ServicesBlogId)
+                .OnDelete(DeleteBehavior.Cascade);
             // Base on the default model configuration
             base.OnModelCreating(modelBuilder);
         }
@@ -194,5 +201,7 @@ namespace App.Models
         public DbSet<CategoryNews> CategoryNewses { get; set; }
         public DbSet<ContentNews> ContentNewses { get; set; }
         public DbSet<ContentAndCategoryNews> ContentAndCategoryNewses { get; set; }
+        public DbSet<ServicesBlog> ServicesBlogs { get; set; }
+        public DbSet<RooomInServiceBlog> RooomInServiceBlogs { get; set; }
     }
 }
