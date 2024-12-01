@@ -10,5 +10,11 @@ namespace App.Areas.Blog
         {
             return View();
         }
+
+        [Route("/create-services-news")]
+        public IActionResult CreateServiceNews()
+        {
+            return View();
+        }
     }
 }

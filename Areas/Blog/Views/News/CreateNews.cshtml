@@ -1,4 +1,7 @@
 @model App.Models.NewsModel.ContentNews
+@{
+    ViewData["Title"] = "Create News";
+}
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
@@ -82,7 +85,7 @@
                                                 <label class="col-sm-2 col-form-label"></label>
                                                 <div class="col-sm-10">
                                                     <button type="submit" class="btn btn-dark">Finish</button>
-                                                    <a href="@Url.Action("Index", "YourController")"
+                                                    <a asp-action=" Index" asp-controller="News" asp-area="Blog"
                                                         class="btn btn-light">Exit</a>
                                                 </div>
                                             </div>
@@ -127,7 +130,7 @@
                                             <label class="col-sm-2 col-form-label"></label>
                                             <div class="col-sm-10">
                                                 <button type="submit" class="btn btn-dark">Finish</button>
-                                                <a href="@Url.Action("Index", "YourController")"
+                                                <a asp-action="Index" asp-controller="News"
                                                     class="btn btn-light">Exit</a>
                                             </div>
                                         </div>
