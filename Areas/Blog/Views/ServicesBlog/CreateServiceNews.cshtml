@@ -12,6 +12,7 @@
                     <section>
                         <h3>General Information</h3>
                         <div class="row">
+                            @* Title *@
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label for="control-label">Title</label>
@@ -21,6 +22,7 @@
                                     })
                                 </div>
                             </div>
+                            @* self-managed *@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="control-label">Self-managed accommodation</label>
@@ -32,25 +34,27 @@
                                         )
                                 </div>
                             </div>
+                            @* Area *@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="control-label">Area</label>
-                                        @Html.TextBoxFor(m => m.Area, new { @class = "form-control", @placeholder = "Area" })
+                                        @Html.TextBoxFor(m => m.Area, new { @class = "form-control", @placeholder = "Area", type = "number" })
                                 </div>
                             </div>
+                            @* Rental price *@
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label for="control-label">Rental price</label>
-                                    @Html.TextBoxFor(m => m.RentalPrice, new { @class = "form-control", @placeholder = "Rental price" })
+                                    @Html.TextBoxFor(m => m.RentalPrice, new { @class = "form-control", @placeholder = "Rental price",type = "number" })
                                 </div>
                             </div>
+                            @* Summernote *@
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label for="control-label">Description of the content</label>
-                                    <div class="summernote">
-                                        @* Summer note *@
-                                    </div>
-                                    <input type="hidden" name="Content" id="Content" value="@Model.ContentDescription" />
+                                    <div class="summernote" id="first-summernote"></div>
+                                    <!-- Input hidden for Summernote 1 -->
+                                    <input type="hidden" name="ContentDescription" id="ContentDescription" value="@Model.ContentDescription" />
                                 </div>
                             </div>
                             @* Đối tượng *@
@@ -412,6 +416,7 @@
                     <section>
                         <h3>Room Information</h3>
                         <div class="row">
+                            @* Room Name *@
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label for="control-label">Room Name</label>
@@ -430,33 +435,37 @@
                                     })
                                 </div>
                             </div>
+                            @* Rental price room *@
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label for="control-label">Rental price</label>
                                     @Html.EditorFor(m => m.Rooms[0].RentalPrice, new
                                     {
-                                        htmlAttributes = new { @class = "form-control", @placeholder = "Rental price" }
+                                        htmlAttributes = new { @class = "form-control", @placeholder = "Rental price", type = "number" }
                                     })
                                 </div>
                             </div>
+                            @* Number of rooms *@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="control-label">Number of rooms</label>
                                     @Html.EditorFor(m => m.Rooms[0].NumberOfRooms, new
                                     {
-                                        htmlAttributes = new { @class = "form-control", @placeholder = "Number of Room" }
+                                        htmlAttributes = new { @class = "form-control", @placeholder = "Number of Room",type = "number" }
                                     })
                                 </div>
                             </div>
+                            @* Number of people *@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="control-label">Maxium Person</label>
                                     @Html.EditorFor(m => m.Rooms[0].MaximumPerson, new
                                     {
-                                        htmlAttributes = new { @class = "form-control", @placeholder = "Maxium Person" }
+                                        htmlAttributes = new { @class = "form-control", @placeholder = "Maxium Person", type = "number" }
                                     })                                
                                 </div>
                             </div>
+                            @* Object Reantal *@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="control-label">Object Reantal</label>
@@ -470,18 +479,20 @@
                                     </select>
                                 </div>
                             </div>
+                            @* Show Number *@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="control-label">Show Number</label>
                                     <input type="number" name="show-number" class="form-control" placeholder="Show Number">
                                 </div>
                             </div>
+                            @* Summernote *@
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label for="control-label">Description of the content</label>
-                                    <div class="summernote">
-                                        @* Summer note *@
-                                    </div>
+                                    <div class="summernote" id="second-summernote"></div>
+                                    <!-- Input hidden for Summernote 2 -->
+                                    <input type="hidden" name="Rooms[0].Description" id="Description" value="@Model.Rooms?[0]?.Description" />
                                 </div>
                             </div>
                             @* Tiện nghi *@
@@ -605,7 +616,7 @@
                                 <div class="upload-container">
                                     <div class="upload-box" id="dropArea_room">
                                         <p class="upload-text">DRAG AND DROP IMAGES<br>(Or click to select images)</p>
-                                        <input type="file" class="input-hidden" id="fileInput_room" accept="image/*" multiple />
+                                        <input type="file" class="input-hidden" id="fileInput_room" name="filesRoom" accept="image/*" multiple />
                                         <div class="preview-area" id="previewArea_room"></div>
                                     </div>
                                     <div class="upload-instructions">
@@ -627,7 +638,6 @@
         </div>
     </div>
 </div>
-
 @* Link CSS *@
 @section AdditionalLinkCSS {
     <link href="./plugins/jquery-steps/css/jquery.steps.css" rel="stylesheet">
@@ -737,69 +747,79 @@
 
 @* Link Javascript *@
 @section AdditionalLinkJavascript {
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Load jQuery first -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Load Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Load jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script> <!-- Bootstrap JS -->
     <script src="./plugins/summernote/dist/summernote.min.js"></script>
-    <script src="./plugins/summernote/dist/summernote-init.js"></script>
+    @* <script src="./plugins/summernote/dist/summernote-init.js"></script> *@
     <script src="./plugins/jquery-steps/build/jquery.steps.min.js"></script>
     <script src="./plugins/jquery-validation/jquery.validate.min.js"></script>
     <script src="./js/plugins-init/jquery-steps-init.js"></script>
-
     <script>
-        $(document).ready(function () {
-            // Initialize Summernote
-            $('.summernote').summernote({
-                height: 200,
-                callbacks: {
-                    onChange: function (contents, $editable) {
-                        // Update the hidden input with the Summernote content
-                        $('#Content').val(contents);
-                    }
+    $(document).ready(function () {
+        $('#first-summernote').summernote({
+            height: 200,
+            callbacks: {
+                onChange: function (contents) {
+                    $('#ContentDescription').val(contents);
                 }
-            });
-
-            // Initialize Summernote with existing content if editing
-            if ($('#Content').val()) {
-                $('.summernote').summernote('code', $('#Content').val());
             }
-
-            // Get and populate provinces (tinh)
-            $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function (data_tinh) {
-                if (data_tinh.error == 0) {
-                    $.each(data_tinh.data, function (key_tinh, val_tinh) {
-                        $("#tinh").append('<option value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>');
-                    });
-
-                    // When province is changed, populate districts (quan)
-                    $("#tinh").change(function (e) {
-                        var idtinh = $(this).val();
-                        $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm', function (data_quan) {
-                            if (data_quan.error == 0) {
-                                $("#quan").html('<option value="0">Quận Huyện</option>');
-                                $("#phuong").html('<option value="0">Phường Xã</option>');
-                                $.each(data_quan.data, function (key_quan, val_quan) {
-                                    $("#quan").append('<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>');
-                                });
-
-                                // When district is changed, populate wards (phuong)
-                                $("#quan").change(function (e) {
-                                    var idquan = $(this).val();
-                                    $.getJSON('https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm', function (data_phuong) {
-                                        if (data_phuong.error == 0) {
-                                            $("#phuong").html('<option value="0">Phường Xã</option>');
-                                            $.each(data_phuong.data, function (key_phuong, val_phuong) {
-                                                $("#phuong").append('<option value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>');
-                                            });
-                                        }
-                                    });
-                                });
-                            }
-                        });
-                    });
-                }
-            });
         });
+
+        // Initialize second Summernote
+        $('#second-summernote').summernote({
+            height: 200,
+            callbacks: {
+                onChange: function (contents) {
+                    $('#Description').val(contents);
+                }
+            }
+        });
+
+        // Initialize Summernote with existing content if editing
+        if ($('#ContentDescription').val()) {
+            $('#first-summernote').summernote('code', $('#ContentDescription').val());
+        }
+
+        if ($('#Description').val()) {
+            $('#second-summernote').summernote('code', $('#Description').val());
+        }
+
+        // Other AJAX logic (e.g., provinces and districts)
+        $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function (data_tinh) {
+            if (data_tinh.error === 0) {
+                $.each(data_tinh.data, function (key_tinh, val_tinh) {
+                    $("#tinh").append('<option value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>');
+                });
+
+                // When province is changed, populate districts
+                $("#tinh").change(function () {
+                    var idtinh = $(this).val();
+                    $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm', function (data_quan) {
+                        if (data_quan.error === 0) {
+                            $("#quan").html('<option value="0">Quận Huyện</option>');
+                            $("#phuong").html('<option value="0">Phường Xã</option>');
+                            $.each(data_quan.data, function (key_quan, val_quan) {
+                                $("#quan").append('<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>');
+                            });
+
+                            // When district is changed, populate wards
+                            $("#quan").change(function () {
+                                var idquan = $(this).val();
+                                $.getJSON('https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm', function (data_phuong) {
+                                    if (data_phuong.error === 0) {
+                                        $("#phuong").html('<option value="0">Phường Xã</option>');
+                                        $.each(data_phuong.data, function (key_phuong, val_phuong) {
+                                            $("#phuong").append('<option value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>');
+                                        });
+                                    }
+                                });
+                            });
+                        }
+                    });
+                });
+            }
+        });
+    });
     </script>
     @* Link Javascript For Room and Area 1 *@
     <script>

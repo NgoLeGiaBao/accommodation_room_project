@@ -40,7 +40,10 @@ namespace App.Areas.Blog
                 }
                 return Content(name);
             }
-            return Content(servicesBlog.Title + "/" + servicesBlog.Province + "/" + servicesBlog.District + "/" + servicesBlog.Town);
+            // return Content(servicesBlog.Title + "/" + servicesBlog.Province + "/" + servicesBlog.District + "/" + servicesBlog.Town);
+            // return Content(servicesBlog.Rooms[0].Desk.ToString());
+            return Content(servicesBlog.ContentDescription + "/" + servicesBlog.Rooms[0].Description);
+
         }
     }
 }
