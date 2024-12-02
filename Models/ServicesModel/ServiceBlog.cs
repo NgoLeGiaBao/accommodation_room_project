@@ -1,12 +1,15 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace App.Models.ServicesModel
 {
     public class ServicesBlog
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string? ServicesBlogId { get; set; }
-        public string? Title { get; set; }
+        // [Required]
+        public string Title { get; set; }
         public string? SelfManagedAccommodation { get; set; }
         public string? Area { get; set; }
         public decimal RentalPrice { get; set; }

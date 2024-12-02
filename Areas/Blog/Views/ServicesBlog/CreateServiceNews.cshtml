@@ -3,6 +3,8 @@
     ViewData["Title"] = "Create Services News";
 }
 <div class="container-fluid">
+    <partial name="_SuccessMessage" />
+    <partial name="_FailureMessage" />
     <div class="row">
         <div class="col-md-12">
             @* <form asp-action="CreateServiceNews" id="step-form-horizontal" class="step-form-horizontal"> *@
@@ -20,6 +22,7 @@
                                     {
                                         htmlAttributes = new { @class = "form-control", @placeholder = "For example: Hostel at 83-85, District 7" }
                                     })
+                                    @* @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" }) *@
                                 </div>
                             </div>
                             @* self-managed *@
@@ -906,4 +909,6 @@
             });
         }
     </script>
+    @* Partial *@
+    <partial name="_ValidationScriptsPartial" />
 }

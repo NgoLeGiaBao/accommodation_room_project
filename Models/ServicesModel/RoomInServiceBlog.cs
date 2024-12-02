@@ -6,6 +6,7 @@ namespace App.Models.ServicesModel
     public class RooomInServiceBlog
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string? RooomInServiceBlogId { get; set; }
         public string? Name { get; set; }
         public double Area { get; set; }

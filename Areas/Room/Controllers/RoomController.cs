@@ -320,15 +320,12 @@ namespace App.Areas.Room
 
         }
 
-
-
         [Route("/room-delete/{id?}")]
         [HttpGet]
         public IActionResult Delete(int id)
         {
             return Content(id.ToString());
         }
-
 
         [Route("/view-room")]
         public async Task<IActionResult> ViewRoom(string rentalPropertyId, string roomId)
