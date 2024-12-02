@@ -26,24 +26,30 @@ namespace App.Areas.Blog
 
         [Route("/create-services-news")]
         [HttpPost]
-        public IActionResult CreateServiceNews(ServicesBlog servicesBlog, List<IFormFile> files)
+        public IActionResult CreateServiceNews(ServicesBlog servicesBlog, List<IFormFile> filesRoom, List<IFormFile> filesArea)
         {
-            if (files != null && files.Any())
-            {
-                var name = "";
-                foreach (var file in files)
-                {
-                    if (file.Length > 0)
-                    {
-                        name = name + "/" + file.FileName;
-                    }
-                }
-                return Content(name);
-            }
-            // return Content(servicesBlog.Title + "/" + servicesBlog.Province + "/" + servicesBlog.District + "/" + servicesBlog.Town);
-            // return Content(servicesBlog.Rooms[0].Desk.ToString());
-            return Content(servicesBlog.ContentDescription + "/" + servicesBlog.Rooms[0].Description);
+            var results = "";
 
+            // Xử lý các tệp trong 'filesRoom'
+            if (filesRoom != null && filesRoom.Any())
+            {
+                // Lấy danh sách tên tệp hình ảnh từ 'filesRoom'
+                var roomFileNames = filesRoom.Select(file => file.FileName).ToList();
+
+                // Xử lý tệp (lưu trữ, hoặc xử lý thêm...)
+                // Ví dụ: Lưu các tệp vào thư mục hoặc cơ sở dữ liệu
+                results = $"Room files: {string.Join(", ", roomFileNames)}";
+            }
+
+            // Xử lý các tệp trong 'filesArea'
+            if (filesArea != null && filesArea.Any())
+            {
+                var areaFileNames = filesArea.Select(file => file.FileName).ToList();
+
+                // Xử lý tệp (lưu trữ, hoặc xử lý thêm...)
+                results += $"\nArea files: {string.Join(", ", areaFileNames)}";
+            }
+            return Content(results);
         }
     }
 }

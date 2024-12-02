@@ -366,7 +366,7 @@
                                 <div class="upload-container">
                                     <div class="upload-box" id="dropArea">
                                         <p class="upload-text">DRAG AND DROP IMAGES<br>(Or click to select images)</p>
-                                        <input type="file" class="input-hidden" id="fileInput" name="files" accept="image/*" multiple />
+                                        <input type="file" class="input-hidden" id="fileInput" name="filesArea" accept="image/*" multiple />
                                         <div class="preview-area" id="previewArea"></div>
                                     </div>
                                     <div class="upload-instructions">
@@ -755,8 +755,8 @@
     <script src="./plugins/jquery-validation/jquery.validate.min.js"></script>
     <script src="./js/plugins-init/jquery-steps-init.js"></script>
     <script>
-    $(document).ready(function () {
-        $('#first-summernote').summernote({
+        $(document).ready(function () {
+            $('#first-summernote').summernote({
             height: 200,
             callbacks: {
                 onChange: function (contents) {
@@ -764,9 +764,9 @@
                 }
             }
         });
-
-        // Initialize second Summernote
-        $('#second-summernote').summernote({
+    
+            // Initialize second Summernote
+            $('#second-summernote').summernote({
             height: 200,
             callbacks: {
                 onChange: function (contents) {
@@ -774,18 +774,18 @@
                 }
             }
         });
-
-        // Initialize Summernote with existing content if editing
-        if ($('#ContentDescription').val()) {
+    
+            // Initialize Summernote with existing content if editing
+            if ($('#ContentDescription').val()) {
             $('#first-summernote').summernote('code', $('#ContentDescription').val());
         }
-
-        if ($('#Description').val()) {
+    
+            if ($('#Description').val()) {
             $('#second-summernote').summernote('code', $('#Description').val());
         }
-
-        // Other AJAX logic (e.g., provinces and districts)
-        $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function (data_tinh) {
+    
+            // Other AJAX logic (e.g., provinces and districts)
+            $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function (data_tinh) {
             if (data_tinh.error === 0) {
                 $.each(data_tinh.data, function (key_tinh, val_tinh) {
                     $("#tinh").append('<option value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>');
@@ -819,7 +819,7 @@
                 });
             }
         });
-    });
+        });
     </script>
     @* Link Javascript For Room and Area 1 *@
     <script>
@@ -872,10 +872,8 @@
         function handleFiles(files, previewAreaElement, maxFiles) {
             const currentItems = previewAreaElement.querySelectorAll('.preview-item').length;
             if (files.length + currentItems > maxFiles) {
-                alert(`Bạn chỉ có thể tải lên tối đa ${maxFiles} ảnh.`);
                 return;
             }
-
             Array.from(files).forEach((file) => {
                 const reader = new FileReader();
                 reader.onload = (e) => {
