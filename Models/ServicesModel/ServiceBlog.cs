@@ -63,6 +63,8 @@ namespace App.Models.ServicesModel
 
         // Images
         public List<string> Images { get; set; } = new List<string>();
+        public string? StatusBlog { get; set; } = "Active";
+        public string? CreatedBy { get; set; }
 
         // Navigation Property: One-to-Many with RooomInServiceBlog
         public List<RooomInServiceBlog> Rooms { get; set; } = new List<RooomInServiceBlog>();

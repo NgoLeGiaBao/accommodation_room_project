@@ -9,30 +9,14 @@
                     <div class="card-body card-modifed">
                         <div class="d-flex justify-content-between align-items-center flex-wrap">
                             <div class="status-info mb-2">
-                                <select id="news-status" class="form-select input-height" style="text-align: center;"
-                                    aria-label="Choose status news">
-                                    <option value="all">All</option>
-                                    <option value="public">Show</option>
-                                    <option value="private">Hide</option>
-                                </select>
-                                <!-- Room Number Field -->
-                                <input class="input-height input-room" type="text" id="room-number"
-                                    placeholder="Enter news name" aria-label="Nhập số phòng">
-                                <!-- Search Button -->
-                                <a href="#" class="btn btn-primary btn-custom me-2">
-                                    <i class="fas fa-search"></i>
-                                    Search
-                                </a>
+                                <h4>Services News</h4>
                             </div>
                             <div class="action-buttons mb-2">
-                                @* <a asp-controller="Room" asp-action="CreateHome" class="btn btn-primary me-2">
-                                <i class="fas fa-plus"></i>
-                                Add home
-                                </a> *@
-                                @* <a href="#" class="btn btn-info me-2">
-                                <i class="fas fa-edit"></i>
-                                Enter room from excel
-                                </a> *@
+                                <a asp-controller="ServicesBlog" asp-action="CreateServiceNews"
+                                    class="btn btn-primary me-2">
+                                    <i class="fas fa-plus"></i>
+                                    Post New Accommodation
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -43,42 +27,115 @@
     <div class="col-12 mb-30">
         <div class="row">
             <div class="col-lg-12">
-                <div class="card ">
-                    @* <div class="card-header">
-                    <ul class="nav nav-tabs card-header-tabs" id="tab-list">
-                    Render rental property here
-                    </ul>
-                    </div> *@
+                <div class="card">
+                    <div class="card-header">
+                        <ul class="nav nav-tabs card-header-tabs" id="tab-list">
+                            @* Render status blog *@
+                        </ul>
+                    </div>
                     <div class="card-body">
-                        <div class="d-flex justify-content-end align-items-center flex-wrap mb-3">
-                            @* <div class="status-info mb-2" id="status-info">
-                            Render status info
+                        <div class="row" id="servies-news-list">
+                            @* <div class="row">
+                                <div class="col-lg-4">
+                                    <img class="img-fluid" src="/client_part/img/blog/blog-details-1.jpg" alt="">
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="row">
+                                        <h2>Nhà Trọ Quận 7</h2>
+                                        <p style="color:#71727a"><i class="fa fa-map-marker" aria-hidden="true"></i>
+                                            83 đường số 9 phường Tân Phong, Quận 7, Tp.HCM</p>
+                                        <p style="color:#71727a"><i class="fas fa-info-circle"></i>
+                                            Nhà Trọ, phòng trọ</p>
+                                        <div class="form-check form-check-inline">
+                                            <label style="color: #71727a;" class="form-check-label padiding-left-label">
+                                                <input type="checkbox" class="form-check-input" value="">
+                                                Đã Đóng
+                                            </label>
+                                        </div>
+                                        <div class="d-flex align-items-center mt-3">
+                                            <!-- Nút "Nâng cấp trọ" -->
+                                            <a href="#" class="btn btn-danger me-2">Nâng cấp trọ</a>
+                                            <!-- Dropdown -->
+                                            <div class="btn-group me-2">
+                                                <button type="button" class="btn btn-primary dropdown-toggle"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="fa fa-sort-numeric-desc" aria-hidden="true"></i>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a class="dropdown-item" href="#">
+                                                            <i class="fa fa-refresh" style="padding-right: 8px"
+                                                                aria-hidden="true"></i>
+                                                            Làm mới ngay
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" href="#">
+                                                            <i class="fa fa-credit-card" aria-hidden="true"
+                                                                style="padding-right: 8px"></i>
+                                                            Mua gói làm mới
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" href="#">
+                                                            <i class="fa fa-magic" aria-hidden="true"
+                                                                style="padding-right: 8px"></i>
+                                                            Làm mới tự động
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <button type="button" class="btn btn-primary me-2" data-toggle="tooltip"
+                                                data-placement="top" title="Thêm phòng">
+                                                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary" data-toggle="tooltip"
+                                                data-placement="top" title="Chỉnh sửa trọ">
+                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 card-child mt-3" id="list-rental-property">
+                                    <div class="row card-child-second pt-3 pb-3">
+                                        <div class="col-md-2 room-image">
+                                            <img class="img-fluid" src="/client_part/img/blog/blog-details-2.jpg"
+                                                alt="Room">
+                                        </div>
+                                        <div
+                                            class="col-md-4 bg-white d-flex align-items-center justify-content-between">
+                                            <div class="d-flex flex-column align-items-start">
+                                                <span class="title">Phòng nội thất cơ bản, có ban công</span>
+                                                <span class="price">1 đ/tháng</span>
+
+                                            </div>
+                                            <div>
+                                                <a href="#">
+                                                    <i class="fas fa-chevron-right ms-2"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
                             </div> *@
-                            <div class="action-buttons mb-2" id="btn-action">
-                                @* Render action buttons *@
-                                <a asp-action="CreateServiceNews" asp-controller="ServicesBlog"
-                                    class="btn btn-primary me-2"> <i class="fas fa-plus"></i> Add </a>
-                                <a asp-action="CreateNews" asp-controller="News" class="btn btn-info me-2"> <i
-                                        class="fas fa-trash"></i> Delete </a>
-                            </div>
                         </div>
-                        <div class="table-responsive">
-                            <table class="table table-striped table-bordered zero-configuration text-center"
-                                id="news-list">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>No.</th>
-                                        <th>News Title</th>
-                                        <th>Image</th>
-                                        <th>Public</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @* Render user data *@
-                                </tbody>
-                            </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="bootstrap-pagination">
+                                <nav>
+                                    <ul id="pagination-list" class="pagination justify-content-center">
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                        </li>
+                                        <!-- Các nút phân trang sẽ được thêm vào đây qua JavaScript -->
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href="#">Next</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -86,40 +143,62 @@
         </div>
     </div>
 </div>
+</div>
 @* Link CSS*@
 @section AdditionalLinkCSS {
-
-    <link href="../css/site.css" rel="stylesheet">
-    <link href="../plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        #news-list_wrapper {
-            padding: 0px !important;
+        .card {
+            border-radius: 12px;
+            background-color: #fff;
         }
 
-        /* Show the first row if it exists */
-        div.table-responsive>div.dataTables_wrapper>div.row:first-child {
-            display: none !important;
+        .card .btn {
+            min-width: 40px;
+            font-size: 0.9rem;
         }
 
-        .btn-delete {
-            cursor: pointer;
+        .card img {
+            border: 2px solid #ddd;
         }
 
-        .modal .close {
-            border: none !important;
-            outline: none !important;
-            background: transparent !important;
+        .card .text-muted {
+            font-size: 0.85rem;
+        }
+
+        .card-child {
+            background-color: #f4f4f4;
+        }
+
+        .padiding-left-label {
+            padding-left: 12px;
+        }
+
+        .price {
+            padding-top: 12px;
+            color: #ff5e5e;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .title {
+            font-size: 16px;
+            color: black;
+            font-weight: 1000;
         }
     </style>
+
 }
 
 @* Link Javascript*@
 @section AdditionalLinkJavascript {
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    @* <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../plugins/tables/js/jquery.dataTables.min.js"></script>
     <script src="../plugins/tables/js/datatable/dataTables.bootstrap4.min.js"></script>
-    <script src="../plugins/tables/js/datatable-init/datatable-basic.min.js"></script>
-    <script src="~/js/blog/news.js"></script>
+    <script src="../plugins/tables/js/datatable-init/datatable-basic.min.js"></script> *@
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/js/blog/service_blog.js"></script>
 
 }

@@ -632,11 +632,11 @@
                         </div>
                     </section>
                     <h4>Finshed</h4>
-                    <section>
+                    <section class="">
                         @* Here implement code *@
+                        <button class="btn btn-primary">ADD SERVICE BLOG</button>
                     </section>
                 </div>
-                <button>Ok</button>
             </form>
         </div>
     </div>
@@ -647,7 +647,7 @@
     <link href="./plugins/summernote/dist/summernote.css" rel="stylesheet">
     <style>
         .wizard .content {
-            min-height: 142rem !important;
+            min-height: 140rem !important;
         }
         #steps-uid-0-p-1 .wizard .content {
             min-height: 10rem !important;
@@ -758,70 +758,74 @@
     <script src="./plugins/jquery-validation/jquery.validate.min.js"></script>
     <script src="./js/plugins-init/jquery-steps-init.js"></script>
     <script>
+        
+    </script>
+    <script>
         $(document).ready(function () {
+            // Initialize first Summernote
             $('#first-summernote').summernote({
-            height: 200,
-            callbacks: {
-                onChange: function (contents) {
-                    $('#ContentDescription').val(contents);
+                height: 200,
+                callbacks: {
+                    onChange: function (contents) {
+                        $('#ContentDescription').val(contents);
+                    }
                 }
-            }
-        });
+            });
     
             // Initialize second Summernote
             $('#second-summernote').summernote({
-            height: 200,
-            callbacks: {
-                onChange: function (contents) {
-                    $('#Description').val(contents);
+                height: 200,
+                callbacks: {
+                    onChange: function (contents) {
+                        $('#Description').val(contents);
+                    }
                 }
-            }
-        });
-    
-            // Initialize Summernote with existing content if editing
+            });
+
+                // Initialize Summernote with existing content if editing
             if ($('#ContentDescription').val()) {
-            $('#first-summernote').summernote('code', $('#ContentDescription').val());
-        }
-    
+                $('#first-summernote').summernote('code', $('#ContentDescription').val());
+            }
+
             if ($('#Description').val()) {
-            $('#second-summernote').summernote('code', $('#Description').val());
-        }
-    
+                $('#second-summernote').summernote('code', $('#Description').val());
+            }
+
             // Other AJAX logic (e.g., provinces and districts)
             $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function (data_tinh) {
-            if (data_tinh.error === 0) {
-                $.each(data_tinh.data, function (key_tinh, val_tinh) {
-                    $("#tinh").append('<option value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>');
-                });
-
-                // When province is changed, populate districts
-                $("#tinh").change(function () {
-                    var idtinh = $(this).val();
-                    $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm', function (data_quan) {
-                        if (data_quan.error === 0) {
-                            $("#quan").html('<option value="0">Quận Huyện</option>');
-                            $("#phuong").html('<option value="0">Phường Xã</option>');
-                            $.each(data_quan.data, function (key_quan, val_quan) {
-                                $("#quan").append('<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>');
-                            });
-
-                            // When district is changed, populate wards
-                            $("#quan").change(function () {
-                                var idquan = $(this).val();
-                                $.getJSON('https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm', function (data_phuong) {
-                                    if (data_phuong.error === 0) {
-                                        $("#phuong").html('<option value="0">Phường Xã</option>');
-                                        $.each(data_phuong.data, function (key_phuong, val_phuong) {
-                                            $("#phuong").append('<option value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>');
-                                        });
-                                    }
-                                });
-                            });
-                        }
+                if (data_tinh.error === 0) {
+                    $.each(data_tinh.data, function (key_tinh, val_tinh) {
+                        $("#tinh").append('<option value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>');
                     });
-                });
-            }
-        });
+
+                    // When province is changed, populate districts
+                    $("#tinh").change(function () {
+                        var idtinh = $(this).val();
+                        $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm', function (data_quan) {
+                            if (data_quan.error === 0) {
+                                $("#quan").html('<option value="0">Quận Huyện</option>');
+                                $("#phuong").html('<option value="0">Phường Xã</option>');
+                                $.each(data_quan.data, function (key_quan, val_quan) {
+                                    $("#quan").append('<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>');
+                                });
+
+                                // When district is changed, populate wards
+                                $("#quan").change(function () {
+                                    var idquan = $(this).val();
+                                    $.getJSON('https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm', function (data_phuong) {
+                                        if (data_phuong.error === 0) {
+                                            $("#phuong").html('<option value="0">Phường Xã</option>');
+                                            $.each(data_phuong.data, function (key_phuong, val_phuong) {
+                                                $("#phuong").append('<option value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>');
+                                            });
+                                        }
+                                    });
+                                });
+                            }
+                        });
+                    });
+                }
+            });
         });
     </script>
     @* Link Javascript For Room and Area 1 *@

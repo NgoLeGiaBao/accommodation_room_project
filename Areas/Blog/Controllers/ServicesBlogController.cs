@@ -1,8 +1,11 @@
 using App.Models;
 using App.Models.ServicesModel;
 using App.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace App.Areas.Blog
 {
@@ -11,10 +14,12 @@ namespace App.Areas.Blog
     {
         private readonly SupabaseSettings _supabaseSettings;
         private readonly AppDbContext _appDbContext;
-        public ServicesBlogController(IOptions<SupabaseSettings> supabaseSettings, AppDbContext appDbContext)
+        private readonly UserManager<AppUser> _userManager;
+        public ServicesBlogController(IOptions<SupabaseSettings> supabaseSettings, AppDbContext appDbContext, UserManager<AppUser> userManager)
         {
             _supabaseSettings = supabaseSettings.Value;
             _appDbContext = appDbContext;
+            _userManager = userManager;
         }
         [Route("/services-blog")]
         public IActionResult Index()
@@ -43,6 +48,9 @@ namespace App.Areas.Blog
 
             if (ModelState.IsValid)
             {
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                    return NotFound("User not found");
                 // Insert data into Service Blog
                 var roomInServiceBlog = servicesBlog.Rooms[0];
 
@@ -90,6 +98,8 @@ namespace App.Areas.Blog
 
                 // Add data Service Blog
                 servicesBlog.Images = areaImages;
+                servicesBlog.CreatedBy = user.Id;
+                servicesBlog.StatusBlog = "Active";
                 _appDbContext.ServicesBlogs.Add(servicesBlog);
 
                 // Insert data into Room In Service Blog
@@ -105,6 +115,51 @@ namespace App.Areas.Blog
 
             TempData["FailureMessage"] = "New Services Blog created failed, please try again.";
             return View(servicesBlog);
+        }
+
+        [Route("/get-all-services-news")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllServicesNews()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+                return NotFound("User not found");
+            try
+            {
+                // Get service blog
+                var servicesBlogs = await _appDbContext.ServicesBlogs
+                    .Where(sb => sb.CreatedBy == user.Id)
+                    .Include(sb => sb.Rooms)
+                    .ToListAsync();
+
+                // Chuyển dữ liệu sang dạng DTO để gửi về client
+                var response = servicesBlogs.Select(blog => new
+                {
+                    blog.ServicesBlogId,
+                    blog.Title,
+                    blog.RentalPrice,
+                    blog.Address,
+                    blog.Province,
+                    blog.District,
+                    blog.Town,
+                    blog.Images,
+                    Rooms = blog.Rooms.Select(room => new
+                    {
+                        room.RooomInServiceBlogId,
+                        room.Name,
+                        room.RentalPrice,
+                        room.ImageUrls
+                    }).ToList()
+                });
+
+                // Trả về JSON response
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                // Xử lý lỗi và trả về thông báo lỗi
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
     }
 }

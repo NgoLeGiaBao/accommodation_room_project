@@ -10,7 +10,7 @@ $(document).ready(function () {
     // Function to load the news
     function loadNews(status) {
         $.ajax({
-            url: '/get-all-news',  // Make sure the URL matches your route
+            url: '/get-all-news', // Make sure the URL matches your route
             method: 'POST',
             dataType: 'json',
             data: { status: status }, // Send the selected status to the server
@@ -93,7 +93,7 @@ $(document).ready(function () {
     // Handler for delete button click
     function handleDeleteClick(event) {
         event.preventDefault();
-        const itemId = $(this).data('id');  // Get the ID of the item to be deleted
+        const itemId = $(this).data('id'); // Get the ID of the item to be deleted
 
         // Create the modal dynamically
         var modalHtml = `
@@ -110,7 +110,7 @@ $(document).ready(function () {
                             Are you sure you want to delete this news item?
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-secondary btn-cancel" data-dismiss="modal">Cancel</button>
                             <button type="button" class="btn btn-primary" id="confirmDelete">Delete</button>
                         </div>
                     </div>
@@ -135,6 +135,16 @@ $(document).ready(function () {
                     loadNews($('#news-status').val()); // Reload the news list
                 }
             });
+        });
+
+        // Ensure modal is removed from DOM after closing
+        $('#deleteModal').on('hidden.bs.modal', function () {
+            $(this).remove(); // Remove modal from DOM
+        });
+
+        // Handle cancel button and close icon
+        $('.btn-cancel, .close').on('click', function () {
+            $('#deleteModal').modal('hide'); // Close modal
         });
     }
 });
