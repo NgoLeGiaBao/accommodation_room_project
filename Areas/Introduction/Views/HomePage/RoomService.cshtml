@@ -102,48 +102,35 @@
         <div class="row">
             <div class="col-lg-3">
                 <div class="property-sidebar">
-                    <h4>Search Property</h4>
+                    <h4>Tìm Kiếm Phòng Trọ</h4>
                     <form action="#" class="sidebar-search">
-                        <div class="sidebar-btn">
-                            <div class="bt-item">
-                                <input type="radio" name="s-type" id="st-buy" checked>
-                                <label for="st-buy">Buy</label>
-                            </div>
-                            <div class="bt-item">
-                                <input type="radio" name="s-type" id="st-rent">
-                                <label for="st-rent">Rent</label>
-                            </div>
-                        </div>
-                        <select>
-                            <option value="">Locations</option>
+                        <select class="nice-select" style="font-size: 16px; color: #707079;" id="tinh" name="Province"
+                            title="Chọn Tỉnh Thành">
+                            <option value="0">Tỉnh Thành</option>
                         </select>
-                        <select>
-                            <option value="">Status</option>
+                        <select class="nice-select" style="font-size: 16px; color: #707079;" id="quan" name="District"
+                            title="Chọn Quận Huyện">
+                            <option value="0">Quận Huyện</option>
                         </select>
-                        <select>
-                            <option value="">No of Bedroom</option>
-                        </select>
-                        <select>
-                            <option value="">No of Bathrooms</option>
-                        </select>
-                        <select>
-                            <option value="">No of Guest</option>
+                        <select class="nice-select" style="font-size: 16px; color: #707079;" id="phuong" name="Town"
+                            title="Chọn Phường Xã">
+                            <option value="0">Phường Xã</option>
                         </select>
                         <div class="room-size-range">
                             <div class="price-text">
                                 <label for="roomsizeRangeP">Size:</label>
                                 <input type="text" id="roomsizeRangeP" readonly>
                             </div>
-                            <div id="roomsize-range-P" class="slider"></div>
+                            <div id="roomsize-range-P" class="slider"></div> <!-- Slider container -->
                         </div>
                         <div class="price-range-wrap">
                             <div class="price-text">
                                 <label for="priceRangeP">Price:</label>
-                                <input type="text" id="priceRangeP" readonly>
+                                <input style="width: auto;" type="text" id="priceRangeP" readonly>
                             </div>
-                            <div id="price-range-P" class="slider"></div>
+                            <div id="price-range-P" class="slider"></div> <!-- Slider container -->
                         </div>
-                        <button type="submit" class="search-btn">Search Property</button>
+                        <button type="submit" class="search-btn">Tìm Kiếm</button>
                     </form>
                 </div>
             </div>
@@ -369,9 +356,116 @@
             background-color: white;
             pointer-events: none;
         }
+
+        #tinh {
+            display: block !important;
+            visibility: visible !important;
+        }
+
+        #quan {
+            display: block !important;
+            visibility: visible !important;
+        }
+
+        #phuong {
+            display: block !important;
+            visibility: visible !important;
+        }
     </style>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
 }
 @* Link Javascript*@
 @section AdditionalLinkJavascript {
-    @* <script src="~/js/introduction/blog.js"></script> *@
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Load danh sách Tỉnh
+            $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function (data_tinh) {
+                if (data_tinh.error === 0) {
+                    $.each(data_tinh.data, function (key_tinh, val_tinh) {
+                        $("#tinh").append('<option value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>');
+                    });
+                }
+            });
+
+            // Khi người dùng chọn Tỉnh
+            $("#tinh").change(function () {
+                console.log("Tỉnh changed");
+                var idtinh = $(this).val();
+
+                // Xóa dữ liệu cũ của Quận/Huyện và Phường/Xã
+                $("#quan").html('<option value="0">Quận Huyện</option>');
+                $("#phuong").html('<option value="0">Phường Xã</option>');
+
+                if (idtinh !== "0") { // Kiểm tra xem Tỉnh có được chọn hay không
+                    // Load danh sách Quận/Huyện theo Tỉnh
+                    $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm', function (data_quan) {
+                        if (data_quan.error === 0) {
+                            $.each(data_quan.data, function (key_quan, val_quan) {
+                                $("#quan").append('<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>');
+                            });
+                        }
+                    });
+                }
+            });
+
+            // Khi người dùng chọn Quận/Huyện
+            $("#quan").change(function () {
+                console.log("Quận/Huyện changed");
+                var idquan = $(this).val();
+
+                // Xóa dữ liệu cũ của Phường/Xã
+                $("#phuong").html('<option value="0">Phường Xã</option>');
+                if (idquan !== "0") { // Kiểm tra xem Quận/Huyện có được chọn hay không
+                    // Load danh sách Phường/Xã theo Quận/Huyện
+                    $.getJSON('https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm', function (data_phuong) {
+                        if (data_phuong.error === 0) {
+                            console.log("Received phường data:", data_phuong);  // Log toàn bộ dữ liệu phường
+                            $.each(data_phuong.data, function (key_phuong, val_phuong) {
+                                console.log("Appending: " + val_phuong.full_name);  // Kiểm tra tên phường
+                                $("#phuong").append('<option value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>');
+                            });
+                        } else {
+                            console.log("No Phường data found for the selected district.");
+                        }
+                    }).fail(function () {
+                        console.log("API call failed for phường data.");
+                    });
+                }
+            });
+
+
+            // Room Size Slider
+            $("#roomsize-range-P").slider({
+                range: true, // Allows selecting a range
+                min: 10, // Minimum size (in square meters, for example)
+                max: 200, // Maximum size
+                values: [20, 100], // Initial selected range [min size, max size]
+                slide: function (event, ui) {
+                    $("#roomsizeRangeP").val(ui.values[0] + " - " + ui.values[1] + " m²");
+                }
+            });
+            $("#roomsizeRangeP").val($("#roomsize-range-P").slider("values", 0) + " - " + $("#roomsize-range-P").slider("values", 1) + " m²");
+
+            // Price Slider
+            $("#price-range-P").slider({
+                range: true,
+                min: 500000, // Minimum price (example in VND or any currency)
+                max: 10000000, // Maximum price
+                values: [1000000, 5000000], // Initial selected range [min price, max price]
+                slide: function (event, ui) {
+                    var formattedMinPrice = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(ui.values[0]);
+                    var formattedMaxPrice = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(ui.values[1]);
+                    $("#priceRangeP").val(formattedMinPrice + " - " + formattedMaxPrice);
+                }
+            });
+            $("#priceRangeP").val(
+                new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format($("#price-range-P").slider("values", 0)) +
+                " - " +
+                new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format($("#price-range-P").slider("values", 1))
+            )
+        });
+    </script>
 }
