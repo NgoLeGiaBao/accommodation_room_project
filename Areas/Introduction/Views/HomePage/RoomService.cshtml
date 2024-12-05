@@ -103,7 +103,8 @@
             <div class="col-lg-3">
                 <div class="property-sidebar">
                     <h4>Tìm Kiếm Phòng Trọ</h4>
-                    <form action="#" class="sidebar-search">
+                    <form id="searchForm" class="sidebar-search" action="/room-service" method="get"
+                        class="sidebar-search">
                         <select class="nice-select" style="font-size: 16px; color: #707079;" id="tinh" name="Province"
                             title="Chọn Tỉnh Thành">
                             <option value="0">Tỉnh Thành</option>
@@ -135,175 +136,9 @@
                 </div>
             </div>
             <div class="col-lg-9">
-                <h4 class="property-title">Property</h4>
-                <div class="property-list">
-                    <div class="single-property-item">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="property-pic">
-                                    <img src="client_part/img/properties/property-1.jpg" alt="">
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="property-text">
-                                    <a asp-action="DetailRoomService" asp-controller="HomePage" class="s-text">For
-                                        Sale</a>
-                                    <h5 class="r-title">Villa 9721 Glen Creek</h5>
-                                    <div class="room-price">
-                                        <span>Start From:</span>
-                                        <h5>$3.000.000</h5>
-                                    </div>
-                                    <div class="properties-location"><i class="icon_pin"></i> 9721 Glen Creek Ave.
-                                        Ballston Spa, NY</div>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                        incididunt ut labore.</p>
-                                    <ul class="room-features">
-                                        <li>
-                                            <i class="fa fa-arrows"></i>
-                                            <p>5201 sqft</p>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-bed"></i>
-                                            <p>8 Bed Room</p>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-bath"></i>
-                                            <p>7 Baths Bed</p>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-car"></i>
-                                            <p>1 Garage</p>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single-property-item">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="property-pic">
-                                    <img src="client_part/img/properties/property-2.jpg" alt="">
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="property-text">
-                                    <div class="s-text">For Sale</div>
-                                    <h5 class="r-title">Villa 9721 Glen Creek</h5>
-                                    <div class="room-price">
-                                        <span>Start From:</span>
-                                        <h5>$3.000.000</h5>
-                                    </div>
-                                    <div class="properties-location"><i class="icon_pin"></i> 9721 Glen Creek Ave.
-                                        Ballston Spa, NY</div>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                        incididunt ut labore.</p>
-                                    <ul class="room-features">
-                                        <li>
-                                            <i class="fa fa-arrows"></i>
-                                            <p>5201 sqft</p>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-bed"></i>
-                                            <p>8 Bed Room</p>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-bath"></i>
-                                            <p>7 Baths Bed</p>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-car"></i>
-                                            <p>1 Garage</p>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single-property-item">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="property-pic">
-                                    <img src="client_part/img/properties/property-3.jpg" alt="">
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="property-text">
-                                    <div class="s-text">For Sale</div>
-                                    <h5 class="r-title">Villa 9721 Glen Creek</h5>
-                                    <div class="room-price">
-                                        <span>Start From:</span>
-                                        <h5>$3.000.000</h5>
-                                    </div>
-                                    <div class="client_part/properties-location"><i class="icon_pin"></i> 9721 Glen
-                                        Creek
-                                        Ave.
-                                        Ballston Spa, NY</div>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                        incididunt ut labore.</p>
-                                    <ul class="room-features">
-                                        <li>
-                                            <i class="fa fa-arrows"></i>
-                                            <p>5201 sqft</p>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-bed"></i>
-                                            <p>8 Bed Room</p>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-bath"></i>
-                                            <p>7 Baths Bed</p>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-car"></i>
-                                            <p>1 Garage</p>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single-property-item">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="property-pic">
-                                    <img src="client_part/img/properties/property-4.jpg" alt="">
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="property-text">
-                                    <div class="s-text">For Sale</div>
-                                    <h5 class="r-title">Villa 9721 Glen Creek</h5>
-                                    <div class="room-price">
-                                        <span>Start From:</span>
-                                        <h5>$3.000.000</h5>
-                                    </div>
-                                    <div class="properties-location"><i class="icon_pin"></i> 9721 Glen Creek Ave.
-                                        Ballston Spa, NY</div>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                        incididunt ut labore.</p>
-                                    <ul class="room-features">
-                                        <li>
-                                            <i class="fa fa-arrows"></i>
-                                            <p>5201 sqft</p>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-bed"></i>
-                                            <p>8 Bed Room</p>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-bath"></i>
-                                            <p>7 Baths Bed</p>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-car"></i>
-                                            <p>1 Garage</p>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <h4 class="property-title">Kết Quả Được Tìm Thấy</h4>
+                <div class="property-list" id="propertyList">
+                    @* Render here *@
                 </div>
                 <div class="property-pagination">
                     @* <a href="#">1</a>
@@ -317,6 +152,7 @@
 <!-- Property Section End -->
 @* Link CSS *@
 @section AdditionalLinkCSS {
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <style>
         .sb-pic img {
             width: 100%;
@@ -371,101 +207,30 @@
             display: block !important;
             visibility: visible !important;
         }
+
+        .phong-tro {
+            display: flex;
+        }
+
+        .phong-tro-child {
+            display: block !important;
+            background-color: #f4f4f4;
+            font-size: 14px;
+            padding: 8px;
+            cursor: pointer;
+            margin-bottom: 0px !important;
+        }
+
+        .phong-tro-img {
+            width: 100%;
+            height: 185px;
+        }
     </style>
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 }
 @* Link Javascript*@
 @section AdditionalLinkJavascript {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            // Load danh sách Tỉnh
-            $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function (data_tinh) {
-                if (data_tinh.error === 0) {
-                    $.each(data_tinh.data, function (key_tinh, val_tinh) {
-                        $("#tinh").append('<option value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>');
-                    });
-                }
-            });
-
-            // Khi người dùng chọn Tỉnh
-            $("#tinh").change(function () {
-                console.log("Tỉnh changed");
-                var idtinh = $(this).val();
-
-                // Xóa dữ liệu cũ của Quận/Huyện và Phường/Xã
-                $("#quan").html('<option value="0">Quận Huyện</option>');
-                $("#phuong").html('<option value="0">Phường Xã</option>');
-
-                if (idtinh !== "0") { // Kiểm tra xem Tỉnh có được chọn hay không
-                    // Load danh sách Quận/Huyện theo Tỉnh
-                    $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm', function (data_quan) {
-                        if (data_quan.error === 0) {
-                            $.each(data_quan.data, function (key_quan, val_quan) {
-                                $("#quan").append('<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>');
-                            });
-                        }
-                    });
-                }
-            });
-
-            // Khi người dùng chọn Quận/Huyện
-            $("#quan").change(function () {
-                console.log("Quận/Huyện changed");
-                var idquan = $(this).val();
-
-                // Xóa dữ liệu cũ của Phường/Xã
-                $("#phuong").html('<option value="0">Phường Xã</option>');
-                if (idquan !== "0") { // Kiểm tra xem Quận/Huyện có được chọn hay không
-                    // Load danh sách Phường/Xã theo Quận/Huyện
-                    $.getJSON('https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm', function (data_phuong) {
-                        if (data_phuong.error === 0) {
-                            console.log("Received phường data:", data_phuong);  // Log toàn bộ dữ liệu phường
-                            $.each(data_phuong.data, function (key_phuong, val_phuong) {
-                                console.log("Appending: " + val_phuong.full_name);  // Kiểm tra tên phường
-                                $("#phuong").append('<option value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>');
-                            });
-                        } else {
-                            console.log("No Phường data found for the selected district.");
-                        }
-                    }).fail(function () {
-                        console.log("API call failed for phường data.");
-                    });
-                }
-            });
-
-
-            // Room Size Slider
-            $("#roomsize-range-P").slider({
-                range: true, // Allows selecting a range
-                min: 10, // Minimum size (in square meters, for example)
-                max: 200, // Maximum size
-                values: [20, 100], // Initial selected range [min size, max size]
-                slide: function (event, ui) {
-                    $("#roomsizeRangeP").val(ui.values[0] + " - " + ui.values[1] + " m²");
-                }
-            });
-            $("#roomsizeRangeP").val($("#roomsize-range-P").slider("values", 0) + " - " + $("#roomsize-range-P").slider("values", 1) + " m²");
-
-            // Price Slider
-            $("#price-range-P").slider({
-                range: true,
-                min: 500000, // Minimum price (example in VND or any currency)
-                max: 10000000, // Maximum price
-                values: [1000000, 5000000], // Initial selected range [min price, max price]
-                slide: function (event, ui) {
-                    var formattedMinPrice = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(ui.values[0]);
-                    var formattedMaxPrice = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(ui.values[1]);
-                    $("#priceRangeP").val(formattedMinPrice + " - " + formattedMaxPrice);
-                }
-            });
-            $("#priceRangeP").val(
-                new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format($("#price-range-P").slider("values", 0)) +
-                " - " +
-                new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format($("#price-range-P").slider("values", 1))
-            )
-        });
-    </script>
+    <script src="~/js/introduction/service_blog.js"></script>
 }

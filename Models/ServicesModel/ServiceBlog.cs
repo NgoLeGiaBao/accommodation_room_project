@@ -12,6 +12,7 @@ namespace App.Models.ServicesModel
         public string Title { get; set; }
         public string? SelfManagedAccommodation { get; set; }
         public string? Area { get; set; }
+        public decimal? Size { get; set; }
         public decimal RentalPrice { get; set; }
         public string? ContentDescription { get; set; }
 

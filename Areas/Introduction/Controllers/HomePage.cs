@@ -105,5 +105,50 @@ namespace App.Areas.Introduction
 
             return Ok(result);
         }
+
+        [Route("/get-filtered-services-blogs")]
+        [HttpPost]
+        public async Task<IActionResult> GetFilteredServicesBlogs(string province, string district, string town, decimal? minSize, decimal? maxSize, decimal? minPrice, decimal? maxPrice)
+        {
+            // Khởi tạo query cơ bản
+            var query = _appDbContext.ServicesBlogs.AsQueryable();
+
+            // Thêm các điều kiện lọc vào query nếu có
+            if (!string.IsNullOrEmpty(province))
+                query = query.Where(s => s.Province == province);
+
+            if (!string.IsNullOrEmpty(district))
+            {
+                if (district != "0")
+                {
+                    query = query.Where(s => s.District == district);
+
+                }
+            }
+
+            if (!string.IsNullOrEmpty(town))
+            {
+                if (town != "0")
+                {
+                    query = query.Where(s => s.Town == town);
+                }
+            }
+
+            if (minSize.HasValue)
+                query = query.Where(s => s.Size >= minSize.Value);
+
+            if (maxSize.HasValue)
+                query = query.Where(s => s.Size <= maxSize.Value);
+
+            if (minPrice.HasValue)
+                query = query.Where(s => s.RentalPrice >= minPrice.Value);
+
+            if (maxPrice.HasValue)
+                query = query.Where(s => s.RentalPrice <= maxPrice.Value);
+
+            // Lấy dữ liệu đã lọc và trả về Json
+            var filteredServicesBlogs = await query.ToListAsync();
+            return Json(filteredServicesBlogs);
+        }
     }
 }
