@@ -62,6 +62,7 @@ namespace App.Models.ServicesModel
         public string? PhoneNumber { get; set; }
         public string? ZaloNumber { get; set; }
 
+        public string? Slug { get; set; }
         // Images
         public List<string> Images { get; set; } = new List<string>();
         public string? StatusBlog { get; set; } = "Active";

@@ -181,6 +181,10 @@ namespace App.Models
                 .WithMany(s => s.Rooms)
                 .HasForeignKey(r => r.ServicesBlogId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ServicesBlog>()
+                .HasIndex(sb => sb.Slug)
+                .IsUnique();
             // Base on the default model configuration
             base.OnModelCreating(modelBuilder);
         }

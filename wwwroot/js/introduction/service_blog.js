@@ -124,7 +124,9 @@ $(document).ready(function () {
                                 </div>
                                 <div class="col-md-8">
                                     <div class="property-text">
-                                        <h5 class="r-title">${property.title}</h5>
+                                        <a href = "/detail-service_blog/${property.slug}">
+                                            <h5 class="r-title">${property.title}</h5>
+                                        <a/>
                                         <div class="room-price">
                                             <span>Giá từ:</span>
                                             <h5>${property.rentalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</h5>
@@ -175,7 +177,9 @@ $(document).ready(function () {
                                 </div>
                                 <div class="col-md-8">
                                     <div class="property-text">
-                                        <h5 class="r-title">${property.title}</h5>
+                                        <a href = "/detail-service-blog/${property.slug}">
+                                            <h5 class="r-title">${property.title}</h5>
+                                        <a/>
                                         <div class="room-price">
                                             <span>Giá từ:</span>
                                             <h5>${property.rentalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</h5>

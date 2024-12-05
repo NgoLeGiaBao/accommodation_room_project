@@ -42,11 +42,6 @@ namespace App.Areas.Introduction
             return View();
         }
 
-        [Route("/detail-room-service/{id?}")]
-        public IActionResult DetailRoomService(string id)
-        {
-            return View();
-        }
         [Route("/news-detail/{id}")]
         public async Task<ActionResult> Single(string id)
         {
@@ -149,6 +144,19 @@ namespace App.Areas.Introduction
             // Lấy dữ liệu đã lọc và trả về Json
             var filteredServicesBlogs = await query.ToListAsync();
             return Json(filteredServicesBlogs);
+        }
+
+        [Route("/detail-service-blog/{slug}")]
+        [HttpGet]
+        public async Task<IActionResult> DetailRoomService(string slug)
+        {
+            var serviceBlog = _appDbContext.ServicesBlogs
+                                .Include(s => s.Rooms)
+                                .FirstOrDefault(s => s.Slug == slug);
+
+            if (serviceBlog == null)
+                return NotFound();
+            return View(serviceBlog);
         }
     }
 }
