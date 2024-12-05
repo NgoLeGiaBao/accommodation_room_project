@@ -18,6 +18,8 @@
                             </li>
                             <li><a asp-action="Blog" asp-controller="HomePage">News</a></li>
                         </ul>
+                        using System.Security.Cryptography;
+    using Microsoft.Build.Evaluation;
                     </nav>
                 </div>
                 <div class="col-lg-5">
@@ -108,20 +110,12 @@
         <div class="row">
             <div class="col-lg-9">
                 <div class="pd-details-text">
-                    <div class="pd-details-social">
-                        @* <a href="#"><i class="fa fa-facebook"></i></a>
-                        <a href="#"><i class="fa fa-send"></i></a>
-                        <a href="#"><i class="fa fa-star"></i></a>
-                        <a href="#"><i class="fa fa-print"></i></a>
-                        <a href="#"><i class="fa fa-cloud-download"></i></a> *@
-                    </div>
                     <div class="property-more-pic">
                         <div class="product-pic-zoom">
-                            <img class="product-big-img"
+                            <img style="height: 500px;" class="product-big-img"
                                 src="https://imbfaeyswkneestptfkr.supabase.co/storage/v1/object/public/home_img/@Model.Images[0]"
                                 alt="Property Image">
                         </div>
-
                         <div class="product-thumbs">
                             <div class="product-thumbs-track ps-slider owl-carousel">
                                 @{
@@ -152,13 +146,10 @@
                         <div class="tab-item">
                             <ul class="nav" role="tablist">
                                 <li>
-                                    <a class="active" data-toggle="tab" href="#tab-1" role="tab">Overview</a>
+                                    <a class="active" style="text-decoration: none;" data-toggle="tab" href="#tab-1" role="tab">Overview</a>
                                 </li>
                                 <li>
-                                    <a data-toggle="tab" href="#tab-2" role="tab">Description</a>
-                                </li>
-                                <li>
-                                    <a data-toggle="tab" href="#tab-3" role="tab">Amenities</a>
+                                    <a style="text-decoration: none;" data-toggle="tab" href="#tab-3" role="tab">Tiện nghi</a>
                                 </li>
                             </ul>
                         </div>
@@ -167,7 +158,7 @@
                                 <!-- Tab 1: Chi tiết phòng -->
                                 <div class="tab-pane fade-in active" id="tab-1" role="tabpanel">
                                     <div class="property-more-table">
-                                        <table>
+                                        <table style="width: 100%;">
                                             <tbody>
                                                 <tr>
                                                     <td class="pt-name">Giá chỉ từ</td>
@@ -179,40 +170,40 @@
                                                 </tr>
                                                 <tr>
                                                     <td class="pt-name">Đối tượng</td>
-                                                    <td class="p-value">Phù hợp cho sinh viên, gia đình</td>
-                                                    <!-- Thay bằng dữ liệu thực -->
-                                                </tr>
-                                                <tr>
-                                                    <td class="pt-name">Tiện nghi</td>
-                                                    <td class="p-value">Wi-Fi, điều hòa, nước nóng</td>
-                                                    <!-- Thay bằng dữ liệu thực -->
+                                                        @{
+                                                            var suitableFor = 
+                                                                (Model.IsStudent ? "Sinh viên, " : "") +
+                                                                (Model.IsWorker ? "Người lao động, " : "") +
+                                                                (Model.IsFamily ? "Gia đình, " : "") +
+                                                                (Model.IsCouple ? "Cặp đôi" : "");
+                                                            if (suitableFor.Length > 2) {
+                                                                suitableFor= suitableFor.Substring(0, suitableFor.Length - 2);
+                                                            }
+                                                        }
+                                                    </td>
+                                                    <td class="p-value">@suitableFor</td>
                                                 </tr>
                                                 <tr>
                                                     <td class="pt-name">Môi trường xung quanh</td>
-                                                    <td class="p-value">Gần trường học, công viên</td>
-                                                    <!-- Thay bằng dữ liệu thực -->
-                                                </tr>
-                                                <tr>
-                                                    <td class="pt-name">Khu vực để xe</td>
-                                                    <td class="p-value">Có, sức chứa 3 xe</td>
-                                                    <!-- Thay bằng dữ liệu thực -->
-                                                </tr>
-                                                <tr>
-                                                    <td class="pt-name">Diện tích khu đất</td>
-                                                    <td class="p-value">200 m&sup2;</td> <!-- Thay bằng dữ liệu thực -->
+                                                    <td class="p-value">
+                                                        @{
+                                                            var surroundingEnvironment = 
+                                                                (Model.NearSchool ? "Trường học, " : "") +
+                                                                (Model.NearPark ? "Công viên, " : "") +
+                                                                (Model.NearSupermarket ? "Siêu thị, " : "") +
+                                                                (Model.NearHospital ? "Bệnh viện, " : "");
+
+                                                            // Kiểm tra nếu chuỗi không rỗng và có dấu phẩy ở cuối
+                                                            if (!string.IsNullOrEmpty(surroundingEnvironment) && surroundingEnvironment.EndsWith(", "))
+                                                            {
+                                                                surroundingEnvironment = surroundingEnvironment.Substring(0, surroundingEnvironment.Length - 2); // Cắt bỏ 2 ký tự cuối (", ")
+                                                            }
+                                                        }
+                                                        @surroundingEnvironment
+                                                    </td>
                                                 </tr>
                                             </tbody>
                                         </table>
-                                    </div>
-                                </div>
-
-                                <!-- Tab 2: Mô tả chi tiết -->
-                                <div class="tab-pane fade" id="tab-2" role="tabpanel">
-                                    <div class="pd-table-desc">
-                                        <p>Phòng được thiết kế thoáng mát, hiện đại và đầy đủ tiện nghi. Khu vực yên
-                                            tĩnh, an ninh đảm bảo, gần các tiện ích công cộng.</p>
-                                        <p>Đây là lựa chọn lý tưởng cho những ai tìm kiếm không gian sống tiện nghi, phù
-                                            hợp cho sinh viên và gia đình trẻ.</p>
                                     </div>
                                 </div>
 
@@ -220,12 +211,19 @@
                                 <div class="tab-pane fade" id="tab-3" role="tabpanel">
                                     <div class="pd-table-amenities">
                                         <p>Các tiện nghi bao gồm:</p>
-                                        <ul>
-                                            <li>Wi-Fi miễn phí</li>
-                                            <li>Máy lạnh</li>
-                                            <li>Nước nóng</li>
-                                            <li>Bãi đỗ xe</li>
-                                            <li>Dịch vụ vệ sinh</li>
+                                        <ul style="padding-left: 20px;color: #707079;">
+                                            @Html.Raw(Model.HasWiFi ? "<li>Wi-Fi miễn phí</li>" : "")
+                                            @Html.Raw(Model.HasAirConditioner ? "<li>Máy lạnh</li>" : "")
+                                            @Html.Raw(Model.HasWaterHeater ? "<li>Nước nóng</li>" : "")
+                                            @Html.Raw(Model.HasPrivateParkingLot ? "<li>Bãi đỗ xe riêng</li>" : "")
+                                            @Html.Raw(Model.HasIndoorCleaning ? "<li>Dịch vụ vệ sinh</li>" : "")
+                                            @Html.Raw(Model.HasKitchenShelf ? "<li>Kệ bếp</li>" : "")
+                                            @Html.Raw(Model.HasWardrobe ? "<li>Tủ quần áo</li>" : "")
+                                            @Html.Raw(Model.HasBedAndMattress ? "<li>Giường và nệm</li>" : "")
+                                            @Html.Raw(Model.HasTV ? "<li>TV</li>" : "")
+                                            @Html.Raw(Model.HasRefrigerator ? "<li>Tủ lạnh</li>" : "")
+                                            @Html.Raw(Model.HasSwimmingPool ? "<li>Hồ bơi</li>" : "")
+                                            @Html.Raw(Model.HasGarden ? "<li>Sân vườn</li>" : "")
                                         </ul>
                                     </div>
                                 </div>
@@ -236,7 +234,7 @@
                         <h4>Map</h4>
                         <div class="map-inside">
                             <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2942.5524090066037!2d-71.10245469994108!3d42.47980730490846!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e3748250c43a43%3A0xe1b9879a5e9b6657!2sWinter%20Street%20Public%20Parking%20Lot!5e0!3m2!1sen!2sbd!4v1577299251173!5m2!1sen!2sbd"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.8454898481097!2d106.6923273!3d10.7540211!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f978c91ee7d%3A0x25c2f24f54f91578!2s83-85+Đường+số+9,+Tân+Phong,+Quận+7,+Thành+phố+Hồ+Chí+Minh!5e0!3m2!1sen!2sbd!4v1678403155157!5m2!1sen!2sbd"
                                 height="320" style="border:0;" allowfullscreen=""></iframe>
                             <div class="icon">
                                 <i class="fa fa-home"></i>
@@ -250,8 +248,8 @@
                                 <div class="agent-desc">
                                     <img src="../../client_part/img/properties/agent-contact.jpg" alt="">
                                     <div class="agent-title">
-                                        <h5>Adam Smith</h5>
-                                        <span>Saler Marketing</span>
+                                        <h5>@ViewData["UserName"]</h5>
+                                        <span>Owner</span>
                                     </div>
                                     <div class="agent-social">
                                         <a href="#"><i class="fa fa-facebook"></i></a>
@@ -259,9 +257,7 @@
                                         <a href="#"><i class="fa fa-google-plus"></i></a>
                                         <a href="#"><i class="fa fa-envelope"></i></a>
                                     </div>
-                                    <p>In today’s net-savvy world it has become common for any business to have a
-                                        website which they use mostly for advertising their products and services.
-                                    </p>
+                                    
                                 </div>
                             </div>
                             <div class="col-lg-6 offset-lg-1">
@@ -280,37 +276,35 @@
                 <div class="property-sidebar">
                     <h4>Tìm Kiếm Phòng Trọ</main>
                     </h4>
-                    <form action="#" class="sidebar-search">
-                        <select>
-                            <option value="">Locations</option>
+                    <form id="searchForm" class="sidebar-search" action="/room-service" method="get"
+                        class="sidebar-search">
+                        <select class="nice-select" style="font-size: 16px; color: #707079;" id="tinh" name="Province"
+                            title="Chọn Tỉnh Thành">
+                            <option value="0">Tỉnh Thành</option>
                         </select>
-                        <select>
-                            <option value="">Status</option>
+                        <select class="nice-select" style="font-size: 16px; color: #707079;" id="quan" name="District"
+                            title="Chọn Quận Huyện">
+                            <option value="0">Quận Huyện</option>
                         </select>
-                        <select>
-                            <option value="">No of Bedroom</option>
-                        </select>
-                        <select>
-                            <option value="">No of Bathrooms</option>
-                        </select>
-                        <select>
-                            <option value="">No of Guest</option>
+                        <select class="nice-select" style="font-size: 16px; color: #707079;" id="phuong" name="Town"
+                            title="Chọn Phường Xã">
+                            <option value="0">Phường Xã</option>
                         </select>
                         <div class="room-size-range">
                             <div class="price-text">
                                 <label for="roomsizeRangeP">Size:</label>
                                 <input type="text" id="roomsizeRangeP" readonly>
                             </div>
-                            <div id="roomsize-range-P" class="slider"></div>
+                            <div id="roomsize-range-P" class="slider"></div> <!-- Slider container -->
                         </div>
                         <div class="price-range-wrap">
                             <div class="price-text">
                                 <label for="priceRangeP">Price:</label>
-                                <input type="text" id="priceRangeP" readonly>
+                                <input style="width: auto;" type="text" id="priceRangeP" readonly>
                             </div>
-                            <div id="price-range-P" class="slider"></div>
+                            <div id="price-range-P" class="slider"></div> <!-- Slider container -->
                         </div>
-                        <button type="submit" class="search-btn">Search Property</button>
+                        <button type="submit" class="search-btn">Tìm Kiếm</button>
                     </form>
                 </div>
             </div>
@@ -321,51 +315,33 @@
 @* Link CSS *@
 @section AdditionalLinkCSS {
     <style>
-        .sb-pic img {
-            width: 100%;
-            height: 400px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-
-        /* Default pagination button */
-        .custom-pagination .page-item .page-link {
-            color: #2cbdb8;
-            background-color: white;
-            padding: 8px 15px;
-            border: 1px solid #ddd;
-            margin: 0;
-            transition: color 0.3s ease, background-color 0.3s ease;
-            text-align: center;
-        }
-
-        /* Active pagination button */
-        .custom-pagination .page-item.active .page-link {
-            background-color: #2cbdb8;
-            color: white;
-            border-color: #2cbdb8;
-        }
-
-        /* Hover effect for all buttons */
-        .custom-pagination .page-item .page-link:hover {
-            background-color: #2cbdb8;
-            color: white;
-            border-color: #2cbdb8;
-        }
-
-        /* Disabled button */
-        .custom-pagination .page-item.disabled .page-link {
-            color: #ddd;
-            background-color: white;
-            pointer-events: none;
-        }
-
         .product-fix-img {
             height: 118px;
+        }
+
+        .pt-name {
+            width: 225px !important;
+        }
+        
+        #tinh {
+            display: block !important;
+            visibility: visible !important;
+        }
+
+        #quan {
+            display: block !important;
+            visibility: visible !important;
+        }
+
+        #phuong {
+            display: block !important;
+            visibility: visible !important;
         }
     </style>
 }
 @* Link Javascript*@
 @section AdditionalLinkJavascript {
-    @* <script src="~/js/introduction/blog.js"></script> *@
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="~/js/introduction/service_blog.js"></script>
 }

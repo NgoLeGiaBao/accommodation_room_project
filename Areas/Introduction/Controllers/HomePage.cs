@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using App.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace App.Areas.Introduction
 {
@@ -21,6 +22,15 @@ namespace App.Areas.Introduction
         [Route("/")]
         public IActionResult Home()
         {
+            var news = _appDbContext.ContentNewses
+                            .Include(c => c.Author)
+                            .Where(c => c.Published == true)
+                            .ToList();
+            var blogNews = _appDbContext.ServicesBlogs
+                            .Include(c => c.Rooms).ToList();
+
+            ViewData["News"] = news;
+            ViewData["BlogNews"] = blogNews;
             return View();
         }
 
@@ -156,7 +166,14 @@ namespace App.Areas.Introduction
 
             if (serviceBlog == null)
                 return NotFound();
+            var user = await _appDbContext.AppUsers.Where(u => u.Id == serviceBlog.CreatedBy).FirstOrDefaultAsync();
+            if (user == null)
+                return NotFound();
+
+            ViewData["UserName"] = user.FullName;
             return View(serviceBlog);
         }
+
+
     }
 }
